@@ -1,0 +1,9 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* We hide the default shipping selector from WooCommerce in favor of our shiny one */
+.wc-block-components-totals-shipping__collaterals,
+.wp-block-woocommerce-checkout-shipping-methods-block {
+	display: none;
+}

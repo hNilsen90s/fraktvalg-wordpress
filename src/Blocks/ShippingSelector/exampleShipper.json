@@ -1,0 +1,45 @@
+{
+	"fraktvalg": [
+		{
+			"texts": {
+				"shipperName": "Fraktvalg",
+				"logo": {
+					"name": "FRAKTVALG",
+					"url": null
+				},
+				"displayName": "Home delivery"
+			},
+			"price": {
+				"withVAT": "313.67",
+				"withoutVAT": "250.93",
+				"VAT": "62.74",
+				"currency": "NOK"
+			},
+			"delivery": {
+				"estimatedDays": "2",
+				"estimatedDate": "2025-2-18"
+			}
+		},
+		{
+			"texts": {
+				"shipperName": "Fraktvalg",
+				"logo": {
+					"name": "FRAKTVALG",
+					"url": null
+				},
+				"displayName": "Nearest post office"
+			},
+			"price": {
+				"withVAT": "67.50",
+				"withoutVAT": "54.00",
+				"VAT": "13.50",
+				"currency": "NOK"
+			},
+			"delivery": {
+				"estimatedDays": "1",
+				"estimatedDate": "2025-2-19",
+				"productCode": "3584"
+			}
+		}
+	]
+}
