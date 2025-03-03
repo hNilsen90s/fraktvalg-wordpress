@@ -20,7 +20,7 @@ class Settings {
 
 		\add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
 
-		\add_action( 'admin_head', [ $this, 'inject_admin_css' ] );
+		\add_action( 'admin_print_styles', [ $this, 'inject_admin_css' ] );
 	}
 
 	public function inject_admin_css() {
