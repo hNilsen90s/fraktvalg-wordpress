@@ -15,7 +15,7 @@ class Privacy {
 		           '</p>' .
 		           '<p>' . __( 'We process information about you order when calculating shipping options on our store.', 'fraktvalg' ) . '</p>' .
 		           '<h2>' . __( 'What we share with others', 'fraktvalg' ) . '</h2>' .
-		           '<p>' . __( 'In addition to any data covered by the stores general privacy policy, When you visit your cart or the store checkout page, the following information may be shared, but not stored, with our shipping providers:', 'fraktvalg' ) . '</p>' .
+		           '<p>' . __( 'In addition to any data covered by the stores general privacy policy, When you visit your cart or the store checkout page, the following information may be shared with our shipping providers:', 'fraktvalg' ) . '</p>' .
 		           '<ul>' .
 		           '<li>' . __( 'Your cart items: This is to ensure the size of your shipment is accounted for, and any items requiring special handling are accounted for.', 'fraktvalg' ) . '</li>' .
 		           '<li>' . __( 'Your shipping address: This is to ensure the shipping provider can deliver your order to your address, and can provide an accurate cost for the shipping and handling.', 'fraktvalg' ) . '</li>' .
