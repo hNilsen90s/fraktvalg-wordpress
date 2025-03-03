@@ -32,7 +32,7 @@ class Settings {
 		?>
 		<style>
 			#wpcontent {
-				padding-left: 0;
+				padding-left: 0 !important;
 			}
 		</style>
 		<?php
