@@ -19,7 +19,7 @@ Fraktvalg is a SaaS solution, and requires an API key to function, which you can
 **Privacy note**
 Although the plugin does not directly store user data, in order to calculate shipping costs it will need to send order data such as items (weight, sizes, and types), your shop address, and the customers delivery address to the Fraktvalg API services, which handles the communication with the individual shipping providers.
 
-Please see the [Fraktvalg Privacy Policy]( for information on what data may be collected and how it is handled.
+Please see the [Fraktvalg Privacy Policy](https://api.fraktvalg.no/personvern) for information on what data may be collected and how it is handled.
 
 You may also find additional privacy details in your WordPress admin area under the Tools > Privacy menu.
 
