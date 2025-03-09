@@ -58,17 +58,17 @@ export default function Modal({ setIsModalOpen }) {
 					</div>
 				) : labelImageUrl ? (
 					<>
-						<img
-							src={labelImageUrl}
-							alt="Shipping Label"
-							className="max-w-full w-full h-auto mb-4 shadow-lg"
-						/>
 						<button
 							type="button"
 							className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
 							onClick={printLabel}>
 							{ __( 'Print', 'fraktvalg' ) }
 						</button>
+						<img
+							src={labelImageUrl}
+							alt="Shipping Label"
+							className="max-w-full w-full h-auto mb-4 shadow-lg"
+						/>
 					</>
 				) : (
 					<p className="text-red-500 text-center">
