@@ -245,7 +245,7 @@ export default function Providers({setProvider, setTab}) {
 							<p className="text-sm text-gray-600">
 								{ __( 'Is there someone you would like to see here?', 'fraktvalg' ) }
 							</p>
-							<a href="mailto:kontakt@fraktvalg.no" className="inline-flex items-center text-custom hover:text-custom-dark font-medium">
+							<a href="mailto:hei@fraktvalg.no" className="inline-flex items-center text-custom hover:text-custom-dark font-medium">
 								<span>
 									{ __( 'Send us an e-mail', 'fraktvalg' ) }
 								</span>
