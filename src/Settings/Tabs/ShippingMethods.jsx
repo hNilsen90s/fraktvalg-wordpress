@@ -149,9 +149,11 @@ export default function ShippingMethods({supplier, setTab}) {
 						</tbody>
 					</table>
 
-					<Button type="button" onClick={() => saveShippingMethods()} className="mt-4">
-						{__('Save', 'fraktvalg')}
-					</Button>
+					<div className="flex flex-col md:flex-row justify-end gap-2 mt-4">
+						<Button type="button" onClick={() => saveShippingMethods()} className="md:inline-block md:w-fit">
+							{__('Save shipping overrides', 'fraktvalg')}
+						</Button>
+					</div>
 				</>
 			}
 		</Wrapper>
