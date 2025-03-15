@@ -9,14 +9,29 @@
 }
 
 /* Define color variables with fallback values from Tailwind config */
-#fraktvalg-shipping {
+.wp-block-fraktvalg-shipping-selector {
 	--fraktvalg-primary-color: #2F463E;
 	--fraktvalg-secondary-color: #4D8965;
 	--fraktvalg-tertiary-color: #65C7A4;
+
+	/* Inherit theme typography */
+	font-family: var(--wp--preset--font-family--system-font, inherit);
+	font-size: var(--wp--preset--font-size--normal, inherit);
+	line-height: var(--wp--custom--typography--line-height--normal, inherit);
+
+	h1, h2, h3, h4, h5, h6 {
+		font-family: var(--wp--preset--font-family--heading, inherit);
+		line-height: var(--wp--custom--typography--line-height--heading, inherit);
+	}
+
+	p {
+		font-family: var(--wp--preset--font-family--body, inherit);
+		line-height: var(--wp--custom--typography--line-height--paragraph, inherit);
+	}
 }
 
 /* Override Tailwind color classes with CSS variables */
-#fraktvalg-shipping {
+.wp-block-fraktvalg-shipping-selector {
 	/* Text colors */
 	.text-primary {
 		color: var(--fraktvalg-primary-color) !important;
