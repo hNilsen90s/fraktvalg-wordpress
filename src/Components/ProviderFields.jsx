@@ -12,7 +12,7 @@ import FieldDescription from "../FormElements/FieldDescription";
 
 export default function ProviderFields({ includeOptional = false, provider, fields, callback }) {
 	const [ fieldValues, setFieldValues ] = useState( {} );
-	const [ showExplanation, setShowExplanation ] = useState( false );
+	const [ showExplanations, setShowExplanations ] = useState( {} );
 
 	const setFieldValueCallback = ( event ) => {
 		if ( event.target.type === 'checkbox' ) {
@@ -110,6 +110,13 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 		}
 	}
 
+	const toggleExplanation = (fieldName) => {
+		setShowExplanations(prev => ({
+			...prev,
+			[fieldName]: !prev[fieldName]
+		}));
+	};
+
 	return (
 		<>
 			{fields.flatMap( (field, index) => {
@@ -124,7 +131,7 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 							<div className="mt-2">
 								<button type="button"
 										className="text-sm text-custom hover:text-custom-dark flex items-center cursor-pointer help-toggle"
-										onClick={() => setShowExplanation( ! showExplanation )}
+										onClick={() => toggleExplanation(field.name)}
 								>
 									<InformationCircleIcon className="w-5 h-5 mr-1" />
 									<span>
@@ -132,7 +139,7 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 									</span>
 								</button>
 
-								{ showExplanation &&
+								{ showExplanations[field.name] &&
 									<FieldDescription>
 										<p>
 											{ field?.help?.text }
