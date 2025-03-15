@@ -7,12 +7,13 @@ import metadata from './block.json';
 import {Edit} from "./edit";
 import Block from "./block";
 
-registerBlockType( metadata, {
+registerBlockType(metadata.name, {
+	...metadata,
 	edit: Edit,
 	save: () => null,
-} );
+});
 
-registerCheckoutBlock( {
+registerCheckoutBlock({
 	metadata: metadata,
-	component: () => <Block />,
-} );
+	component: Block
+});

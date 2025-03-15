@@ -4,12 +4,24 @@ import {ArrowLeftIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
 import {clsx} from "clsx";
 import {formatShippingPrice} from "../utils/formatShippingPrice";
 
-export default function ShippingMethods({ methods, selectedShippingMethod, onSelectMethod, setSelectedShipper }) {
+export default function ShippingMethods({
+	methods,
+	selectedShippingMethod,
+	onSelectMethod,
+	setSelectedShipper,
+	isEditor = false
+}) {
 	return (
 		<div className="p-4">
 			<button
 				className="mb-4 px-4 py-2 pl-0 transition-all bg-transparent hover:text-secondary rounded-lg"
-				onClick={() => setSelectedShipper(null)}>
+				onClick={() => setSelectedShipper(null)}
+				disabled={isEditor}
+				style={{
+					opacity: isEditor ? 0.5 : 1,
+					cursor: isEditor ? 'not-allowed' : 'pointer',
+				}}
+			>
 				<ArrowLeftIcon className="w-4 h-4 inline-block mr-2" />
 				{ __( 'Return to shipping providers', 'fraktvalg' ) }
 			</button>

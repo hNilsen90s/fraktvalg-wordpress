@@ -33,6 +33,9 @@
 		"tertiaryColor": {
 			"type": "string",
 			"default": "#65C7A4"
+		},
+		"style": {
+			"type": "object"
 		}
 	},
 	"supports": {
@@ -41,11 +44,18 @@
 		"reusable": false,
 		"inserter": false,
 		"lock": false,
-		"color": {
-			"text": true,
-			"background": false
-		}
+		"color": false,
+		"spacing": false,
+		"typography": false,
+		"__experimentalBorder": false
 	},
+	"styles": [
+		{
+			"name": "default",
+			"label": "Default",
+			"isDefault": true
+		}
+	],
 	"textdomain": "fraktvalg",
 	"editorScript": "file:./index.js",
 	"viewScript": "file:./frontend.js",

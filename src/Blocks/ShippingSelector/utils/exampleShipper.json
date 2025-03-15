@@ -1,0 +1,90 @@
+{
+    "single": [
+        {
+            "id": "1",
+            "name": "Express Shipping",
+            "details": {
+                "LowestPrice": 99,
+                "quickestShippingTime": "1-2 business days"
+            },
+            "shippingOptions": [
+                {
+                    "rate_id": "express_standard",
+                    "name": "Standard Delivery",
+                    "price": 99,
+                    "shippingTime": "2-3 virkedager",
+                    "delivery": {
+                        "days": 2
+                    }
+                },
+                {
+                    "rate_id": "express_priority",
+                    "name": "Priority Delivery",
+                    "price": 149,
+                    "shippingTime": "1-2 virkedager",
+                    "delivery": {
+                        "days": 1
+                    }
+                }
+            ]
+        }
+    ],
+    "multiple": [
+        {
+            "id": "1",
+            "name": "Fast Shipping",
+            "details": {
+                "LowestPrice": 149,
+                "quickestShippingTime": "1 business day"
+            },
+            "shippingOptions": [
+                {
+                    "rate_id": "fast_priority",
+                    "name": "Priority Delivery",
+                    "price": 149,
+                    "shippingTime": "1-2 virkedager",
+                    "delivery": {
+                        "days": 1
+                    }
+                },
+                {
+                    "rate_id": "fast_express",
+                    "name": "Express Delivery",
+                    "price": 199,
+                    "shippingTime": "Same Day",
+                    "delivery": {
+                        "days": 0
+                    }
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "name": "Budget Shipping",
+            "details": {
+                "LowestPrice": 49,
+                "quickestShippingTime": "3 business days"
+            },
+            "shippingOptions": [
+                {
+                    "rate_id": "budget_standard",
+                    "name": "Standard Delivery",
+                    "price": 49,
+                    "shippingTime": "3-5 virkedager",
+                    "delivery": {
+                        "days": 3
+                    }
+                },
+                {
+                    "rate_id": "budget_express",
+                    "name": "Express Delivery",
+                    "price": 79,
+                    "shippingTime": "2-3 virkedager",
+                    "delivery": {
+                        "days": 2
+                    }
+                }
+            ]
+        }
+    ]
+} 
