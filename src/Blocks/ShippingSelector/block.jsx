@@ -11,7 +11,8 @@ import Loading from "./Components/Loading";
 import ShippingMethods from "./Components/ShippingMethods";
 import Shippers from "./Components/Shippers";
 
-export default function Block( { className, isEditor = false } ) {
+export default function Block( { attributes = {}, className, isEditor = false } ) {
+	const { primaryColor = '#2F463E', secondaryColor = '#4D8965', tertiaryColor = '#65C7A4' } = attributes;
 	const [ selectedShipper, setSelectedShipper ] = useState(null);
 	const [ selectedShippingMethod, setSelectedShippingMethod ] = useState( null );
 	const [ isLoading, setIsLoading ] = useState( true );
@@ -19,6 +20,13 @@ export default function Block( { className, isEditor = false } ) {
 	const [ shippers, setShippers ] = useState( {} );
 
 	const blockProps = useBlockProps();
+
+	// Create a style object for dynamic colors
+	const colorStyles = {
+		'--fraktvalg-primary-color': primaryColor,
+		'--fraktvalg-secondary-color': secondaryColor,
+		'--fraktvalg-tertiary-color': tertiaryColor,
+	};
 
 	const selectShippingMethod = (method) => {
 		fetch( '/wp-json/wc/store/v1/cart/select-shipping-rate', {
@@ -52,7 +60,7 @@ export default function Block( { className, isEditor = false } ) {
 						name: rate.name,
 						price: rate.price,
 						shippingTime: '1-3 virkedager', // Default value, adjust as needed
-						icon: <TruckIcon className="w-10 h-10 mr-4 text-tertiary inline-block" />, // Default icon, adjust as needed
+						icon: <TruckIcon className="w-10 h-10 mr-4" style={{ color: 'var(--fraktvalg-tertiary-color)' }} />, // Using CSS variable
 						selected: rate.selected,
 						delivery: {
 							days: rate.delivery.days,
@@ -86,14 +94,14 @@ export default function Block( { className, isEditor = false } ) {
 
 	if ( isEditor ) {
 		return (
-			<div { ...blockProps }>
+			<div { ...blockProps } style={colorStyles}>
 				<Loading />
 			</div>
 		);
 	}
 
 	return (
-		<>
+		<div style={colorStyles}>
 			{ isLoading &&
 				<Loading />
 			}
@@ -110,6 +118,6 @@ export default function Block( { className, isEditor = false } ) {
 					onSelectMethod={ selectShippingMethod }
 				/>
 			}
-		</>
+		</div>
 	)
 }

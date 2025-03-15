@@ -21,6 +21,18 @@
 				"remove": true,
 				"move": false
 			}
+		},
+		"primaryColor": {
+			"type": "string",
+			"default": "#2F463E"
+		},
+		"secondaryColor": {
+			"type": "string",
+			"default": "#4D8965"
+		},
+		"tertiaryColor": {
+			"type": "string",
+			"default": "#65C7A4"
 		}
 	},
 	"supports": {
@@ -28,7 +40,11 @@
 		"multiple": false,
 		"reusable": false,
 		"inserter": false,
-		"lock": false
+		"lock": false,
+		"color": {
+			"text": true,
+			"background": false
+		}
 	},
 	"textdomain": "fraktvalg",
 	"editorScript": "file:./index.js",

@@ -7,3 +7,91 @@
 .wp-block-woocommerce-checkout-shipping-methods-block {
 	display: none;
 }
+
+/* Define color variables with fallback values from Tailwind config */
+#fraktvalg-shipping {
+	--fraktvalg-primary-color: #2F463E;
+	--fraktvalg-secondary-color: #4D8965;
+	--fraktvalg-tertiary-color: #65C7A4;
+}
+
+/* Override Tailwind color classes with CSS variables */
+#fraktvalg-shipping {
+	/* Text colors */
+	.text-primary {
+		color: var(--fraktvalg-primary-color) !important;
+	}
+
+	.text-secondary {
+		color: var(--fraktvalg-secondary-color) !important;
+	}
+
+	.text-tertiary {
+		color: var(--fraktvalg-tertiary-color) !important;
+	}
+
+	/* Background colors */
+	.bg-primary {
+		background-color: var(--fraktvalg-primary-color) !important;
+	}
+
+	.bg-secondary {
+		background-color: var(--fraktvalg-secondary-color) !important;
+	}
+
+	.bg-tertiary {
+		background-color: var(--fraktvalg-tertiary-color) !important;
+	}
+
+	/* Hover text colors */
+	.hover\:text-primary:hover {
+		color: var(--fraktvalg-primary-color) !important;
+	}
+
+	.hover\:text-secondary:hover {
+		color: var(--fraktvalg-secondary-color) !important;
+	}
+
+	.hover\:text-tertiary:hover {
+		color: var(--fraktvalg-tertiary-color) !important;
+	}
+
+	/* Hover background colors */
+	.hover\:bg-primary:hover {
+		background-color: var(--fraktvalg-primary-color) !important;
+	}
+
+	.hover\:bg-secondary:hover {
+		background-color: var(--fraktvalg-secondary-color) !important;
+	}
+
+	.hover\:bg-tertiary:hover {
+		background-color: var(--fraktvalg-tertiary-color) !important;
+	}
+
+	/* Border colors */
+	.border-primary {
+		border-color: var(--fraktvalg-primary-color) !important;
+	}
+
+	.border-secondary {
+		border-color: var(--fraktvalg-secondary-color) !important;
+	}
+
+	.border-tertiary {
+		border-color: var(--fraktvalg-tertiary-color) !important;
+	}
+
+	/* Hover border colors */
+	.hover\:border-primary:hover {
+		border-color: var(--fraktvalg-primary-color) !important;
+	}
+
+	.hover\:border-secondary:hover {
+		border-color: var(--fraktvalg-secondary-color) !important;
+	}
+
+	.hover\:border-tertiary:hover {
+		border-color: var(--fraktvalg-tertiary-color) !important;
+	}
+}
