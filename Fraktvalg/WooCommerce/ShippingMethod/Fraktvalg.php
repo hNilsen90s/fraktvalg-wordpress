@@ -30,6 +30,11 @@ class Fraktvalg extends \WC_Shipping_Method {
 		}
 
 		$total_weight = 0;
+		$total_length = 0;
+		$total_width = 0;
+		$total_height = 0;
+		$total_volume = 0;
+
 		foreach ( $package['contents'] as $data ) {
 			$product = $data['data'];
 			if ( $data['quantity'] < 1 || ! $data['data']->needs_shipping() ) {
@@ -37,9 +42,18 @@ class Fraktvalg extends \WC_Shipping_Method {
 			}
 
 			$product_weight = $product->get_weight();
+			$product_length = $product->get_length();
+			$product_width = $product->get_width();
+			$product_height = $product->get_height();
 
 			if ( $product_weight ) {
 				$total_weight += ( (float) $product_weight * $data['quantity'] );
+			}
+			if ( $product_length && $product_width && $product_height ) {
+				$total_length = max($total_length, (float) $product_length);
+				$total_width = max($total_width, (float) $product_width);
+				$total_height = max($total_height, (float) $product_height);
+				$total_volume += ((float) $product_length * (float) $product_width * (float) $product_height * $data['quantity']);
 			}
 		}
 
@@ -64,6 +78,20 @@ class Fraktvalg extends \WC_Shipping_Method {
 				]
 			],
 		];
+
+		// Add dimensions if they are available
+		if ($total_length > 0) {
+			$shipping_options_array['packages'][0]['packageLength'] = $total_length;
+		}
+		if ($total_width > 0) {
+			$shipping_options_array['packages'][0]['packageWidth'] = $total_width;
+		}
+		if ($total_height > 0) {
+			$shipping_options_array['packages'][0]['packageHeight'] = $total_height;
+		}
+		if ($total_volume > 0) {
+			$shipping_options_array['packages'][0]['packageVolume'] = $total_volume;
+		}
 
 		$shippers = Api::post(
 			'/shipment/offers',
