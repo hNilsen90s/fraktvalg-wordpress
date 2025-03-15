@@ -9,17 +9,18 @@ export default function ShippingMethods({
 	selectedShippingMethod,
 	onSelectMethod,
 	setSelectedShipper,
-	isEditor = false
+	isEditor = false,
+	isLoading = false
 }) {
 	return (
 		<div className="p-4">
 			<button
 				className="mb-4 px-4 py-2 pl-0 transition-all bg-transparent hover:text-secondary rounded-lg"
 				onClick={() => setSelectedShipper(null)}
-				disabled={isEditor}
+				disabled={isEditor || isLoading}
 				style={{
-					opacity: isEditor ? 0.5 : 1,
-					cursor: isEditor ? 'not-allowed' : 'pointer',
+					opacity: (isEditor || isLoading) ? 0.5 : 1,
+					cursor: (isEditor || isLoading) ? 'not-allowed' : 'pointer',
 				}}
 			>
 				<ArrowLeftIcon className="w-4 h-4 inline-block mr-2" />
@@ -31,9 +32,13 @@ export default function ShippingMethods({
 					<div
 						key={index}
 						className={ clsx(
-							"border rounded-lg p-4 flex flex-col sm:flex-row transition-all duraction-300 items-center justify-between cursor-pointer hover:bg-tertiary/10 hover:shadow-md",
+							"border rounded-lg p-4 flex flex-col sm:flex-row transition-all duraction-300 items-center justify-between",
+							{
+								'cursor-pointer hover:bg-tertiary/10 hover:shadow-md': !isLoading,
+								'cursor-not-allowed opacity-50': isLoading && option?.rate_id !== selectedShippingMethod
+							}
 						) }
-						onClick={() => onSelectMethod(option)}>
+						onClick={() => !isLoading && onSelectMethod(option)}>
 						<div className="flex items-center">
 							{ option?.rate_id === selectedShippingMethod
 								? <CheckCircleIcon className="w-10 h-10 mr-4 text-primary inline-block" />
@@ -43,7 +48,7 @@ export default function ShippingMethods({
 									<span className="text-md font-semibold">
 										{option.name}
 									</span>
-								<p  className="text-sm text-gray-600 flex items-center">
+								<p className="text-sm text-gray-600 flex items-center">
 									{option.shippingTime}
 								</p>
 							</div>

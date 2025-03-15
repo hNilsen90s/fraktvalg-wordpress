@@ -2,6 +2,9 @@ import {useEffect, useState} from '@wordpress/element';
 import {useBlockProps} from '@wordpress/block-editor';
 import {__} from '@wordpress/i18n';
 import {TruckIcon} from "@heroicons/react/24/outline";
+import apiFetch from '@wordpress/api-fetch';
+import { dispatch } from '@wordpress/data';
+import '@woocommerce/block-data';
 
 import './style.pcss';
 import {GetUniqueShippers} from "./utils/getUniqueShippers";
@@ -15,6 +18,7 @@ export default function Block({attributes = {}}) {
 	const [selectedShipper, setSelectedShipper] = useState(null);
 	const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isMethodSelectionLoading, setIsMethodSelectionLoading] = useState(false);
 	const [shippers, setShippers] = useState({});
 	const [showShipperList, setShowShipperList] = useState(false);
 
@@ -28,19 +32,34 @@ export default function Block({attributes = {}}) {
 	};
 
 	const selectShippingMethod = (method) => {
-		fetch('/wp-json/wc/store/v1/cart/select-shipping-rate', {
+		if (!method || !method.rate_id) {
+			console.error('Invalid shipping method or missing rate_id:', method);
+			return;
+		}
+
+		setIsMethodSelectionLoading(true);
+
+		apiFetch({
+			path: '/wc/store/v1/cart/select-shipping-rate',
 			method: 'POST',
-			body: JSON.stringify({
+			data: {
 				package_id: 0,
-				rate_id: method?.rate_id,
-			}),
+				rate_id: method.rate_id,
+			},
 		})
-			.then(response => response.json())
 			.then(data => {
-				setSelectedShippingMethod(method?.rate_id);
-				console.log(data);
+				setSelectedShippingMethod(method.rate_id);
+				console.log('Shipping method updated:', data);
+				// Invalidate the cart store to trigger a refresh
+				dispatch('wc/store/cart').invalidateResolutionForStore();
 			})
-			.catch(error => console.error('Error selecting shipping method:', error));
+			.catch(error => {
+				console.error('Error selecting shipping method:', error);
+				setSelectedShippingMethod(null);
+			})
+			.finally(() => {
+				setIsMethodSelectionLoading(false);
+			});
 	};
 
 	const handleShipperSelect = (shipper) => {
@@ -100,6 +119,7 @@ export default function Block({attributes = {}}) {
 					setSelectedShipper={() => setShowShipperList(true)}
 					selectedShippingMethod={selectedShippingMethod}
 					onSelectMethod={selectShippingMethod}
+					isLoading={isMethodSelectionLoading}
 				/>
 			);
 		}
@@ -120,6 +140,7 @@ export default function Block({attributes = {}}) {
 				setSelectedShipper={() => setSelectedShipper(null)}
 				selectedShippingMethod={selectedShippingMethod}
 				onSelectMethod={selectShippingMethod}
+				isLoading={isMethodSelectionLoading}
 			/>
 		);
 	};
