@@ -65,6 +65,8 @@ class Fraktvalg extends \WC_Shipping_Method {
 			'sender' => [
 				'country'    => \get_option( 'woocommerce_default_country' ),
 				'postalCode' => \get_option( 'woocommerce_store_postcode' ),
+				'city'       => \get_option( 'woocommerce_store_city' ),
+				'address'    => \get_option( 'woocommerce_store_address' ),
 			],
 			'recipient' => [
 				'country'    => $package['destination']['country'] ?? '',
