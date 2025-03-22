@@ -84,7 +84,6 @@ class Fraktvalg extends \WC_Shipping_Method {
 			$product_length = $product->get_length();
 			$product_width = $product->get_width();
 			$product_height = $product->get_height();
-			$product_volume = $product->get_volume();
 
 			if ( $product_length || $product_width || $product_height ) {
 				if ( $product_length ) {
@@ -111,12 +110,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 				$total_width = max( $total_width, (float) $product_width );
 				$total_height = max( $total_height, (float) $product_height );
 
-				if ( ! $product_volume ) {
-					$total_volume += ( ( (float) $product_length * (float) $product_width * (float) $product_height ) * $data['quantity'] );
-				}
-			}
-			if ( $product_volume ) {
-				$total_volume += ( (float) $product_volume * $data['quantity'] );
+				$total_volume += ( ( (float) $product_length * (float) $product_width * (float) $product_height ) * $data['quantity'] );
 			}
 		}
 
