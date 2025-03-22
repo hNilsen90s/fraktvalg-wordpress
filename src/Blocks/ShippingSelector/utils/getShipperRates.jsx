@@ -16,6 +16,7 @@ export function GetShipperRates( cart, shipper ) {
 				rates.push( {
 					rate_id: rate?.rate_id,
 					name: rate?.name,
+					description: options?.texts?.description,
 					price: rate?.price,
 					selected: rate?.selected || false,
 					delivery: {

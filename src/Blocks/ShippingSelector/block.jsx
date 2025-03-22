@@ -35,7 +35,6 @@ export default function Block({attributes = {}}) {
 
 	const selectShippingMethod = (method) => {
 		if (!method || !method.rate_id) {
-			console.error('Invalid shipping method or missing rate_id:', method);
 			return;
 		}
 
@@ -51,12 +50,11 @@ export default function Block({attributes = {}}) {
 		})
 			.then(data => {
 				setSelectedShippingMethod(method.rate_id);
-				console.log('Shipping method updated:', data);
+
 				// Invalidate the cart store to trigger a refresh
 				dispatch('wc/store/cart').invalidateResolutionForStore();
 			})
 			.catch(error => {
-				console.error('Error selecting shipping method:', error);
 				setSelectedShippingMethod(null);
 			})
 			.finally(() => {
@@ -83,6 +81,7 @@ export default function Block({attributes = {}}) {
 					shipper.shippingOptions = rates.map(rate => ({
 						rate_id: rate.rate_id,
 						name: rate.name,
+						description: rate.description,
 						price: rate.price,
 						shippingTime: '1-3 virkedager',
 						icon: <TruckIcon className="w-10 h-10 mr-4" style={{color: 'var(--fraktvalg-tertiary-color)'}}/>,

@@ -45,9 +45,12 @@ export default function ShippingMethods({
 								: option?.icon && option.icon
 							}
 							<div className="flex flex-col gap-1">
-									<span className="text-md font-semibold">
-										{option.name}
-									</span>
+								<span className="text-md font-semibold">
+									{option.name}
+								</span>
+								<span className="text-sm italic">
+									{option.description}
+								</span>
 								<p className="text-sm text-gray-600 flex items-center">
 									{option.shippingTime}
 								</p>
