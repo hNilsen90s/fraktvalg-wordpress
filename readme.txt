@@ -35,5 +35,5 @@ Fantastic! The Fraktvalg plugin is open source, and you can browse the code or g
 
 == Changelog ==
 
-= 1.0.0 (TODO TBD) =
+= 1.0.0 (2025-03-22) =
 * Initial release
