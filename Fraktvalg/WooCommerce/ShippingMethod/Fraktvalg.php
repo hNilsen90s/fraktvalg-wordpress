@@ -35,28 +35,92 @@ class Fraktvalg extends \WC_Shipping_Method {
 		$total_height = 0;
 		$total_volume = 0;
 
+		// Get units once before the loop
+		$weight_unit = get_option( 'woocommerce_weight_unit' );
+		$dimension_unit = get_option( 'woocommerce_dimension_unit' );
+		
+		// Set up dimension conversion factor
+		$dimension_conversion_factor = 1;
+		switch ( $dimension_unit ) {
+			case 'm':
+				$dimension_conversion_factor = 1000;
+				break;
+			case 'cm':
+				$dimension_conversion_factor = 10;
+				break;
+			case 'in':
+				$dimension_conversion_factor = 25.4;
+				break;
+			case 'yd':
+				$dimension_conversion_factor = 914.4;
+				break;
+			// 'mm' needs no conversion
+		}
+
 		foreach ( $package['contents'] as $data ) {
 			$product = $data['data'];
 			if ( $data['quantity'] < 1 || ! $data['data']->needs_shipping() ) {
 				continue;
 			}
 
+			// Get the weight and convert to grams
 			$product_weight = $product->get_weight();
+			if ( $product_weight ) {
+				switch ( $weight_unit ) {
+					case 'kg':
+						$product_weight *= 1000;
+						break;
+					case 'lbs':
+						$product_weight *= 453.59237;
+						break;
+					case 'oz':
+						$product_weight *= 28.3495231;
+						break;
+					// 'g' needs no conversion
+				}
+			}
+
+			// Get dimensions and convert to millimeters
 			$product_length = $product->get_length();
 			$product_width = $product->get_width();
 			$product_height = $product->get_height();
+			$product_volume = $product->get_volume();
+
+			if ( $product_length || $product_width || $product_height ) {
+				if ( $product_length ) {
+					$product_length *= $dimension_conversion_factor;
+				}
+				if ( $product_width ) {
+					$product_width *= $dimension_conversion_factor;
+				}
+				if ( $product_height ) {
+					$product_height *= $dimension_conversion_factor;
+				}
+				
+				// Recalculate volume if it wasn't explicitly set
+				if ( ! $product_volume && $product_length && $product_width && $product_height ) {
+					$product_volume = $product_length * $product_width * $product_height;
+				}
+			}
 
 			if ( $product_weight ) {
 				$total_weight += ( (float) $product_weight * $data['quantity'] );
 			}
 			if ( $product_length && $product_width && $product_height ) {
-				$total_length = max($total_length, (float) $product_length);
-				$total_width = max($total_width, (float) $product_width);
-				$total_height = max($total_height, (float) $product_height);
-				$total_volume += ((float) $product_length * (float) $product_width * (float) $product_height * $data['quantity']);
+				$total_length = max( $total_length, (float) $product_length );
+				$total_width = max( $total_width, (float) $product_width );
+				$total_height = max( $total_height, (float) $product_height );
+
+				if ( ! $product_volume ) {
+					$total_volume += ( ( (float) $product_length * (float) $product_width * (float) $product_height ) * $data['quantity'] );
+				}
+			}
+			if ( $product_volume ) {
+				$total_volume += ( (float) $product_volume * $data['quantity'] );
 			}
 		}
 
+		// Ensure minimum weight of 1g instead of 1kg
 		if ( $total_weight < 1 ) {
 			$total_weight = 1;
 		}
@@ -139,7 +203,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 				}
 			}
 		} else {
-			// If an error happened when fetching shipping providers, use the fallback shipping option.
+			// If an error happened when fetching shipping providers, or no options exist, use the fallback shipping option.
 			if ( ! empty( $settings['freight'] ) ) {
 				if ( 'fixed' === $settings['freight']['custom']['type'] ) {
 					$price = $settings['freight']['custom']['price'];
