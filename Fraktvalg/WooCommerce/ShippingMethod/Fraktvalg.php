@@ -140,23 +140,23 @@ class Fraktvalg extends \WC_Shipping_Method {
 			],
 			'packages' => [
 				[
-					'packageWeight' => $total_weight
+					'packageWeight' => ceil( $total_weight )
 				]
 			],
 		];
 
 		// Add dimensions if they are available
 		if ($total_length > 0) {
-			$shipping_options_array['packages'][0]['packageLength'] = $total_length;
+			$shipping_options_array['packages'][0]['packageLength'] = ceil( $total_length );
 		}
 		if ($total_width > 0) {
-			$shipping_options_array['packages'][0]['packageWidth'] = $total_width;
+			$shipping_options_array['packages'][0]['packageWidth'] = ceil( $total_width );
 		}
 		if ($total_height > 0) {
-			$shipping_options_array['packages'][0]['packageHeight'] = $total_height;
+			$shipping_options_array['packages'][0]['packageHeight'] = ceil( $total_height );
 		}
 		if ($total_volume > 0) {
-			$shipping_options_array['packages'][0]['packageVolume'] = $total_volume;
+			$shipping_options_array['packages'][0]['packageVolume'] = ceil( $total_volume );
 		}
 
 		$shippers = Api::post(
