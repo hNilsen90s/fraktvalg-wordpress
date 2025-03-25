@@ -6,7 +6,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Fraktvalg
- * Plugin URI: https://wordpress.org/plugins/troubleshooting/
+ * Plugin URI: https://fraktvalg.no
  * Description: Easily provide shipping estimates for your customers from multiple providers.
  * Author: fraktvalg
  * Version: 1.0.0
