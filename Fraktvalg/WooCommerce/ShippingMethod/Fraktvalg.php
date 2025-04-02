@@ -168,6 +168,9 @@ class Fraktvalg extends \WC_Shipping_Method {
 			}
 		}
 
+		// Check if we're using a block theme
+		$is_block_theme = function_exists('wp_is_block_theme') && wp_is_block_theme();
+
 		if ( ! empty( $shippingOptions) ) {
 			foreach ( $shippingOptions as $shipper => $options ) {
 				foreach ( $options as $count => $option ) {
@@ -180,11 +183,16 @@ class Fraktvalg extends \WC_Shipping_Method {
 						} else {
 							$price += $settings['freight']['addedCost'];
 						}
+					}					
+					// Set the label based on theme type
+					$label = $option->texts->displayName;
+					if (!$is_block_theme && isset($option->texts->shipperName)) {
+						$label = $option->texts->shipperName . ' - ' . $label;
 					}
 
 					$this->add_rate( [
 						'id'        => $shipping_id,
-						'label'     => $option->texts->displayName,
+						'label'     => $label,
 						'cost'      => $price,
 						'taxes'     => false,
 						'package'   => $package,
