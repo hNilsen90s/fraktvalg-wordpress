@@ -91,12 +91,12 @@ export default function Templates({ nextStep }) {
 				<p className="text-gray-600 mb-6">
 					{ templates.blockTheme 
 						? __( 'Your theme uses block templates. Choose how you want to add the Fraktvalg block to your templates:', 'fraktvalg' )
-						: __( 'Your theme does not use block templates. You can proceed to the next step.', 'fraktvalg' )
+						: __( 'Your theme does not use block templates. You can proceed to the next step without configuring any templates.', 'fraktvalg' )
 					}
 				</p>
 			</div>
 
-			{ templates.urls && (
+			{ templates.blockTheme && templates.urls && (
 				<ul className="space-y-4">
 					{ templates.urls.cart !== undefined && (
 						<li className="flex flex-col p-4 bg-white rounded-lg shadow-sm border">
