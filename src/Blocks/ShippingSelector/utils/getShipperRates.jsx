@@ -18,6 +18,7 @@ export function GetShipperRates( cart, shipper ) {
 					name: rate?.name,
 					description: options?.texts?.description,
 					price: rate?.price,
+					icon: options?.delivery?.serviceCode,
 					selected: rate?.selected || false,
 					delivery: {
 						date: delivery,

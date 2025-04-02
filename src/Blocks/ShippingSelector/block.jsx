@@ -9,6 +9,7 @@ import '@woocommerce/block-data';
 import './style.pcss';
 import {GetUniqueShippers} from "./utils/getUniqueShippers";
 import {GetShipperRates} from "./utils/getShipperRates";
+import {getShippingIcon} from "./utils/getShippingIcon";
 import Loading from "./Components/Loading";
 import ShippingMethods from "./Components/ShippingMethods";
 import Shippers from "./Components/Shippers";
@@ -70,9 +71,11 @@ export default function Block({attributes = {}}) {
 	const fetchShippingOptions = () => {
 		setIsLoading(true);
 
-		fetch('/wp-json/wc/store/v1/cart')
-			.then(response => response.json())
-			.then(data => {
+		apiFetch({
+			path: '/wc/store/v1/cart',
+			method: 'GET',
+		})
+			.then( ( data ) => {
 				let newShippers = GetUniqueShippers(data);
 
 				newShippers.forEach(shipper => {
@@ -84,7 +87,7 @@ export default function Block({attributes = {}}) {
 						description: rate.description,
 						price: rate.price,
 						shippingTime: '1-3 virkedager',
-						icon: <TruckIcon className="w-10 h-10 mr-4" style={{color: 'var(--fraktvalg-tertiary-color)'}}/>,
+						icon: getShippingIcon(rate.delivery.serviceCode),
 						selected: rate.selected,
 						delivery: {
 							days: rate.delivery.days,
@@ -103,9 +106,11 @@ export default function Block({attributes = {}}) {
 				});
 
 				setShippers(newShippers);
-				setIsLoading(false);
 			})
-			.catch(error => console.error('Error fetching shipping options:', error));
+			.catch(error => console.error('Error fetching shipping options:', error))
+			.finally(() => {
+				setIsLoading(false);
+			});
 	};
 
 	useEffect(() => {
