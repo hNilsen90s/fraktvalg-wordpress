@@ -5,6 +5,7 @@ import { useState } from 'react';
 import {ChevronDownIcon, ChevronUpIcon} from "@heroicons/react/24/solid";
 import InputNumber from "../../FormElements/InputNumber";
 import InputText from "../../FormElements/InputText";
+import InputBoolean from "../../FormElements/InputBoolean";
 import Button from "../../FormElements/Button";
 import Notification from "../../Components/Notifications";
 
@@ -42,12 +43,14 @@ export default function OptionalSettings({nextStep}) {
 	const [ options, setOptions ] = useState({
 		freight: {
 			addedCost: 0,
-			undersell: 10,
+			addedCostType: 'fixed',
 			custom: {
 				name: __( 'Shipping & handling', 'fraktvalg' ),
 				price: 100,
+				type: 'fixed',
 			}
 		},
+		useProduction: true,
 		names: [],
 	} );
 
@@ -56,14 +59,23 @@ export default function OptionalSettings({nextStep}) {
 			case 'freight[addedCost]':
 				setOptions( { ...options, freight: { ...options.freight, addedCost: event.target.value } } );
 				break;
-			case 'freight[undersell]':
-				setOptions( { ...options, freight: { ...options.freight, undersell: event.target.value } } );
+			case 'freight[addedCostType]':
+				setOptions( { ...options, freight: { ...options.freight, addedCostType: event.target.value } } );
 				break;
 			case 'freight[custom][name]':
 				setOptions( { ...options, freight: { ...options.freight, custom: { ...options.freight.custom, name: event.target.value } } } );
 				break;
 			case 'freight[custom][price]':
 				setOptions( { ...options, freight: { ...options.freight, custom: { ...options.freight.custom, price: event.target.value } } } );
+				break;
+			case 'freight[custom][type]':
+				setOptions( { ...options, freight: { ...options.freight, custom: { ...options.freight.custom, type: event.target.value } } } );
+				break;
+			case 'useProduction':
+				setOptions( { ...options, useProduction: event.target.checked } );
+				break;
+			default:
+				setOptions( { ...options, [event.target.name]: event.target.value } );
 				break;
 		}
 	}
@@ -83,7 +95,7 @@ export default function OptionalSettings({nextStep}) {
 				type: response?.type,
 				title: response?.title,
 				message: response?.message,
-			})
+			} );
 
 			setShowNextButton( true );
 		}).catch((error) => {
@@ -104,38 +116,60 @@ export default function OptionalSettings({nextStep}) {
 			<AccordionSection title={ __( 'Backup shipping option', 'fraktvalg' ) } open={true}>
 				<div className="relative grid grid-cols-1 gap-4">
 					<p>
-						{ __( 'If Fraktvalg should ever become unavailable, create a shipping alternative that will be used instead.', 'fraktvalg' ) }
+						{ __( 'If Fraktvalg should ever become unavailable, or no shiopping options are returned, returns this shipping alternative by default.', 'fraktvalg' ) }
 					</p>
 
-					<InputText label={ __( 'Shipping option name', 'fraktvalg' ) } name="freight[custom][name]" value={options.freight.custom.name} callback={setOption} />
+					<div className="mt-2 grid grid-cols-1 gap-4">
+						<InputText label={ __( 'Shipping option name', 'fraktvalg' ) } name="freight[custom][name]" value={options.freight.custom.name} callback={setOption} />
 
-					<InputNumber label={ __( 'Shipping option cost' ) } name="freight[custom][price]" value={options.freight.custom.price} callback={setOption} />
+						<div className="flex items-center gap-3">
+							<input name="freight[custom][price]" value={ options.freight.custom.price } onChange={ setOption } type="number" min="0" step="1" placeholder="25" className="w-16 border border-gray-300 rounded-md p-2" />
+							<select name="freight[custom][type]" className="border border-gray-300 rounded-md p-2" value={ options.freight.custom.type } onChange={ setOption }>
+								<option value="percent">%</option>
+								<option value="fixed">NOK</option>
+							</select>
+
+							<div>
+								<label htmlFor="something">
+									{ __( 'Backup shipping cost', 'fraktvalg' ) }
+								</label>
+								<p className="text-xs italic">
+									{ __( 'The backup shipping cost can be set to either a fixed value, or a percentage of the order total.', 'fraktvalg' ) }
+								</p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</AccordionSection>
 
 			<AccordionSection title={ __( 'Shipping cost adjustments', 'fraktvalg' ) }>
-				<div className="relative grid grid-cols-1 gap-4">
-					<p>
-						{ __( 'Safeguard your shipping costs with these optional alternatives.', 'fraktvalg' ) }
-					</p>
+				{ __( 'Safeguard your shipping costs with these optional alternatives.', 'fraktvalg' ) }
+
+				<div className="flex items-center gap-3">
+					<input name="freight[addedCost]" value={ options.freight.addedCost } onChange={ setOption } type="number" min="0" step="1" placeholder="10" className="w-16 border border-gray-300 rounded-md p-2" />
+					<select name="freight[addedCostType]" className="border border-gray-300 rounded-md p-2" value={ options.freight.addedCostType } onChange={ setOption }>
+						<option value="percent">%</option>
+						<option value="fixed">NOK</option>
+					</select>
 
 					<div>
-						<InputNumber label={ __( 'Add an optional surcharge to all shipping options', 'fraktvalg' ) } name="freight[addedCost]"
-									 value={options.freight.addedCost} callback={setOption}>
-							<p className="text-xs italic">
-								{ __( 'Additional shipping surcharges are meant to cover administrative- and handling costs, and is automatically added to all shipping alternatives.', 'fraktvalg' ) }
-							</p>
-						</InputNumber>
+						<label htmlFor="something">
+							{ __( 'Add an optional surcharge to all shipping options', 'fraktvalg' ) }
+						</label>
+						<p className="text-xs italic">
+							{ __( 'Additional shipping surcharges are meant to cover administrative- and handling costs, and is automatically added to all shipping alternatives.', 'fraktvalg' ) }
+						</p>
 					</div>
+				</div>
+			</AccordionSection>
 
-					<div>
-						<InputNumber label={ __( 'Fixed discount for prioritized shipping providers', 'fraktvalg' ) } name="freight[undersell]"
-									 value={options.freight.undersell} callback={setOption}>
-							<p className="text-xs italic">
-								{ __( 'If you have chosen a prioritized shipping provider, they will always be cheaper than the competitors by the amount specified here.', 'fraktvalg' ) }
-							</p>
-						</InputNumber>
-					</div>
+			<AccordionSection title={ __( 'Shop environment', 'fraktvalg' ) } open={false}>
+				<p>
+					{ __( 'Some times, you wish to use the shipping providers test environments, for example on a staging site. Doing so will not create legitimate shipping requests, and prevents yo ufrom incurring charges while testing your store setup.', 'fraktvalg' ) }
+				</p>
+
+				<div className="mt-2 grid grid-cols-1 gap-4">
+					<InputBoolean label={ __( 'Use production environments', 'fraktvalg' ) } name="useProduction" value={ options.useProduction } callback={ setOption } />
 				</div>
 			</AccordionSection>
 

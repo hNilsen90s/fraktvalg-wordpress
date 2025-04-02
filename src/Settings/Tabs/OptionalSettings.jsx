@@ -121,7 +121,7 @@ export default function OptionalSettings({}) {
 			<div className="grid grid-cols-1 gap-3">
 				<AccordionSection title={ __( 'Backup shipping option', 'fraktvalg' ) } open={true}>
 					<p>
-						{ __( 'If Fraktvalg should ever become unavailable, create a shipping alternative that will be used instead.', 'fraktvalg' ) }
+						{ __( 'If Fraktvalg should ever become unavailable, or no shiopping options are returned, returns this shipping alternative by default.', 'fraktvalg' ) }
 					</p>
 
 					<div className="mt-2 grid grid-cols-1 gap-4">
