@@ -12,6 +12,7 @@ import Providers from "./Steps/Providers";
 import Finished from "./Steps/Finished";
 import StepCounter from "../Components/StepCounter";
 import OptionalSettings from "./Steps/OptionalSettings";
+import Templates from "./Steps/Templates";
 
 export default function Onboarding() {
 	const [ step, setStep ] = useState(1);
@@ -19,6 +20,7 @@ export default function Onboarding() {
 	const stepLabels = [
 		__( 'License', 'fraktvalg' ),
 		__( 'Providers', 'fraktvalg' ),
+		__( 'Templates', 'fraktvalg' ),
 		__( 'Settings', 'fraktvalg' ),
 		__( 'Finished', 'fraktvalg' ),
 	]
@@ -51,8 +53,9 @@ export default function Onboarding() {
 					<div className="max-w-5xl bg-white rounded-lg shadow p-6">
 						{ step === 1 && <LicenseKey nextStep={ nextStep } /> }
 						{ step === 2 && <Providers nextStep={ nextStep } /> }
-						{ step === 3 && <OptionalSettings nextStep={ nextStep } /> }
-						{ step === 4 && <Finished nextStep={ nextStep } /> }
+						{ step === 3 && <Templates nextStep={ nextStep } /> }
+						{ step === 4 && <OptionalSettings nextStep={ nextStep } /> }
+						{ step === 5 && <Finished nextStep={ nextStep } /> }
 					</div>
 				</div>
 			</div>
