@@ -188,6 +188,10 @@ class Fraktvalg extends \WC_Shipping_Method {
 					$label = $option->texts->displayName;
 					if (!$is_block_theme && isset($option->texts->shipperName)) {
 						$label = $option->texts->shipperName . ' - ' . $label;
+
+						if ( isset( $option->texts->description ) ) {
+							$label .= ' (' . $option->texts->description . ')';
+						}
 					}
 
 					$this->add_rate( [
