@@ -13,6 +13,12 @@ export default function ProviderLogo({logo = null, ...props}) {
 		);
 	}
 
+	if ( logo.startsWith( 'data:image' ) ) {
+		return (
+			<img src={ logo } alt={ alt } { ...props } />
+		);
+	}
+
 	if ( ! logo.startsWith( 'https' ) ) {
 		logo = encodeURIComponent( logo );
 	}
