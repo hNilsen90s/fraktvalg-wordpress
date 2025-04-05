@@ -213,7 +213,7 @@ export default function Providers({setProvider, setTab}) {
 											{ __( 'Disconnect provider', 'fraktvalg' ) }
 										</Button>
 
-										<Button className="md:inline-block md:w-fit" type="button" onClick={ () => storeProviders( key ) }>
+										<Button className="md:inline-block md:w-fit" type="button" onClick={ () => storeProviders( suppliers[ key ] ) }>
 											{ __( 'Update provider settings', 'fraktvalg' ) }
 										</Button>
 									</div>
