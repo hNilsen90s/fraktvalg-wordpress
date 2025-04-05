@@ -136,19 +136,32 @@ class Providers extends Base {
 
 	public function store_providers( \WP_REST_Request $request ) {
 		$provider = $request->get_param( 'providerId' );
-		$fields = $request->get_param( 'fieldValues' );
+		$fields = $request->get_param( 'fieldValues' ) ?: [];
 
 		if ( ! $provider ) {
 			return new \WP_Error( 'missing_providers', 'No providers were supplied', [ 'status' => 400 ] );
 		}
 
-		Api::post(
+		$response = Api::post(
 			'/shipper/register',
 			array_merge(
 				$fields,
 				[ 'shipper_id' => $provider ]
 			)
 		);
+
+		if ( \is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
+			$error_message = 'Could not store providers';
+			
+			if ( ! \is_wp_error( $response ) && isset( $response['body'] ) ) {
+				$response_body = json_decode( $response['body'], true );
+				if ( isset( $response_body['message'] ) ) {
+					$error_message = $response_body['message'];
+				}
+			}
+			
+			return new \WP_Error( 'api_error', $error_message, [ 'status' => 400 ] );
+		}
 
 		return new \WP_Rest_Response( [ 'status' => 'OK' ] );
 	}
