@@ -15,15 +15,38 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 	const [ showExplanations, setShowExplanations ] = useState( {} );
 
 	const setFieldValueCallback = ( event ) => {
-		if ( event.target.type === 'checkbox' ) {
-			setFieldValues( { ...fieldValues, [ event.target.name ]: event.target.checked } );
+		// Handle paste events
+		if (event.type === 'paste') {
+			// Create a synthetic event that mimics the onChange event
+			const syntheticEvent = {
+				target: {
+					name: event.target.name,
+					value: event.clipboardData.getData('text'),
+					type: event.target.type
+				}
+			};
+			
+			// Process the synthetic event
+			if (syntheticEvent.target.type === 'checkbox') {
+				setFieldValues({ ...fieldValues, [syntheticEvent.target.name]: syntheticEvent.target.checked });
+			} else {
+				setFieldValues({ ...fieldValues, [syntheticEvent.target.name]: syntheticEvent.target.value });
+			}
+			
+			callback(provider, fieldValues);
 			return;
 		}
+		
+		// Handle regular change events
+		if (event.target.type === 'checkbox') {
+			setFieldValues({ ...fieldValues, [event.target.name]: event.target.checked });
+		} else {
+			setFieldValues({ ...fieldValues, [event.target.name]: event.target.value });
+		}
 
-		setFieldValues( { ...fieldValues, [ event.target.name ]: event.target.value } );
-
-		callback( provider, fieldValues );
+		callback(provider, fieldValues);
 	}
+
 	useEffect(() => {
 		fields.forEach( field => {
 			if ( field?.value ) {

@@ -7,6 +7,7 @@ export default function InputText({ name, label, value = '', placeholder = '', r
 				type="text"
 				value={value}
 				onChange={callback}
+				onPaste={callback}
 				placeholder={placeholder}
 				required={required}
 				className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"

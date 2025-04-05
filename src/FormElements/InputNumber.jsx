@@ -13,6 +13,21 @@ export default function InputNumber({ name, label, value = '', placeholder = '',
 		}
 	}
 
+	const handlePaste = (event) => {
+		// Get the pasted value
+		const pastedValue = event.clipboardData.getData('text');
+		// Convert to number
+		const numericValue = parseInt(pastedValue, 10);
+		
+		// Only update if it's a valid number
+		if (!isNaN(numericValue) && numericValue >= 0) {
+			setNumber(numericValue);
+		}
+		
+		// Call the original callback
+		callback(event);
+	}
+
 	return (
 		<div>
 			<div className="flex items-center justify-between">
@@ -22,6 +37,7 @@ export default function InputNumber({ name, label, value = '', placeholder = '',
 					type="number"
 					value={number}
 					onChange={callback}
+					onPaste={handlePaste}
 					placeholder={placeholder}
 					required={required}
 					min="0"
