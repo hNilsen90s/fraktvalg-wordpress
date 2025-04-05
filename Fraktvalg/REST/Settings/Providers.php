@@ -150,8 +150,6 @@ class Providers extends Base {
 			)
 		);
 
-		\update_option( 'fraktvalg_configured', true );
-
 		return new \WP_Rest_Response( [ 'status' => 'OK' ] );
 	}
 
