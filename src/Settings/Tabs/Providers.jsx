@@ -17,6 +17,7 @@ export default function Providers({setProvider, setTab}) {
 	const [allSuppliers, setAllSuppliers] = useState({});
 	const [suppliers, setSuppliers] = useState({});
 	const [error, setError] = useState(null);
+	const [errorContext, setErrorContext] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
 	const [ priorityProvider, setPriorityProvider ] = useState(null);
 	const [ priorityProviderDiscount, setPriorityProviderDiscount ] = useState( 10 );
@@ -31,6 +32,7 @@ export default function Providers({setProvider, setTab}) {
 
 	const fetchSuppliers = () => {
 		setError(null);
+		setErrorContext('');
 
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/mine',
@@ -58,6 +60,7 @@ export default function Providers({setProvider, setTab}) {
 				} );
 			}
 		}).catch((error) => {
+			setErrorContext('fetching providers');
 			setError(error?.message);
 		}).then( () => {
 			setIsLoading( false );
@@ -77,6 +80,8 @@ export default function Providers({setProvider, setTab}) {
 
 	const storeProviders = ( key ) => {
 		setProviderLoadingIndicator( key );
+		setError(null);
+		setErrorContext('');
 
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/store',
@@ -85,12 +90,20 @@ export default function Providers({setProvider, setTab}) {
 				providerId: key,
 				fieldValues: providerFieldValues[ key ]
 			}
-		}).then( () => {
+		}).then( (response) => {
 			setProviderLoadingIndicator( '' );
+			fetchSuppliers();
+		}).catch((error) => {
+			setProviderLoadingIndicator( '' );
+			setErrorContext('saving provider settings');
+			setError(error?.message || __('Failed to save provider settings', 'fraktvalg'));
 		});
 	}
 
 	const storePriorityProvider = () => {
+		setError(null);
+		setErrorContext('');
+		
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/priority/store',
 			method: 'POST',
@@ -101,6 +114,11 @@ export default function Providers({setProvider, setTab}) {
 					discountType: priorityProviderDiscountType
 				}
 			}
+		}).then((response) => {
+			fetchPriorityProvider();
+		}).catch((error) => {
+			setErrorContext('saving priority provider settings');
+			setError(error?.message || __('Failed to save priority provider settings', 'fraktvalg'));
 		});
 	}
 
@@ -110,6 +128,8 @@ export default function Providers({setProvider, setTab}) {
 		}
 
 		setProviderLoadingIndicator( provider?.id );
+		setError(null);
+		setErrorContext('');
 
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/disconnect',
@@ -118,7 +138,12 @@ export default function Providers({setProvider, setTab}) {
 				provider: provider?.id
 			}
 		}).then((response) => {
+			setProviderLoadingIndicator('');
 			fetchSuppliers();
+		}).catch((error) => {
+			setProviderLoadingIndicator('');
+			setErrorContext('disconnecting provider');
+			setError(error?.message || __('Failed to disconnect provider', 'fraktvalg'));
 		});
 	}
 
@@ -144,7 +169,7 @@ export default function Providers({setProvider, setTab}) {
 		<Wrapper title="My providers">
 			<div className="grid grid-cols-1 gap-3">
 				{ error &&
-					<Notification type="error" title="Error fetching providers">
+					<Notification type="error" title={`Error ${errorContext ? errorContext : 'fetching providers'}`}>
 						{ error }
 					</Notification>
 				}
