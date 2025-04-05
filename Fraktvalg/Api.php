@@ -5,8 +5,6 @@ namespace Fraktvalg\Fraktvalg;
 class Api {
 
 	private static function headers() {
-		$options = \get_option( 'fraktvalg_options', [] );
-
 		return [
 			'X-Api-Key' => \get_option( 'fraktvalg_api_key' ),
 			'X-API-Environment' => ( Options::get( 'useProduction' ) ? 'production' : 'development' ),
