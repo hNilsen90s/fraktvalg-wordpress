@@ -126,6 +126,7 @@ export default function Block({attributes = {}}) {
 					selectedShippingMethod={selectedShippingMethod}
 					onSelectMethod={selectShippingMethod}
 					isLoading={isMethodSelectionLoading}
+					showReturnButton={false}
 				/>
 			);
 		}

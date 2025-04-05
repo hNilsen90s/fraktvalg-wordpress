@@ -9,23 +9,26 @@ export default function ShippingMethods({
 	selectedShippingMethod,
 	onSelectMethod,
 	setSelectedShipper,
+	showReturnButton = true,
 	isEditor = false,
 	isLoading = false
 }) {
 	return (
-		<div className="p-4">
-			<button
-				className="mb-4 px-4 py-2 pl-0 transition-all bg-transparent hover:text-secondary rounded-lg"
-				onClick={() => setSelectedShipper(null)}
-				disabled={isEditor || isLoading}
-				style={{
-					opacity: (isEditor || isLoading) ? 0.5 : 1,
-					cursor: (isEditor || isLoading) ? 'not-allowed' : 'pointer',
-				}}
-			>
-				<ArrowLeftIcon className="w-4 h-4 inline-block mr-2" />
-				{ __( 'Return to shipping providers', 'fraktvalg' ) }
-			</button>
+		<div className="py-4">
+			{ showReturnButton && (
+				<button
+					className="mb-4 px-4 py-2 pl-0 transition-all bg-transparent hover:text-secondary rounded-lg"
+					onClick={() => setSelectedShipper(null)}
+					disabled={isEditor || isLoading}
+					style={{
+						opacity: (isEditor || isLoading) ? 0.5 : 1,
+						cursor: (isEditor || isLoading) ? 'not-allowed' : 'pointer',
+					}}
+				>
+					<ArrowLeftIcon className="w-4 h-4 inline-block mr-2" />
+					{ __( 'Return to shipping providers', 'fraktvalg' ) }
+				</button>
+			) }
 
 			<div className="flex flex-col gap-2">
 				{methods.map((option, index) => (
