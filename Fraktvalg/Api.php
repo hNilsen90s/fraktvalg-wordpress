@@ -9,6 +9,7 @@ class Api {
 			'X-Api-Key' => \get_option( 'fraktvalg_api_key' ),
 			'X-API-Environment' => ( Options::get( 'useProduction' ) ? 'production' : 'development' ),
 			'X-Request-Locale' => \get_user_locale(),
+			'Accept' => 'application/json',
 		];
 	}
 
