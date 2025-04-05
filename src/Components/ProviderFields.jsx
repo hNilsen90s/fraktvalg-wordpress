@@ -13,6 +13,7 @@ import FieldDescription from "../FormElements/FieldDescription";
 export default function ProviderFields({ includeOptional = false, provider, fields, callback }) {
 	const [ fieldValues, setFieldValues ] = useState( {} );
 	const [ showExplanations, setShowExplanations ] = useState( {} );
+	const [ lastPastedField, setLastPastedField ] = useState( null );
 
 	const setFieldValueCallback = ( event ) => {
 		// Handle paste events
@@ -27,24 +28,43 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 			};
 			
 			// Process the synthetic event
+			const newFieldValues = { ...fieldValues };
 			if (syntheticEvent.target.type === 'checkbox') {
-				setFieldValues({ ...fieldValues, [syntheticEvent.target.name]: syntheticEvent.target.checked });
+				newFieldValues[syntheticEvent.target.name] = syntheticEvent.target.checked;
 			} else {
-				setFieldValues({ ...fieldValues, [syntheticEvent.target.name]: syntheticEvent.target.value });
+				newFieldValues[syntheticEvent.target.name] = syntheticEvent.target.value;
 			}
 			
-			callback(provider, fieldValues);
+			// Update state and call callback with the new values
+			setFieldValues(newFieldValues);
+			callback(provider, newFieldValues);
+			
+			// Mark this field as just pasted to prevent handling the subsequent change event
+			setLastPastedField(syntheticEvent.target.name);
+			
+			// Reset the lastPastedField after a short delay
+			setTimeout(() => {
+				setLastPastedField(null);
+			}, 100);
+			
+			return;
+		}
+		
+		// Skip handling change events for fields that were just pasted
+		if (lastPastedField === event.target.name) {
 			return;
 		}
 		
 		// Handle regular change events
+		const newFieldValues = { ...fieldValues };
 		if (event.target.type === 'checkbox') {
-			setFieldValues({ ...fieldValues, [event.target.name]: event.target.checked });
+			newFieldValues[event.target.name] = event.target.checked;
 		} else {
-			setFieldValues({ ...fieldValues, [event.target.name]: event.target.value });
+			newFieldValues[event.target.name] = event.target.value;
 		}
 
-		callback(provider, fieldValues);
+		setFieldValues(newFieldValues);
+		callback(provider, newFieldValues);
 	}
 
 	useEffect(() => {
