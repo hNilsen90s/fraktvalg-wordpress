@@ -58,10 +58,8 @@ class Onboarding extends Base {
 	 * @return \WP_REST_Response Response containing theme and template status.
 	 */
 	public function get_theme_status() {
-		$theme = \wp_get_theme();
-		$is_elementor = defined( 'ELEMENTOR_VERSION' );
-		$is_block_theme = $theme->is_block_theme();
-		$is_classic_theme = ! $is_block_theme && ! $is_elementor;
+		$is_block_cart_template = \has_blocks( \wc_get_page_id( 'cart' ) );
+		$is_block_checkout_template = \has_blocks( \wc_get_page_id( 'checkout' ) );
 
 		// Get Site Editor URLs.
 		$urls = [
@@ -71,10 +69,9 @@ class Onboarding extends Base {
 
 		return new \WP_REST_Response(
 			[
-				'elementor'      => $is_elementor,
-				'blockTheme'     => $is_block_theme,
-				'classicTheme'   => $is_classic_theme,
 				'urls'           => $urls,
+				'isBlockCartTemplate' => $is_block_cart_template,
+				'isBlockCheckoutTemplate' => $is_block_checkout_template,
 			]
 		);
 	}

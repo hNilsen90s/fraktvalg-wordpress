@@ -71,6 +71,41 @@ export default function Templates({ nextStep }) {
 		}
 	};
 
+	// Determine the theme type based on the API response
+	const getThemeType = () => {
+		const { isBlockCartTemplate, isBlockCheckoutTemplate } = templates;
+		
+		if (isBlockCartTemplate && isBlockCheckoutTemplate) {
+			return 'all-blocks';
+		} else if (isBlockCartTemplate || isBlockCheckoutTemplate) {
+			return 'mixed';
+		} else {
+			return 'classic';
+		}
+	};
+
+	// Get the appropriate helper text based on theme type
+	const getHelperText = () => {
+		const themeType = getThemeType();
+		
+		switch (themeType) {
+			case 'all-blocks':
+				return __( 'Your theme uses block templates. Choose how you want to add the Fraktvalg block to your templates:', 'fraktvalg' );
+			case 'mixed':
+				return __( 'Your theme uses a mix of block and classic templates. You can configure the block templates below:', 'fraktvalg' );
+			case 'classic':
+			default:
+				return __( 'Your theme does not use block templates. You can proceed to the next step without configuring any templates.', 'fraktvalg' );
+		}
+	};
+
+	// Check if there are any block templates available
+	const hasBlockTemplate = () => {
+		return templates.urls && 
+			((templates.isBlockCartTemplate && templates.urls.cart !== undefined) || 
+			 (templates.isBlockCheckoutTemplate && templates.urls.checkout !== undefined));
+	};
+
 	if ( isLoading ) {
 		return (
 			<div className="flex flex-col justify-center items-center h-64">
@@ -89,16 +124,13 @@ export default function Templates({ nextStep }) {
 					{ __( 'Template Configuration', 'fraktvalg' ) }
 				</h2>
 				<p className="text-gray-600 mb-6">
-					{ templates.blockTheme 
-						? __( 'Your theme uses block templates. Choose how you want to add the Fraktvalg block to your templates:', 'fraktvalg' )
-						: __( 'Your theme does not use block templates. You can proceed to the next step without configuring any templates.', 'fraktvalg' )
-					}
+					{ getHelperText() }
 				</p>
 			</div>
 
-			{ templates.blockTheme && templates.urls && (
+			{ hasBlockTemplate() && (
 				<ul className="space-y-4">
-					{ templates.urls.cart !== undefined && (
+					{ templates.urls.cart !== undefined && templates.isBlockCartTemplate && (
 						<li className="flex flex-col p-4 bg-white rounded-lg shadow-sm border">
 							<div className="flex items-center justify-between mb-4">
 								<div className="flex items-center">
@@ -143,7 +175,7 @@ export default function Templates({ nextStep }) {
 							</div>
 						</li>
 					)}
-					{ templates.urls.checkout !== undefined && (
+					{ templates.urls.checkout !== undefined && templates.isBlockCheckoutTemplate && (
 						<li className="flex flex-col p-4 bg-white rounded-lg shadow-sm border">
 							<div className="flex items-center justify-between mb-4">
 								<div className="flex items-center">
