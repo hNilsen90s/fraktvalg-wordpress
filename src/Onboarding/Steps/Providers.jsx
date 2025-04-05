@@ -102,6 +102,7 @@ export default function Providers({nextStep}) {
 
 	const storeProviders = ( key ) => {
 		setProviderLoadingIndicator( key );
+		setError(null);
 
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/store',
@@ -115,6 +116,8 @@ export default function Providers({nextStep}) {
 			setIsConnectedProviders( [ ...isConnectedProviders, key ] );
 		}).catch((error) => {
 			console.error( error );
+			setError(error?.message || __('Failed to connect to provider', 'fraktvalg'));
+			setProviderLoadingIndicator( '' );
 		});
 	}
 
@@ -136,6 +139,13 @@ export default function Providers({nextStep}) {
 	return (
 		<div className="grid grid-cols-1 gap-3">
 			<span className="text-xl">Nesten ferdig, vi trenger å vite hvilke fraktleverandører du har en avtale med.</span>
+
+			{error && (
+				<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+					<strong className="font-bold">{__('Error:', 'fraktvalg')} </strong>
+					<span className="block sm:inline">{error}</span>
+				</div>
+			)}
 
 			{Object.keys(suppliers).map((key) => (
 				<ExpandableElement
