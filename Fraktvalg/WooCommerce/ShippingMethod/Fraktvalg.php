@@ -84,6 +84,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 			$product_length = $product->get_length();
 			$product_width = $product->get_width();
 			$product_height = $product->get_height();
+			$product_volume = 0;
 
 			if ( $product_length || $product_width || $product_height ) {
 				if ( $product_length ) {
@@ -97,7 +98,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 				}
 				
 				// Recalculate volume if it wasn't explicitly set
-				if ( ! $product_volume && $product_length && $product_width && $product_height ) {
+				if ( $product_length && $product_width && $product_height ) {
 					$product_volume = $product_length * $product_width * $product_height;
 				}
 			}
@@ -160,6 +161,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 
 		$settings        = Options::get();
 		$shippingOptions = [];
+		$priorityProvider = \get_option( "fraktvalg['priorityProvider']", [ 'providerId' => '', 'discount' => 0, 'discountType' => 'percent' ] );
 
 		if ( ! \is_wp_error( $shippers ) ) {
 			$shippingOptions = \json_decode( $shippers['body'] );
@@ -172,21 +174,48 @@ class Fraktvalg extends \WC_Shipping_Method {
 		$is_block_theme = function_exists('wp_is_block_theme') && wp_is_block_theme();
 
 		if ( ! empty( $shippingOptions) ) {
-			foreach ( $shippingOptions as $shipper => $options ) {
-				foreach ( $options as $count => $option ) {
-					$shipping_id = $shipper . ':' . $count;
+			// Find the cheapest shipping method from non-priority providers
+			$cheapest_price = $this->get_cheapest_shipping_price( $shippingOptions, $priorityProvider['providerId'], $settings );
+			
+			// First, add the priority provider if it exists
+			if ( ! empty( $priorityProvider['providerId'] ) && isset( $shippingOptions->{$priorityProvider['providerId']} ) ) {
+				foreach ( $shippingOptions->{$priorityProvider['providerId']} as $count => $option ) {
+					$shipping_id = $priorityProvider['providerId'] . ':' . $count;
 
 					$price = $option->price->withVAT;
+					
+					// Apply priority provider discount if set and if priority provider is more expensive than cheapest option
+					if ( ! empty( $priorityProvider['discount'] ) && $price > $cheapest_price ) {
+						// Calculate the discount amount needed to match or beat the cheapest price
+						$discount_amount = $price - $cheapest_price;
+						
+						// Apply the configured discount type and amount
+						if ( 'percent' === $priorityProvider['discountType'] ) {
+							// Calculate what percentage discount would be needed to match the cheapest price
+							$needed_percent_discount = ( $discount_amount / $price ) * 100;
+							
+							// Apply the configured discount, but not more than needed to match the cheapest price
+							$applied_percent_discount = min( $priorityProvider['discount'], $needed_percent_discount );
+							$price = $price * ( 1 - ( $applied_percent_discount / 100 ) );
+						} else {
+							// Apply the configured fixed discount, but not more than needed to match the cheapest price
+							$applied_fixed_discount = min( $priorityProvider['discount'], $discount_amount );
+							$price = $price - $applied_fixed_discount;
+						}
+					}
+					
+					// Apply added cost from settings
 					if ( isset( $settings['freight']['addedCost'] ) ) {
-						if ( ! empty( $settings['freight']['addedCostType'] ) && $settings['freight']['addedCostType'] === 'percent' ) {
+						if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
 							$price += $price * ( $settings['freight']['addedCost'] / 100 );
 						} else {
 							$price += $settings['freight']['addedCost'];
 						}
 					}					
+					
 					// Set the label based on theme type
 					$label = $option->texts->displayName;
-					if (!$is_block_theme && isset($option->texts->shipperName)) {
+					if ( ! $is_block_theme && isset( $option->texts->shipperName ) ) {
 						$label = $option->texts->shipperName . ' - ' . $label;
 
 						if ( isset( $option->texts->description ) ) {
@@ -194,17 +223,47 @@ class Fraktvalg extends \WC_Shipping_Method {
 						}
 					}
 
-					$this->add_rate( [
-						'id'        => $shipping_id,
-						'label'     => $label,
-						'cost'      => $price,
-						'taxes'     => false,
-						'package'   => $package,
-						'meta_data' => [
-							'fraktvalg' => true,
-							'shipper'   => $shipper,
-							'option'    => $option,
-						],
+					$this->add_shipping_rate( $shipping_id, $label, $price, $package, [
+						'fraktvalg' => true,
+						'shipper'   => $priorityProvider['providerId'],
+						'option'    => $option,
+						'priority'  => true,
+					] );
+				}
+			}
+
+			// Then add all other providers
+			foreach ( $shippingOptions as $shipper => $options ) {
+				// Skip the priority provider as it's already been added
+				if ( $shipper === $priorityProvider['providerId'] ) {
+					continue;
+				}
+
+				foreach ( $options as $count => $option ) {
+					$shipping_id = $shipper . ':' . $count;
+
+					$price = $option->price->withVAT;
+					if ( isset( $settings['freight']['addedCost'] ) ) {
+						if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
+							$price += $price * ( $settings['freight']['addedCost'] / 100 );
+						} else {
+							$price += $settings['freight']['addedCost'];
+						}
+					}					
+					// Set the label based on theme type
+					$label = $option->texts->displayName;
+					if ( ! $is_block_theme && isset( $option->texts->shipperName ) ) {
+						$label = $option->texts->shipperName . ' - ' . $label;
+
+						if ( isset( $option->texts->description ) ) {
+							$label .= ' (' . $option->texts->description . ')';
+						}
+					}
+
+					$this->add_shipping_rate( $shipping_id, $label, $price, $package, [
+						'fraktvalg' => true,
+						'shipper'   => $shipper,
+						'option'    => $option,
 					] );
 				}
 			}
@@ -221,27 +280,88 @@ class Fraktvalg extends \WC_Shipping_Method {
 					$price += $settings['freight']['addedCost'];
 				}
 
-				$this->add_rate( [
-					'id'        => 'fallback',
-					'label'     => $settings['freight']['custom']['name'],
-					'cost'      => $price,
-					'taxes'     => false,
-					'package'   => $package,
-					'meta_data' => [
-						'fraktvalg' => true,
-						'shipper'   => 'fallback',
-						'option'    => array_merge(
-							[
-								'delivery' => [
-									'estimatedDays' => '3-5',
-								],
+				$this->add_shipping_rate( 'fallback', $settings['freight']['custom']['name'], $price, $package, [
+					'fraktvalg' => true,
+					'shipper'   => 'fallback',
+					'option'    => array_merge(
+						[
+							'delivery' => [
+								'estimatedDays' => '3-5',
 							],
-							$settings['freight']['custom']
-						),
-					],
+						],
+						$settings['freight']['custom']
+					),
 				] );
 			}
 		}
+	}
+
+	/**
+	 * Add a shipping rate to WooCommerce
+	 *
+	 * @param string $shipping_id The shipping ID
+	 * @param string $label The shipping label
+	 * @param float  $price The shipping price
+	 * @param array  $package The package data
+	 * @param array  $meta_data Additional meta data for the shipping rate
+	 * @return void
+	 */
+	private function add_shipping_rate( $shipping_id, $label, $price, $package, $meta_data ) {
+		$this->add_rate( [
+			'id'        => $shipping_id,
+			'label'     => $label,
+			'cost'      => $price,
+			'taxes'     => false,
+			'package'   => $package,
+			'meta_data' => $meta_data,
+		] );
+	}
+
+	/**
+	 * Find the cheapest shipping price from non-priority providers
+	 *
+	 * @param object $shipping_options The shipping options returned from the API
+	 * @param string $priority_provider_id The ID of the priority provider to exclude
+	 * @param array  $settings The plugin settings
+	 * @return float The cheapest shipping price found
+	 */
+	private function get_cheapest_shipping_price( $shipping_options, $priority_provider_id, $settings ) {
+		$cheapest_price = PHP_FLOAT_MAX;
+		$has_other_providers = false;
+		
+		// Loop through all providers to find the cheapest price
+		foreach ( $shipping_options as $shipper => $options ) {
+			// Skip the priority provider
+			if ( $shipper === $priority_provider_id ) {
+				continue;
+			}
+			
+			$has_other_providers = true;
+			
+			foreach ( $options as $option ) {
+				$price = $option->price->withVAT;
+				
+				// Apply added cost from settings
+				if ( isset( $settings['freight']['addedCost'] ) ) {
+					if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
+						$price += $price * ( $settings['freight']['addedCost'] / 100 );
+					} else {
+						$price += $settings['freight']['addedCost'];
+					}
+				}
+				
+				if ( $price < $cheapest_price ) {
+					$cheapest_price = $price;
+				}
+			}
+		}
+		
+		// If no other providers exist, set cheapest price to 0 to avoid applying discount
+		if ( ! $has_other_providers ) {
+			$cheapest_price = 0;
+		}
+		
+		return $cheapest_price;
 	}
 
 }
