@@ -4,7 +4,7 @@ import {formatShippingPrice} from "../utils/formatShippingPrice";
 
 export default function Shippers({ shippers, onSelectShipper, editorMode }) {
 	return (
-		<div className="p-4 flex flex-col gap-2">
+		<div className="py-4 flex flex-col gap-2">
 			{Object.entries(shippers).map(([key, shipper]) => (
 				<div key={key}
 					 className="border rounded-lg p-4 bg-white flex flex-col sm:flex-row transition-all duration-300 items-center justify-between cursor-pointer hover:bg-tertiary/10 hover:shadow-md"
