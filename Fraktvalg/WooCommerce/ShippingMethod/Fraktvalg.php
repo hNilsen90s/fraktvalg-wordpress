@@ -163,7 +163,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 		$shippingOptions = [];
 		$priorityProvider = \get_option( "fraktvalg['priorityProvider']", [ 'providerId' => '', 'discount' => 0, 'discountType' => 'percent' ] );
 
-		if ( ! \is_wp_error( $shippers ) ) {
+		if ( ! \is_wp_error( $shippers ) && 200 === $shippers['response']['code'] ) {
 			$shippingOptions = \json_decode( $shippers['body'] );
 			if ( ! is_array( $shippingOptions ) && ! is_object( $shippingOptions ) ) {
 				$shippingOptions = [];
