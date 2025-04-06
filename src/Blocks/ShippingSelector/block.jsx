@@ -1,9 +1,9 @@
-import {useEffect, useState} from '@wordpress/element';
+import {useEffect, useState, useCallback} from '@wordpress/element';
 import {useBlockProps, __experimentalGetSpacingClassesAndStyles} from '@wordpress/block-editor';
 import {__} from '@wordpress/i18n';
 import {TruckIcon} from "@heroicons/react/24/outline";
 import apiFetch from '@wordpress/api-fetch';
-import { dispatch } from '@wordpress/data';
+import { dispatch, select, subscribe } from '@wordpress/data';
 import '@woocommerce/block-data';
 
 import './style.pcss';
@@ -113,9 +113,52 @@ export default function Block({attributes = {}}) {
 			});
 	};
 
+	// Debounce function to limit how often fetchShippingOptions is called
+	const debouncedFetchShippingOptions = useCallback(() => {
+		// Clear any existing timeout
+		if (window.shippingOptionsTimeout) {
+			clearTimeout(window.shippingOptionsTimeout);
+		}
+		
+		// Set a new timeout
+		window.shippingOptionsTimeout = setTimeout(() => {
+			fetchShippingOptions();
+		}, 1000); // 1 second delay
+	}, []);
+
 	useEffect(() => {
 		fetchShippingOptions();
-	}, []);
+		
+		// Log cart data when component mounts
+		const cartData = select('wc/store/cart').getCartData();
+		console.log('Initial Cart Data:', cartData);
+		
+		// Monitor shipping address changes and re-fetch shipping options
+		let previousShippingAddress = JSON.stringify(cartData.shippingAddress);
+		
+		const unsubscribe = subscribe(() => {
+			const cartStore = select('wc/store/cart');
+			const currentCartData = cartStore.getCartData();
+			const currentShippingAddress = JSON.stringify(currentCartData.shippingAddress);
+			
+			// Check if shipping address has changed
+			if (previousShippingAddress !== currentShippingAddress) {
+				console.log('Shipping Address Changed:', currentCartData.shippingAddress);
+				previousShippingAddress = currentShippingAddress;
+				
+				// Use debounced function instead of calling fetchShippingOptions directly
+				debouncedFetchShippingOptions();
+			}
+		});
+		
+		// Clean up subscription and timeout when component unmounts
+		return () => {
+			unsubscribe();
+			if (window.shippingOptionsTimeout) {
+				clearTimeout(window.shippingOptionsTimeout);
+			}
+		};
+	}, [debouncedFetchShippingOptions]);
 
 	const renderContent = () => {
 		if (shippers.length === 1 && !showShipperList) {
