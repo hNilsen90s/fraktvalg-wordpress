@@ -211,7 +211,10 @@ class Fraktvalg extends \WC_Shipping_Method {
 						} else {
 							$price += $settings['freight']['addedCost'];
 						}
-					}					
+					}				
+					
+					// Always round up the price to the next full number.
+					$price = ceil( $price );
 					
 					// Set the label based on theme type
 					$label = $option->texts->displayName;
