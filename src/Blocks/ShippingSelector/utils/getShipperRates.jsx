@@ -15,7 +15,7 @@ export function GetShipperRates( cart, shipper ) {
 			if ( rateGroup === shipper.id ) {
 				rates.push( {
 					rate_id: rate?.rate_id,
-					name: rate?.name,
+					name: options?.texts?.displayName || rate?.name,
 					description: options?.texts?.description,
 					price: rate?.price,
 					icon: options?.delivery?.serviceCode,

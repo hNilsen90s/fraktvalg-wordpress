@@ -217,13 +217,10 @@ class Fraktvalg extends \WC_Shipping_Method {
 					$price = ceil( $price );
 					
 					// Set the label based on theme type
-					$label = $option->texts->displayName;
-					if ( ! $is_block_theme && isset( $option->texts->shipperName ) ) {
-						$label = $option->texts->shipperName . ' - ' . $label;
+					$label = $option->texts->shipperName . ' - ' . $label;
 
-						if ( isset( $option->texts->description ) ) {
-							$label .= ' (' . $option->texts->description . ')';
-						}
+					if ( isset( $option->texts->description ) ) {
+						$label .= ' (' . $option->texts->description . ')';
 					}
 
 					$this->add_shipping_rate( $shipping_id, $label, $price, $package, [
