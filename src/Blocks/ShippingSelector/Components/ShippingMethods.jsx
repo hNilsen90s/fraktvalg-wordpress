@@ -56,15 +56,18 @@ export default function ShippingMethods({
 								<span className="text-sm italic">
 									{option.description}
 								</span>
-								<p className="text-sm text-gray-600 flex items-center">
-									{option.shippingTime}
-								</p>
+								
+								<div className="flex justify-between gap-2">
+									<p className="text-sm text-nowrap text-gray-600 flex items-center">
+										{option.shippingTime}
+									</p>
+
+									<p className="text-md text-nowrap font-medium mt-2 sm:mt-0">
+										{ formatShippingPrice( option.price ) }
+									</p>
+								</div>
 							</div>
 						</div>
-
-						<p className="text-md text-nowrap font-medium mt-2 sm:mt-0">
-							{ formatShippingPrice( option.price ) }
-						</p>
 					</div>
 				))}
 			</div>
