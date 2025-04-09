@@ -354,9 +354,13 @@ class Fraktvalg extends \WC_Shipping_Method {
 	 * @return void
 	 */
 	private function add_shipping_rate( $shipping_id, $label, $price, $package, $meta_data ) {
+		// Use wp_kses_post to allow safe HTML in the label while preventing XSS attacks
+		// This will prevent React from escaping the HTML entities
+		$safe_label = wp_kses_post( $label );
+		
 		$this->add_rate( [
 			'id'        => $shipping_id,
-			'label'     => $label,
+			'label'     => $safe_label,
 			'cost'      => $price,
 			'taxes'     => false,
 			'package'   => $package,

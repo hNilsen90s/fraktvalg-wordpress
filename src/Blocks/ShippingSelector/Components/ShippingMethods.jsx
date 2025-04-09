@@ -61,9 +61,10 @@ export default function ShippingMethods({
 								}
 							</div>
 							<div className="flex flex-col gap-1">
-								<span className="text-md font-semibold">
-									{option.name}
-								</span>
+								<span 
+									className="text-md font-semibold"
+									dangerouslySetInnerHTML={{ __html: option.name }}
+								/>
 								<span className="text-sm italic">
 									{option.description}
 								</span>
