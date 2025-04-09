@@ -102,7 +102,8 @@ export default function Block({attributes = {}}) {
 					}
 
 					shipper.details.LowestPrice = Math.min(...shipper.shippingOptions.map(option => option.price));
-					shipper.details.quickestShippingTime = Math.min(...shipper.shippingOptions.map(option => option.delivery.days)) + __(' business days', 'fraktvalg');
+					const minDays = Math.min(...shipper.shippingOptions.map(option => option.delivery.days));
+					shipper.details.quickestShippingTime = !isNaN(minDays) ? minDays + __(' business days', 'fraktvalg') : '1-3';
 				});
 
 				setShippers(newShippers);
