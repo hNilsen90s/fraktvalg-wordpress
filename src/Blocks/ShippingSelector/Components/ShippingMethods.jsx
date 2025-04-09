@@ -30,18 +30,29 @@ export default function ShippingMethods({
 				</button>
 			) }
 
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-col gap-2" role="radiogroup" aria-label={__('Shipping methods', 'fraktvalg')}>
 				{methods.map((option, index) => (
-					<div
+					<button
 						key={index}
-						className={ clsx(
-							"border rounded-lg p-4 flex flex-col sm:flex-row transition-all duraction-300 items-center justify-between",
+						type="button"
+						role="radio"
+						aria-checked={option?.rate_id === selectedShippingMethod}
+						className={clsx(
+							"w-full text-left border rounded-lg p-4 flex flex-col sm:flex-row transition-all duration-300 items-center justify-between",
 							{
 								'cursor-pointer hover:bg-tertiary/10 hover:shadow-md': !isLoading,
 								'cursor-not-allowed opacity-50': isLoading && option?.rate_id !== selectedShippingMethod
 							}
-						) }
-						onClick={() => !isLoading && onSelectMethod(option)}>
+						)}
+						onClick={() => !isLoading && onSelectMethod(option)}
+						onKeyDown={(e) => {
+							if (!isLoading && (e.key === 'Enter' || e.key === ' ')) {
+								e.preventDefault();
+								onSelectMethod(option);
+							}
+						}}
+						disabled={isLoading && option?.rate_id !== selectedShippingMethod}
+					>
 						<div className="flex items-center">
 							<div className="flex-grow">
 								{ option?.rate_id === selectedShippingMethod
@@ -68,7 +79,7 @@ export default function ShippingMethods({
 								</div>
 							</div>
 						</div>
-					</div>
+					</button>
 				))}
 			</div>
 		</div>
