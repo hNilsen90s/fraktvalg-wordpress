@@ -308,14 +308,19 @@ export default function Providers({setProvider, setTab}) {
 
 							<div className="flex gap-4">
 								{Object.keys(suppliers).map((key) => (
-									<label key={key} className="relative cursor-pointer grow flex flex-col gap-2 items-center border-2 border-gray-300 rounded-lg p-4 hover:border-primary peer-checked:border-primary transition-all duration-200">
+									<label key={key} className="relative cursor-pointer grow flex flex-col gap-2 items-center border-2 border-gray-300 rounded-lg p-4 hover:border-primary peer-checked:border-primary transition-all duration-200"
+										onClick={(e) => {
+											// Prevent the default radio behavior
+											e.preventDefault();
+											// Toggle selection
+											setPriorityProvider(priorityProvider === key ? null : key);
+										}}>
 										<input
 											type="radio"
 											name="preferred_provider"
 											value={key}
 											className="sr-only peer"
-											defaultChecked={ priorityProvider === key }
-											onChange={ () => setPriorityProvider( ( priorityProvider === key ? null : key ) ) }
+											checked={priorityProvider === key}
 										/>
 
 										{ suppliers[ key ]?.logo &&
