@@ -1,5 +1,4 @@
 import {useEffect, useState, useCallback} from '@wordpress/element';
-import {useBlockProps, __experimentalGetSpacingClassesAndStyles} from '@wordpress/block-editor';
 import {__} from '@wordpress/i18n';
 import {TruckIcon} from "@heroicons/react/24/outline";
 import apiFetch from '@wordpress/api-fetch';
@@ -22,10 +21,6 @@ export default function Block({attributes = {}}) {
 	const [isMethodSelectionLoading, setIsMethodSelectionLoading] = useState(false);
 	const [shippers, setShippers] = useState({});
 	const [showShipperList, setShowShipperList] = useState(false);
-
-	const blockProps = useBlockProps({
-		className: 'wp-block-fraktvalg-shipping-selector',
-	});
 
 	// Create a style object for dynamic colors
 	const colorStyles = {
@@ -197,7 +192,7 @@ export default function Block({attributes = {}}) {
 	};
 
 	return (
-		<div {...blockProps} style={colorStyles}>
+		<div className="wp-block-fraktvalg-shipping-selector" style={colorStyles}>
 			{isLoading ? <Loading/> : renderContent()}
 		</div>
 	);
