@@ -43,10 +43,12 @@ export default function ShippingMethods({
 						) }
 						onClick={() => !isLoading && onSelectMethod(option)}>
 						<div className="flex items-center">
-							{ option?.rate_id === selectedShippingMethod
-								? <CheckCircleIcon className="w-10 h-10 mr-4 text-primary inline-block" />
-								: option?.icon && option.icon
-							}
+							<div className="flex-grow">
+								{ option?.rate_id === selectedShippingMethod
+									? <CheckCircleIcon className="w-10 h-10 mr-4 text-primary inline-block" />
+									: option?.icon && option.icon
+								}
+							</div>
 							<div className="flex flex-col gap-1">
 								<span className="text-md font-semibold">
 									{option.name}
@@ -60,7 +62,7 @@ export default function ShippingMethods({
 							</div>
 						</div>
 
-						<p className="text-md font-medium mt-2 sm:mt-0">
+						<p className="text-md text-nowrap font-medium mt-2 sm:mt-0">
 							{ formatShippingPrice( option.price ) }
 						</p>
 					</div>
