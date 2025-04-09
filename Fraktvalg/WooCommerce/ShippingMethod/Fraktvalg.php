@@ -7,6 +7,20 @@ use Fraktvalg\Fraktvalg\Options;
 
 class Fraktvalg extends \WC_Shipping_Method {
 
+	/**
+	 * Stores the cheapest shipping option ID
+	 *
+	 * @var string|null
+	 */
+	private $cheapest_shipping_id = null;
+
+	/**
+	 * Stores the cheapest shipping price
+	 *
+	 * @var float|null
+	 */
+	private $cheapest_shipping_price = null;
+
 	public function __construct( $instance_id = 0 ) {
 		$this->id = 'fraktvalg';
 		$this->instance_id = absint( $instance_id );
@@ -173,6 +187,10 @@ class Fraktvalg extends \WC_Shipping_Method {
 		// Check if we're using a block theme
 		$is_block_theme = function_exists('wp_is_block_theme') && wp_is_block_theme();
 
+		// Reset cheapest shipping variables
+		$this->cheapest_shipping_id = null;
+		$this->cheapest_shipping_price = null;
+
 		if ( ! empty( $shippingOptions) ) {
 			// Find the cheapest shipping method from non-priority providers
 			$cheapest_price = $this->get_cheapest_shipping_price( $shippingOptions, $priorityProvider['providerId'], $settings );
@@ -229,6 +247,12 @@ class Fraktvalg extends \WC_Shipping_Method {
 						'option'    => $option,
 						'priority'  => true,
 					] );
+
+					// Track the cheapest priority shipping option
+					if ( null === $this->cheapest_shipping_price || $price < $this->cheapest_shipping_price ) {
+						$this->cheapest_shipping_price = $price;
+						$this->cheapest_shipping_id = $shipping_id;
+					}
 				}
 			}
 
@@ -265,6 +289,13 @@ class Fraktvalg extends \WC_Shipping_Method {
 						'shipper'   => $shipper,
 						'option'    => $option,
 					] );
+
+					// Track the cheapest non-priority shipping option
+					// Only update if no priority provider exists or if this is cheaper than the cheapest priority option
+					if ( empty( $priorityProvider['providerId'] ) || null === $this->cheapest_shipping_price || $price < $this->cheapest_shipping_price ) {
+						$this->cheapest_shipping_price = $price;
+						$this->cheapest_shipping_id = $shipping_id;
+					}
 				}
 			}
 		} else {
@@ -292,6 +323,22 @@ class Fraktvalg extends \WC_Shipping_Method {
 						$settings['freight']['custom']
 					),
 				] );
+
+				// Set fallback as cheapest option if no other options exist
+				$this->cheapest_shipping_price = $price;
+				$this->cheapest_shipping_id = 'fallback';
+			}
+		}
+
+		// Set the default shipping option in WooCommerce
+		if ( ! empty( $this->cheapest_shipping_id ) ) {
+			// Check if a shipping method is already chosen
+			$chosen_shipping_methods = \WC()->session->get( 'chosen_shipping_methods' );
+			
+			// Only set the default if no shipping method is chosen
+			if ( empty( $chosen_shipping_methods ) || ! is_array( $chosen_shipping_methods ) || empty( $chosen_shipping_methods[0] ) ) {
+				// Set the default shipping option in WooCommerce
+				\WC()->session->set( 'chosen_shipping_methods', [ $this->cheapest_shipping_id ] );
 			}
 		}
 	}
@@ -323,10 +370,10 @@ class Fraktvalg extends \WC_Shipping_Method {
 	 * @param object $shipping_options The shipping options returned from the API
 	 * @param string $priority_provider_id The ID of the priority provider to exclude
 	 * @param array  $settings The plugin settings
-	 * @return float The cheapest shipping price found
+	 * @return float|null The cheapest shipping price found
 	 */
 	private function get_cheapest_shipping_price( $shipping_options, $priority_provider_id, $settings ) {
-		$cheapest_price = PHP_FLOAT_MAX;
+		$cheapest_price = null;
 		$has_other_providers = false;
 		
 		// Loop through all providers to find the cheapest price
@@ -350,7 +397,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 					}
 				}
 				
-				if ( $price < $cheapest_price ) {
+				if ( null === $cheapest_price || $price < $cheapest_price ) {
 					$cheapest_price = $price;
 				}
 			}
