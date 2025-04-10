@@ -20,7 +20,7 @@ export default function Block({attributes = {}}) {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isMethodSelectionLoading, setIsMethodSelectionLoading] = useState(false);
 	const [shippers, setShippers] = useState({});
-	const [showShipperList, setShowShipperList] = useState(false);
+	const [showShipperList, setShowShipperList] = useState(true);
 
 	// Create a style object for dynamic colors
 	const colorStyles = {
@@ -157,36 +157,27 @@ export default function Block({attributes = {}}) {
 	}, [debouncedFetchShippingOptions]);
 
 	const renderContent = () => {
-		if (shippers.length === 1 && !showShipperList) {
+
+		console.log( { shippers, showShipperList } );
+
+		if ( shippers.length === 1 || ( shippers.length > 1 && ! showShipperList ) ) {
 			return (
 				<ShippingMethods
-					methods={shippers[0].shippingOptions}
+					methods={ selectedShipper?.shippingOptions || shippers[0].shippingOptions}
 					setSelectedShipper={() => setShowShipperList(true)}
 					selectedShippingMethod={selectedShippingMethod}
 					onSelectMethod={selectShippingMethod}
 					isLoading={isMethodSelectionLoading}
-					showReturnButton={false}
-				/>
-			);
-		}
-
-		if (!selectedShipper || showShipperList) {
-			return (
-				<Shippers
-					shippers={shippers}
-					onSelectShipper={handleShipperSelect}
-					selectedShippingMethod={selectedShippingMethod}
+					showReturnButton={ shippers.length > 1 }
 				/>
 			);
 		}
 
 		return (
-			<ShippingMethods
-				methods={selectedShipper.shippingOptions}
-				setSelectedShipper={() => setSelectedShipper(null)}
+			<Shippers
+				shippers={shippers}
+				onSelectShipper={handleShipperSelect}
 				selectedShippingMethod={selectedShippingMethod}
-				onSelectMethod={selectShippingMethod}
-				isLoading={isMethodSelectionLoading}
 			/>
 		);
 	};
