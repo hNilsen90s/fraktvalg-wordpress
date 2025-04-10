@@ -19,6 +19,7 @@ class Setup {
 		}
 
 		new Settings();
+		new PluginControls();
 
 		new ShippingMethod();
 		new CreateShipment();
