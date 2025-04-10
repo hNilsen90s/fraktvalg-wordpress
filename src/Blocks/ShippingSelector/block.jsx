@@ -127,7 +127,6 @@ export default function Block({attributes = {}}) {
 		
 		// Log cart data when component mounts
 		const cartData = select('wc/store/cart').getCartData();
-		console.log('Initial Cart Data:', cartData);
 		
 		// Monitor shipping address changes and re-fetch shipping options
 		let previousShippingAddress = JSON.stringify(cartData.shippingAddress);
@@ -139,7 +138,6 @@ export default function Block({attributes = {}}) {
 			
 			// Check if shipping address has changed
 			if (previousShippingAddress !== currentShippingAddress) {
-				console.log('Shipping Address Changed:', currentCartData.shippingAddress);
 				previousShippingAddress = currentShippingAddress;
 				
 				// Use debounced function instead of calling fetchShippingOptions directly
@@ -157,9 +155,6 @@ export default function Block({attributes = {}}) {
 	}, [debouncedFetchShippingOptions]);
 
 	const renderContent = () => {
-
-		console.log( { shippers, showShipperList } );
-
 		if ( shippers.length === 1 || ( shippers.length > 1 && ! showShipperList ) ) {
 			return (
 				<ShippingMethods
@@ -184,7 +179,13 @@ export default function Block({attributes = {}}) {
 
 	return (
 		<div className="wp-block-fraktvalg-shipping-selector" style={colorStyles}>
-			{isLoading ? <Loading/> : renderContent()}
+			{isLoading ? (
+				<Loading />
+			) : isMethodSelectionLoading ? (
+				<Loading text={__('Updating cart totals with your new shipping preference', 'fraktvalg')} />
+			) : (
+				renderContent()
+			)}
 		</div>
 	);
 }
