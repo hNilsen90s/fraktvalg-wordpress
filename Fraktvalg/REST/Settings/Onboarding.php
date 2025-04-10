@@ -50,6 +50,48 @@ class Onboarding extends Base {
 				],
 			]
 		);
+
+		\register_rest_route(
+			$this->namespace,
+			'/onboarding/store-status',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_store_status' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			]
+		);
+
+		\register_rest_route(
+			$this->namespace,
+			'/onboarding/store-address',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => array( $this, 'set_store_address' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+				'args'                => [
+					'address' => [
+						'required'          => true,
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'postcode' => [
+						'required'          => true,
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'city' => [
+						'required'          => true,
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'country' => [
+						'required'          => true,
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+				],
+			]
+		);
 	}
 
 	/**
@@ -122,6 +164,172 @@ class Onboarding extends Base {
 				'url'      => \add_query_arg( [ 'post' => $template->ID, 'action' => 'edit' ], \admin_url( 'post.php' ) ),
 			]
 		);
+	}
+
+	/**
+	 * Get store status including address information, product dimensions, and require address setting.
+	 *
+	 * @return \WP_REST_Response Response containing store status information.
+	 */
+	public function get_store_status() {
+		// Get store address information.
+		$store_address = [
+			'address'   => \get_option( 'woocommerce_store_address', '' ),
+			'postcode'  => \get_option( 'woocommerce_store_postcode', '' ),
+			'city'      => \get_option( 'woocommerce_store_city', '' ),
+			'country'   => \get_option( 'woocommerce_default_country', '' ),
+		];
+
+		// Check if all address fields are filled.
+		$address_complete = ! empty( $store_address['address'] ) && 
+			! empty( $store_address['postcode'] ) && 
+			! empty( $store_address['city'] ) && 
+			! empty( $store_address['country'] );
+
+		// Check for products without dimensions or weight.
+		$products_without_dimensions = $this->get_products_without_dimensions();
+
+		return new \WP_REST_Response(
+			[
+				'address' => [
+					'fields'   => $store_address,
+					'complete' => $address_complete,
+				],
+				'products_without_dimensions' => $products_without_dimensions
+			]
+		);
+	}
+
+	/**
+	 * Set the store address fields.
+	 *
+	 * @param \WP_REST_Request $request Request object containing address fields.
+	 * @return \WP_REST_Response Response indicating success or failure.
+	 */
+	public function set_store_address( $request ) {
+		$address   = $request->get_param( 'address' );
+		$postcode  = $request->get_param( 'postcode' );
+		$city      = $request->get_param( 'city' );
+		$country   = $request->get_param( 'country' );
+		
+		\update_option( 'woocommerce_store_address', $address );
+		\update_option( 'woocommerce_store_postcode', $postcode );
+		\update_option( 'woocommerce_store_city', $city );
+		\update_option( 'woocommerce_default_country', $country );
+		
+		return new \WP_REST_Response(
+			[
+				'status'  => 'success',
+				'address' => [
+					'address'  => $address,
+					'postcode' => $postcode,
+					'city'     => $city,
+					'country'  => $country,
+				],
+			]
+		);
+	}
+
+	/**
+	 * Get products without dimensions or weight.
+	 *
+	 * @return array Array containing a boolean indicating if any products are missing dimensions.
+	 */
+	private function get_products_without_dimensions() {
+		$args = [
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1, // Only need one product to determine if there's an issue
+			'tax_query'      => [
+				[
+					'taxonomy' => 'product_type',
+					'field'    => 'slug',
+					'terms'    => 'simple', // Only check simple products.
+				],
+			],
+			'meta_query'     => [
+				'relation' => 'OR',
+				// Check for missing weight
+				[
+					'relation' => 'OR',
+					[
+						'key'     => '_weight',
+						'compare' => 'NOT EXISTS',
+					],
+					[
+						'key'   => '_weight',
+						'value' => '',
+						'compare' => '=',
+					],
+					[
+						'key'   => '_weight',
+						'value' => '0',
+						'compare' => '=',
+					],
+				],
+				// Check for missing length
+				[
+					'relation' => 'OR',
+					[
+						'key'     => '_length',
+						'compare' => 'NOT EXISTS',
+					],
+					[
+						'key'   => '_length',
+						'value' => '',
+						'compare' => '=',
+					],
+					[
+						'key'   => '_length',
+						'value' => '0',
+						'compare' => '=',
+					],
+				],
+				// Check for missing width
+				[
+					'relation' => 'OR',
+					[
+						'key'     => '_width',
+						'compare' => 'NOT EXISTS',
+					],
+					[
+						'key'   => '_width',
+						'value' => '',
+						'compare' => '=',
+					],
+					[
+						'key'   => '_width',
+						'value' => '0',
+						'compare' => '=',
+					],
+				],
+				// Check for missing height
+				[
+					'relation' => 'OR',
+					[
+						'key'     => '_height',
+						'compare' => 'NOT EXISTS',
+					],
+					[
+						'key'   => '_height',
+						'value' => '',
+						'compare' => '=',
+					],
+					[
+						'key'   => '_height',
+						'value' => '0',
+						'compare' => '=',
+					],
+				],
+			],
+		];
+
+		$products = \get_posts( $args );
+		
+		// Return a simple boolean indicating if any products are missing dimensions
+		return [
+			'has_products_without_dimensions' => ! empty( $products ),
+		];
 	}
 
 	public function finalize_onboarding() {

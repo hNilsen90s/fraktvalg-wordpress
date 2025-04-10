@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 
-export default function InputNumber({ name, label, value = '', placeholder = '', required = false, callback, children, ...props }) {
+export default function InputNumber({ name, label, value = '', placeholder = '', required = false, callback, onChange, children, ...props }) {
 	const [ number, setNumber ] = useState( value ?? 0 );
+	
+	// Use onChange if provided, otherwise fall back to callback for backward compatibility
+	const handleChange = onChange || callback;
 
 	const increaseNumber = () => {
 		setNumber( number + 1 );
+		if (handleChange) {
+			// Create a synthetic event object
+			const event = { target: { value: number + 1 } };
+			handleChange(event);
+		}
 	}
 
 	const decreaseNumber = () => {
 		if ( number > 0 ) {
 			setNumber( number - 1 );
+			if (handleChange) {
+				// Create a synthetic event object
+				const event = { target: { value: number - 1 } };
+				handleChange(event);
+			}
 		}
 	}
 
@@ -22,10 +35,12 @@ export default function InputNumber({ name, label, value = '', placeholder = '',
 		// Only update if it's a valid number
 		if (!isNaN(numericValue) && numericValue >= 0) {
 			setNumber(numericValue);
+			if (handleChange) {
+				// Create a synthetic event object
+				const event = { target: { value: numericValue } };
+				handleChange(event);
+			}
 		}
-		
-		// Call the original callback
-		callback(event);
 	}
 
 	return (
@@ -36,7 +51,7 @@ export default function InputNumber({ name, label, value = '', placeholder = '',
 					name={name}
 					type="number"
 					value={number}
-					onChange={callback}
+					onChange={handleChange}
 					onPaste={handlePaste}
 					placeholder={placeholder}
 					required={required}

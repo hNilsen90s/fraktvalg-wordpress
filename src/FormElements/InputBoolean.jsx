@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import FieldDescription from "./FieldDescription";
 
-export default function InputBoolean({ field, name, label, value = false, callback, required = false, children }) {
+export default function InputBoolean({ field, name, label, value = false, callback, onChange, required = false, children }) {
 	const [ checked, setChecked ] = useState( value );
 
+	// Use onChange if provided, otherwise fall back to callback for backward compatibility
 	const handleChange = ( event ) => {
 		setChecked( event.target.checked );
-		callback( event );
+		if (onChange) {
+			onChange(event);
+		} else if (callback) {
+			callback( event );
+		}
 	}
 
 	return (

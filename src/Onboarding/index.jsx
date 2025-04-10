@@ -13,6 +13,7 @@ import Finished from "./Steps/Finished";
 import StepCounter from "../Components/StepCounter";
 import OptionalSettings from "./Steps/OptionalSettings";
 import Templates from "./Steps/Templates";
+import StoreSettings from "./Steps/StoreSettings";
 
 export default function Onboarding() {
 	const [ step, setStep ] = useState(1);
@@ -21,7 +22,8 @@ export default function Onboarding() {
 		__( 'License', 'fraktvalg' ),
 		__( 'Providers', 'fraktvalg' ),
 		__( 'Templates', 'fraktvalg' ),
-		__( 'Settings', 'fraktvalg' ),
+		__( 'Plugin Settings', 'fraktvalg' ),
+		__( 'Store Settings', 'fraktvalg' ),
 		__( 'Finished', 'fraktvalg' ),
 	]
 
@@ -55,7 +57,8 @@ export default function Onboarding() {
 						{ step === 2 && <Providers nextStep={ nextStep } /> }
 						{ step === 3 && <Templates nextStep={ nextStep } /> }
 						{ step === 4 && <OptionalSettings nextStep={ nextStep } /> }
-						{ step === 5 && <Finished nextStep={ nextStep } /> }
+						{ step === 5 && <StoreSettings nextStep={ nextStep } /> }
+						{ step === 6 && <Finished nextStep={ nextStep } /> }
 					</div>
 				</div>
 			</div>

@@ -185,7 +185,7 @@ export default function OptionalSettings({nextStep}) {
 
 			{ showNextButton &&
 				<Button type="button" onClick={ nextStep }>
-					{ __( 'Finish setup', 'fraktvalg' ) }
+					{ __( 'Next step', 'fraktvalg' ) }
 				</Button>
 			}
 		</div>
