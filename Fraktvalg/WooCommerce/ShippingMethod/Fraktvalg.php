@@ -194,33 +194,16 @@ class Fraktvalg extends \WC_Shipping_Method {
 		if ( ! empty( $shippingOptions) ) {
 			// Find the cheapest shipping method from non-priority providers
 			$cheapest_price = $this->get_cheapest_shipping_price( $shippingOptions, $priorityProvider['providerId'], $settings );
-			
+
 			// First, add the priority provider if it exists
 			if ( ! empty( $priorityProvider['providerId'] ) && isset( $shippingOptions->{$priorityProvider['providerId']} ) ) {
+				// Find the cheapest priority provider option
+				$cheapest_priority_price = null;
+				$cheapest_priority_option = null;
+				$cheapest_priority_count = null;
+				
 				foreach ( $shippingOptions->{$priorityProvider['providerId']} as $count => $option ) {
-					$shipping_id = $priorityProvider['providerId'] . ':' . $count;
-
 					$price = $option->price->withVAT;
-					
-					// Apply priority provider discount if set and if priority provider is more expensive than cheapest option
-					if ( ! empty( $priorityProvider['discount'] ) && $price > $cheapest_price ) {
-						// Calculate the discount amount needed to match or beat the cheapest price
-						$discount_amount = $price - $cheapest_price;
-						
-						// Apply the configured discount type and amount
-						if ( 'percent' === $priorityProvider['discountType'] ) {
-							// Calculate what percentage discount would be needed to match the cheapest price
-							$needed_percent_discount = ( $discount_amount / $price ) * 100;
-							
-							// Apply the configured discount, but not more than needed to match the cheapest price
-							$applied_percent_discount = min( $priorityProvider['discount'], $needed_percent_discount );
-							$price = $price * ( 1 - ( $applied_percent_discount / 100 ) );
-						} else {
-							// Apply the configured fixed discount, but not more than needed to match the cheapest price
-							$applied_fixed_discount = min( $priorityProvider['discount'], $discount_amount );
-							$price = $price - $applied_fixed_discount;
-						}
-					}
 					
 					// Apply added cost from settings
 					if ( isset( $settings['freight']['addedCost'] ) ) {
@@ -229,13 +212,57 @@ class Fraktvalg extends \WC_Shipping_Method {
 						} else {
 							$price += $settings['freight']['addedCost'];
 						}
-					}				
+					}
+					
+					if ( null === $cheapest_priority_price || $price < $cheapest_priority_price ) {
+						$cheapest_priority_price = $price;
+						$cheapest_priority_option = $option;
+						$cheapest_priority_count = $count;
+					}
+				}
+
+				// Apply discount to the cheapest priority provider option if needed
+				if ( ! empty( $priorityProvider['discount'] ) && $cheapest_priority_price >= $cheapest_price ) {
+					// Apply the configured discount type and amount
+					if ( 'percent' === $priorityProvider['discountType'] ) {
+						// Apply the configured percentage discount
+						$cheapest_priority_price = $cheapest_price * ( 1 - ( $priorityProvider['discount'] / 100 ) );
+					} else {
+						// Apply the configured fixed discount
+						$cheapest_priority_price = $cheapest_price - $priorityProvider['discount'];
+					}
+				}
+				
+				// Now add all priority provider options with appropriate pricing
+				foreach ( $shippingOptions->{$priorityProvider['providerId']} as $count => $option ) {
+					$shipping_id = $priorityProvider['providerId'] . ':' . $count;
+
+					$price = $option->price->withVAT;
+					
+					// Apply added cost from settings
+					if ( isset( $settings['freight']['addedCost'] ) ) {
+						if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
+							$price += $price * ( $settings['freight']['addedCost'] / 100 );
+						} else {
+							$price += $settings['freight']['addedCost'];
+						}
+					}
+					
+					// If this is the cheapest priority option, use the discounted price
+					if ( $count === $cheapest_priority_count ) {
+						$price = $cheapest_priority_price;
+					}
+					// For other priority options, apply the same discount percentage if using percentage discount
+					elseif ( ! empty( $priorityProvider['discount'] ) && 'percent' === $priorityProvider['discountType'] ) {
+						$price = $price * ( 1 - ( $priorityProvider['discount'] / 100 ) );
+					}
+					// For fixed discount, we don't apply it to other options as it's a fixed amount
 					
 					// Always round up the price to the next full number.
 					$price = ceil( $price );
 					
 					// Set the label based on theme type
-					$label = $option->texts->shipperName . ' - ' . $label;
+					$label = $option->texts->shipperName . ' - ' . $option->texts->displayName;
 
 					if ( isset( $option->texts->description ) ) {
 						$label .= ' (' . $option->texts->description . ')';
