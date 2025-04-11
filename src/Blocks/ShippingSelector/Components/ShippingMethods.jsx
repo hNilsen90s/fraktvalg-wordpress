@@ -38,7 +38,7 @@ export default function ShippingMethods({
 						role="radio"
 						aria-checked={option?.rate_id === selectedShippingMethod}
 						className={clsx(
-							"w-full text-left border rounded-lg p-4 flex flex-col sm:flex-row transition-all duration-300 items-center justify-between",
+							"w-full text-left border border-solid rounded-lg p-4 flex flex-col sm:flex-row transition-all duration-300 items-center justify-between",
 							{
 								'cursor-pointer hover:bg-tertiary/10 hover:shadow-md': !isLoading,
 								'cursor-not-allowed opacity-50': isLoading && option?.rate_id !== selectedShippingMethod

@@ -9,7 +9,7 @@ export default function Shippers({ shippers, onSelectShipper, editorMode }) {
 				<button
 					key={key}
 					type="button"
-					className="w-full text-left border rounded-lg p-4 bg-white flex flex-col sm:flex-row transition-all duration-300 items-center justify-between cursor-pointer hover:bg-tertiary/10 hover:shadow-md"
+					className="w-full text-left border border-solid rounded-lg p-4 bg-white flex flex-col sm:flex-row transition-all duration-300 items-center justify-between cursor-pointer hover:bg-tertiary/10 hover:shadow-md"
 					onClick={() => editorMode !== 'multiple' && onSelectShipper(shipper)}
 					onKeyDown={(e) => {
 						if (editorMode !== 'multiple' && (e.key === 'Enter' || e.key === ' ')) {
