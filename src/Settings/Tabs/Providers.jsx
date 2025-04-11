@@ -23,6 +23,7 @@ export default function Providers({setProvider, setTab}) {
 	const [ priorityProviderDiscount, setPriorityProviderDiscount ] = useState( 10 );
 	const [ priorityProviderDiscountType, setPriorityProviderDiscountType ] = useState('percent' );
 	const [ providerLoadingIndicator, setProviderLoadingIndicator ] = useState('' );
+	const [ successMessage, setSuccessMessage ] = useState('');
 
 	const [ providerFieldValues, setProviderFieldValues ] = useState({});
 
@@ -103,6 +104,7 @@ export default function Providers({setProvider, setTab}) {
 	const storePriorityProvider = () => {
 		setError(null);
 		setErrorContext('');
+		setSuccessMessage('');
 		
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/priority/store',
@@ -116,6 +118,12 @@ export default function Providers({setProvider, setTab}) {
 			}
 		}).then((response) => {
 			fetchPriorityProvider();
+			setSuccessMessage(__('Preferred provider settings saved successfully', 'fraktvalg'));
+			
+			// Clear success message after 5 seconds
+			setTimeout(() => {
+				setSuccessMessage('');
+			}, 5000);
 		}).catch((error) => {
 			setErrorContext('saving priority provider settings');
 			setError(error?.message || __('Failed to save priority provider settings', 'fraktvalg'));
@@ -290,6 +298,12 @@ export default function Providers({setProvider, setTab}) {
 						</p>
 
 						<div className="grid grid-cols-1 gap-4">
+							{ successMessage &&
+								<Notification type="success">
+									{ successMessage }
+								</Notification>
+							}
+							
 							<p>
 								{ __( 'Price reduction for your preferred provider', 'fraktvalg' ) }
 							</p>
