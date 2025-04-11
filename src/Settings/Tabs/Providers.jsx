@@ -327,14 +327,14 @@ export default function Providers({setProvider, setTab}) {
 											// Prevent the default radio behavior
 											e.preventDefault();
 											// Toggle selection
-											setPriorityProvider(priorityProvider === key ? null : key);
+											setPriorityProvider(priorityProvider === suppliers[ key ]?.id ? null : suppliers[ key ]?.id);
 										}}>
 										<input
 											type="radio"
 											name="preferred_provider"
 											value={key}
 											className="sr-only peer"
-											checked={priorityProvider === key}
+											checked={priorityProvider === suppliers[ key ]?.id}
 										/>
 
 										{ suppliers[ key ]?.logo &&
