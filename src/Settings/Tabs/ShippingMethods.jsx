@@ -9,9 +9,24 @@ import Notification from "../../Components/Notifications";
 
 export default function ShippingMethods({supplier, setTab}) {
 	const [isLoading, setIsLoading] = useState(false);
+	const [isSaving, setIsSaving] = useState(false);
 	const [shippingMethods, setShippingMethods] = useState([]);
+	const [saveStatus, setSaveStatus] = useState(null);
+
+	useEffect(() => {
+		let timeout;
+		if (saveStatus) {
+			timeout = setTimeout(() => {
+				setSaveStatus(null);
+			}, 3000); // Clear after 3 seconds
+		}
+		return () => clearTimeout(timeout);
+	}, [saveStatus]);
 
 	const saveShippingMethods = () => {
+		setIsSaving(true);
+		setSaveStatus(null);
+
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/methods/store',
 			method: 'POST',
@@ -20,7 +35,11 @@ export default function ShippingMethods({supplier, setTab}) {
 				fields: shippingMethods,
 			}
 		}).then((response) => {
-			console.log(response);
+			setSaveStatus('success');
+			setIsSaving(false);
+		}).catch((error) => {
+			setSaveStatus('error');
+			setIsSaving(false);
 		});
 	}
 
@@ -68,6 +87,17 @@ export default function ShippingMethods({supplier, setTab}) {
 
 	return (
 		<Wrapper title={title()}>
+			{saveStatus === 'success' && (
+				<Notification type="success" className="mb-4">
+					{__('Shipping methods saved successfully!', 'fraktvalg')}
+				</Notification>
+			)}
+			{saveStatus === 'error' && (
+				<Notification type="error" className="mb-4">
+					{__('Failed to save shipping methods. Please try again.', 'fraktvalg')}
+				</Notification>
+			)}
+
 			{isLoading &&
 				<div className="flex flex-col justify-center items-center h-64">
 					<ArrowPathIcon className="h-8 w-8 animate-spin text-primary"/>
@@ -150,8 +180,20 @@ export default function ShippingMethods({supplier, setTab}) {
 					</table>
 
 					<div className="flex flex-col md:flex-row justify-end gap-2 mt-4">
-						<Button type="button" onClick={() => saveShippingMethods()} className="md:inline-block md:w-fit">
-							{__('Save shipping overrides', 'fraktvalg')}
+						<Button 
+							type="button" 
+							onClick={() => saveShippingMethods()} 
+							className="md:inline-block md:w-fit"
+							disabled={isSaving}
+						>
+							{isSaving ? (
+								<>
+									<ArrowPathIcon className="h-4 w-4 mr-2 inline-block animate-spin"/>
+									{__('Saving...', 'fraktvalg')}
+								</>
+							) : (
+								__('Save shipping overrides', 'fraktvalg')
+							)}
 						</Button>
 					</div>
 				</>
