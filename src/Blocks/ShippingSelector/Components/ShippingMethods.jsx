@@ -53,14 +53,14 @@ export default function ShippingMethods({
 						}}
 						disabled={isLoading && option?.rate_id !== selectedShippingMethod}
 					>
-						<div className="flex items-center">
-							<div className="flex-grow">
+						<div className="flex items-center w-full">
+							<div className="flex-shrink-0">
 								{ option?.rate_id === selectedShippingMethod
 									? <CheckCircleIcon className="w-10 h-10 mr-4 text-primary inline-block" />
 									: option?.icon && option.icon
 								}
 							</div>
-							<div className="flex flex-col gap-1">
+							<div className="flex flex-col gap-1 flex-grow">
 								<span 
 									className="text-md font-semibold"
 									dangerouslySetInnerHTML={{ __html: option.name }}
@@ -69,7 +69,7 @@ export default function ShippingMethods({
 									{option.description}
 								</span>
 								
-								<div className="flex justify-between gap-2">
+								<div className="flex justify-between gap-2 w-full">
 									<p className="text-sm text-nowrap text-gray-600 flex items-center">
 										{option.shippingTime}
 									</p>
