@@ -53,6 +53,15 @@ Fantastic! The Fraktvalg plugin is open source, and you can browse the code or g
 
 == Changelog ==
 
+= 1.2.0 (2025-04-12) =
+* Improved shipping method front-end presentation.
+* Improved accessibility of shipping provider and method interfaces.
+* Improved onboarding to guide users through required store settings.
+* Add a means to reset the plugin to the onboarding stage.
+* Added more contextual feedbacks in the settings panels.
+* Resolve an issue where preferred providers did not alwways properly apply discounts, and only matched prices.
+* Fixed so you can de-select a preferred shipping provider.
+
 = 1.1.0 (2025-04-06) =
 * Align the shipping block better on the x-axis in themes.
 * Better shipping labels in classic themes wit hthe default shipping display from WooCommerce.
