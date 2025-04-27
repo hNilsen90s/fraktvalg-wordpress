@@ -68,7 +68,7 @@ class CreateShipment {
 						__( 'Fraktvalg: Failed to create shipment with %1$s for %2$s (%3$s)', 'fraktvalg' ),
 						$shipping_method->get_name(),
 						\ucfirst( $shipping_method->get_meta( 'shipper' ) ),
-						$shipment->get_error_message()
+						( \is_wp_error( $shipment ) ? $shipment->get_error_message() : $shipment['response']['message'] )
 					),
 					false // Not a customer note.
 				);
