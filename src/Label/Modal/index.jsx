@@ -67,7 +67,7 @@ export default function Modal({ setIsModalOpen }) {
 						<img
 							src={labelImageUrl}
 							alt="Shipping Label"
-							className="max-w-full w-full h-auto mb-4 shadow-lg"
+							className="max-w-full w-full h-auto my-4 shadow-lg"
 						/>
 					</>
 				) : (
