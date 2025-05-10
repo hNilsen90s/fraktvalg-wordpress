@@ -34,7 +34,12 @@
 		"test": "phpunit",
 		"test:watch": "phpunit-watcher watch < /dev/tty",
 		"automation:lint:compat": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --standard=phpcompat.xml.dist -q --report=checkstyle",
-		"automation:phpstan": "phpstan analyse . --error-format=checkstyle --no-progress"
+		"automation:phpstan": "phpstan analyse . --error-format=checkstyle --no-progress",
+		"i18n": [
+			"wp i18n make-pot . --slug=fraktvalg --domain=fraktvalg --exclude='src'",
+			"wp i18n make-json ./languages --no-purge '--use-map={\"src/fraktvalg.jsx\":\"build/fraktvalg.js\",\"src/label.jsx\":\"build/label.js\",\"src/onboarding.jsx\":\"build/onboarding.js\"}'",
+			"wp i18n make-php ./languages"
+		]
 	},
 	"support": {
 		"issues": "https://wordpress.org/support/plugin/siteh-health-tools"
