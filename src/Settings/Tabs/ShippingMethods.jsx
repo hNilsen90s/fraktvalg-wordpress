@@ -127,6 +127,9 @@ export default function ShippingMethods({supplier, setTab}) {
 								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 									{__('Price', 'fraktvalg')}
 								</th>
+								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{__('Free shipping', 'fraktvalg')}
+								</th>
 							</tr>
 						</thead>
 						<tbody className="bg-white divide-y divide-gray-200">
@@ -169,6 +172,28 @@ export default function ShippingMethods({supplier, setTab}) {
 												   onChange={(e) => {
 													   const updatedMethods = [...shippingMethods];
 													   updatedMethods[index].price = e.target.value;
+													   setShippingMethods(updatedMethods);
+												   }} className="border border-gray-300 rounded-md p-2"/>
+
+										</div>
+									</td>
+									<td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-500">
+										<div className="flex flex-col gap-1">
+											<label>
+												<span className="mr-2">
+													{__('Enable free shipping of this method if the order total exceeds the threshold', 'fraktvalg')}
+												</span>
+												<input type="checkbox" checked={method.hasFreeShipping} onChange={() => {
+													const updatedMethods = [...shippingMethods];
+													updatedMethods[index].hasFreeShipping = !updatedMethods[index].hasFreeShipping;
+													setShippingMethods(updatedMethods);
+												}}/>
+											</label>
+
+											<input type="number" value={method.freeShippingThreshold || ''} disabled={!method.hasFreeShipping}
+												   onChange={(e) => {
+													   const updatedMethods = [...shippingMethods];
+													   updatedMethods[index].freeShippingThreshold = e.target.value;
 													   setShippingMethods(updatedMethods);
 												   }} className="border border-gray-300 rounded-md p-2"/>
 
