@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 function Step( { current  = false, future = false, past = false, setStep = null, label = null, step } ) {
 	const classes = 'flex items-center justify-center w-8 h-8 border-2 border-gray-300 bg-white rounded-full shrink-0' +
 		( current ? ' border-primary text-primary' : '' ) +
@@ -37,7 +39,7 @@ export default function StepCounter({currentStep, steps, labels, setStep = null,
 	return (
 		<div className="mb-10">
 			<span className="sr-only">
-				Step {currentStep} of {steps}
+				{__('Step', 'fraktvalg')} {currentStep} {__('of', 'fraktvalg')} {steps}
 			</span>
 			<ol className="items-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 sm:justify-center max-w-2xl mx-auto">
 				{[...Array(steps)].map((_, index) => (

@@ -61,7 +61,7 @@ export default function Providers({setProvider, setTab}) {
 				} );
 			}
 		}).catch((error) => {
-			setErrorContext('fetching providers');
+			setErrorContext(__('fetching providers', 'fraktvalg'));
 			setError(error?.message);
 		}).then( () => {
 			setIsLoading( false );
@@ -96,7 +96,7 @@ export default function Providers({setProvider, setTab}) {
 			fetchSuppliers();
 		}).catch((error) => {
 			setProviderLoadingIndicator( '' );
-			setErrorContext('saving provider settings');
+			setErrorContext(__('saving provider settings', 'fraktvalg'));
 			setError(error?.message || __('Failed to save provider settings', 'fraktvalg'));
 		});
 	}
@@ -125,7 +125,7 @@ export default function Providers({setProvider, setTab}) {
 				setSuccessMessage('');
 			}, 5000);
 		}).catch((error) => {
-			setErrorContext('saving priority provider settings');
+			setErrorContext(__('saving priority provider settings', 'fraktvalg'));
 			setError(error?.message || __('Failed to save priority provider settings', 'fraktvalg'));
 		});
 	}
@@ -150,7 +150,7 @@ export default function Providers({setProvider, setTab}) {
 			fetchSuppliers();
 		}).catch((error) => {
 			setProviderLoadingIndicator('');
-			setErrorContext('disconnecting provider');
+			setErrorContext(__('disconnecting provider', 'fraktvalg'));
 			setError(error?.message || __('Failed to disconnect provider', 'fraktvalg'));
 		});
 	}
@@ -162,7 +162,7 @@ export default function Providers({setProvider, setTab}) {
 
 	if ( isLoading ) {
 		return (
-			<Wrapper title="My providers">
+			<Wrapper title={__('My providers', 'fraktvalg')}>
 				<div className="flex flex-col justify-center items-center h-64">
 					<ArrowPathIcon className="h-8 w-8 animate-spin text-primary" />
 					<div className="text-lg">
@@ -174,10 +174,10 @@ export default function Providers({setProvider, setTab}) {
 	}
 
 	return (
-		<Wrapper title="My providers">
+		<Wrapper title={__('My providers', 'fraktvalg')}>
 			<div className="grid grid-cols-1 gap-3">
 				{ error &&
-					<Notification type="error" title={`Error ${errorContext ? errorContext : 'fetching providers'}`}>
+					<Notification type="error" title={`Error ${errorContext ? errorContext : __('fetching providers', 'fraktvalg')}`}>
 						{ error }
 					</Notification>
 				}
@@ -311,11 +311,11 @@ export default function Providers({setProvider, setTab}) {
 							<div className="flex items-center gap-3">
 								<input value={ priorityProviderDiscount } onChange={ (e) => setPriorityProviderDiscount( e.target.value ) } type="number" min="0" step="1" placeholder="10" className="w-16 border border-gray-300 rounded-md p-2" />
 								<select className="border border-gray-300 rounded-md p-2" value={ priorityProviderDiscountType } onChange={ (e) => setPriorityProviderDiscountType( e.target.value ) }>
-									<option value="percent">%</option>
-									<option value="fixed">NOK</option>
+									<option value="percent">{__('%', 'fraktvalg')}</option>
+									<option value="fixed">{__('NOK', 'fraktvalg')}</option>
 								</select>
 
-								<label htmlFor="something">
+								<label htmlFor={__('something', 'fraktvalg')}>
 									{ __( 'Determine how much cheaper your preferred provider should be compared to the cheapest competitor.', 'fraktvalg' ) }
 								</label>
 							</div>
