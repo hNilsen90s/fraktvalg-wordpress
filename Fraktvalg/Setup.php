@@ -9,6 +9,8 @@ use Fraktvalg\Fraktvalg\WooCommerce\ShippingMethod;
 class Setup {
 
 	public function __construct() {
+		\add_action( 'init', [ $this, 'load_plugin_textdomain' ] );
+
 		new Privacy();
 		new WooCommerce\Blocks\Shipping();
 
@@ -25,6 +27,14 @@ class Setup {
 		new CreateShipment();
 
 		new WooCommerce\Admin\ShippingLabel();
+	}
+
+	public function load_plugin_textdomain() {
+		\load_plugin_textdomain(
+			'fraktvalg',
+			false,
+			\trailingslashit( FRAKTVALG_BASE_PATH ) . 'languages'
+		);
 	}
 
 }

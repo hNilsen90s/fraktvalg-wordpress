@@ -11,6 +11,7 @@
  * Author: fraktvalg
  * Version: 1.2.0
  * Text Domain: fraktvalg
+ * Domain Path: /languages
  * Requires Plugins: woocommerce
  * License: GPLv2 or later
  */

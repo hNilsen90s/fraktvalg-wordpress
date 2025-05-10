@@ -82,6 +82,12 @@ class Onboarding {
 
 		\wp_enqueue_script( 'fraktvalg-onboarding', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/onboarding.js', $asset['dependencies'], $asset['version'], true );
 		\wp_enqueue_style( 'fraktvalg-onboarding', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/onboarding.css', [], $asset['version'] );
+
+		\wp_set_script_translations(
+			'fraktvalg-onboarding',
+			'fraktvalg',
+			\trailingslashit( FRAKTVALG_BASE_PATH ) . 'languages'
+		);
 	}
 
 }

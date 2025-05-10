@@ -78,6 +78,12 @@ class Settings {
 
 		\wp_enqueue_script( 'fraktvalg', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/fraktvalg.js', $asset['dependencies'], $asset['version'], true );
 		\wp_enqueue_style( 'fraktvalg', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/fraktvalg.css', [], $asset['version'] );
+
+		\wp_set_script_translations(
+			'fraktvalg',
+			'fraktvalg',
+			\trailingslashit( FRAKTVALG_BASE_PATH ) . 'languages'
+		);
 	}
 
 }
