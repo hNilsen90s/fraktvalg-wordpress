@@ -181,7 +181,7 @@ export default function ShippingMethods({supplier, setTab}) {
 										<div className="flex flex-col gap-1">
 											<label>
 												<span className="mr-2">
-													{__('Enable free shipping of this method if the order total exceeds the threshold', 'fraktvalg')}
+													{__('Free shipping if order total is over', 'fraktvalg')}
 												</span>
 												<input type="checkbox" checked={method.hasFreeShipping} onChange={() => {
 													const updatedMethods = [...shippingMethods];

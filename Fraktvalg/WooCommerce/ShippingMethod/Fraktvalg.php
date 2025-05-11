@@ -260,6 +260,12 @@ class Fraktvalg extends \WC_Shipping_Method {
 					
 					// Always round up the price to the next full number.
 					$price = ceil( $price );
+
+					if ( isset( $option->price->hasFreeShipping ) && $option->price->hasFreeShipping ) {
+						if ( $package['contents_cost'] >= $option->price->freeShippingThreshold ) {
+							$price = 0;
+						}
+					}
 					
 					// Set the label based on theme type
 					$label = $option->texts->shipperName . ' - ' . $option->texts->displayName;
@@ -308,6 +314,12 @@ class Fraktvalg extends \WC_Shipping_Method {
 
 						if ( isset( $option->texts->description ) ) {
 							$label .= ' (' . $option->texts->description . ')';
+						}
+					}
+
+					if ( isset( $option->price->hasFreeShipping ) && $option->price->hasFreeShipping ) {
+						if ( $package['contents_cost'] >= $option->price->freeShippingThreshold ) {
+							$price = 0;
 						}
 					}
 
