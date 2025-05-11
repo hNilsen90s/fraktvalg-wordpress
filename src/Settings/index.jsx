@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 
 import "./fraktvalg.pcss";
 import Header from "./Components/Header";
@@ -14,15 +14,15 @@ export default function Settings({}) {
 	const [ provider, setProvider ] = useState( null );
 	const tabs = [
 		{
-			label: __('My providers', 'fraktvalg'),
+			label: _x('My providers', 'Tab label', 'fraktvalg'),
 			value: 'providers',
 		},
 		{
-			label: __('Optional settings', 'fraktvalg'),
+			label: _x('Optional settings', 'Tab label', 'fraktvalg'),
 			value: 'settings',
 		},
 		{
-			label: __('Support', 'fraktvalg'),
+			label: _x('Support', 'Tab label', 'fraktvalg'),
 			value: 'support',
 		},
 	]

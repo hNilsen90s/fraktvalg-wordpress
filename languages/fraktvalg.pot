@@ -2,21 +2,21 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Fraktvalg 1.1.0\n"
+"Project-Id-Version: Fraktvalg 1.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fraktvalg\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-12T22:02:50+00:00\n"
+"POT-Creation-Date: 2025-05-11T21:01:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: fraktvalg\n"
 
 #. Plugin Name of the plugin
 #: fraktvalg.php
-#: Fraktvalg/WooCommerce/Admin/ShippingLabel.php:38
+#: Fraktvalg/WooCommerce/Admin/ShippingLabel.php:60
 #: Fraktvalg/WooCommerce/ShippingMethod/Fraktvalg.php:27
 #: Fraktvalg/WooCommerce/ShippingMethod/Fraktvalg.php:28
 msgid "Fraktvalg"
@@ -122,605 +122,618 @@ msgstr ""
 msgid "Fraktvalg: Shipment created with %1$s for %2$s and has been assigned shipment ID %3$s"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/frontend.js:1
-#: build/Blocks/ShippingSelector/index.js:1
-msgid "Fetching the best shipping options..."
-msgstr ""
-
-#: build/Blocks/ShippingSelector/frontend.js:1
-#: build/Blocks/ShippingSelector/index.js:1
-msgid "Return to shipping providers"
-msgstr ""
-
-#: build/Blocks/ShippingSelector/frontend.js:1
-#: build/Blocks/ShippingSelector/index.js:1
-msgid "Shipping methods"
-msgstr ""
-
-#: build/Blocks/ShippingSelector/frontend.js:1
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/block.jsx:101
 msgid " business days"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/frontend.js:1
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/block.jsx:185
 msgid "Updating cart totals with your new shipping preference"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/Components/Loading.jsx:5
+msgid "Fetching the best shipping options..."
+msgstr ""
+
+#: src/Blocks/ShippingSelector/Components/ShippingMethods.jsx:29
+msgid "Return to shipping providers"
+msgstr ""
+
+#: src/Blocks/ShippingSelector/Components/ShippingMethods.jsx:33
+#: src/Blocks/ShippingSelector/edit.jsx:107
+msgid "Shipping methods"
+msgstr ""
+
+#: src/Blocks/ShippingSelector/edit.jsx:98
 msgid "Preview Settings"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/edit.jsx:101
 msgid "Preview Mode:"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/edit.jsx:113
 msgid "Shipping providers"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/edit.jsx:121
 msgid "Color Settings"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/edit.jsx:130
 msgid "Primary Color"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/edit.jsx:147
 msgid "Secondary Color"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/index.js:1
+#: src/Blocks/ShippingSelector/edit.jsx:164
 msgid "Tertiary Color"
 msgstr ""
 
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
+#: src/Components/ProviderFields.jsx:181
 msgid "Help"
 msgstr ""
 
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Connected"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Disconnected"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "fetching providers"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "saving provider settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Failed to save provider settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "My providers"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Fetching available providers..."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Saving provider settings, one moment please..."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Configure shipping methods"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Are you sure you want to disconnect this provider?"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "disconnecting provider"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Failed to disconnect provider"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Disconnect provider"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Update provider settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Connecting provider, one moment please..."
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Connect to this provider"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "More providers are coming 🥳"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "We are continually working to integrate more shipping providers to you you more opportunities."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Is there someone you would like to see here?"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "hei@fraktvalg.no"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Send us an e-mail"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Preferred provider"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Choose which provider should always be the cheapest option in your store. This gives you the opportunity to prioritize one provider by making their prices more competitive."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Price reduction for your preferred provider"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "10"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "%"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "NOK"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "something"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Determine how much cheaper your preferred provider should be compared to the cheapest competitor."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Currently chosen as your preferred provider"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Preferred provider settings saved successfully"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "saving priority provider settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Failed to save priority provider settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Save preferred provider preferences"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Shipping & handling"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Error fetching optional settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Backup shipping option"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "If Fraktvalg should ever become unavailable, or no shiopping options are returned, returns this shipping alternative by default."
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Shipping option name"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Backup shipping cost"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "The backup shipping cost can be set to either a fixed value, or a percentage of the order total."
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Shipping cost adjustments"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Safeguard your shipping costs with these optional alternatives."
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Add an optional surcharge to all shipping options"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Additional shipping surcharges are meant to cover administrative- and handling costs, and is automatically added to all shipping alternatives."
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Shop environment"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Some times, you wish to use the shipping providers test environments, for example on a staging site. Doing so will not create legitimate shipping requests, and prevents yo ufrom incurring charges while testing your store setup."
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Use production environments"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Error saving optional settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Save optional settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Fraktvalg support"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "For help with the Fraktvalg API, your subscription, or other questions, please contact us directly."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Contact Fraktvalg support"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Community support"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "If you are having trouble with WordPress, or using the plugin, please use the community support forums at WordPress.org."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Visit the WordPress.org support forums"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Back to providers"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Shipping methods saved successfully!"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Failed to save shipping methods. Please try again."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Loading shipping methods..."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "This provider does not offer any shipping methods that can be modified."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Active"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Name"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Price"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Set a fixed price for this shipping method"
-msgstr ""
-
-#: build/fraktvalg.js:1
-#: build/onboarding.js:1
-msgid "Saving..."
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Save shipping overrides"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Optional settings"
-msgstr ""
-
-#: build/fraktvalg.js:1
-msgid "Support"
-msgstr ""
-
-#: build/label.js:1
-msgid "Print"
-msgstr ""
-
-#: build/label.js:1
-msgid "Failed to load shipping label."
-msgstr ""
-
-#: build/label.js:1
-msgid "Fetch & print shipping label"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Activate license"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Your license will be activated for the domain: "
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "License key"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Enter your license key"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "An error was encountered when validating your API key"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Need a license?"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "To use Fraktvalg you first need to register an account. It only takes a moment to get started."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Register at fraktvalg.no"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Error:"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Failed to connect to provider"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Next step"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Fraktvalg is now set up and ready to use."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Finish setup"
-msgstr ""
-
-#: build/onboarding.js:1
+#: src/Components/StepCounter.jsx:42
 msgid "Step"
 msgstr ""
 
-#: build/onboarding.js:1
+#: src/Components/StepCounter.jsx:42
 msgid "of"
 msgstr ""
 
-#: build/onboarding.js:1
-msgid "Almost there! Are there any optional settings you would like to change?"
+#: src/Label/index.jsx:17
+msgid "Fetch & print shipping label"
 msgstr ""
 
-#: build/onboarding.js:1
-msgid "Checking which templates are in use on this site..."
+#: src/Label/Modal/index.jsx:19
+#: src/Label/Modal/index.jsx:65
+msgid "Print"
 msgstr ""
 
-#: build/onboarding.js:1
-msgid "Template Configuration"
+#: src/Label/Modal/index.jsx:75
+msgid "Failed to load shipping label."
 msgstr ""
 
-#: build/onboarding.js:1
-msgid "Your theme uses block templates. Choose how you want to add the Fraktvalg block to your templates:"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Your theme uses a mix of block and classic templates. You can configure the block templates below:"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Your theme does not use block templates. You can proceed to the next step without configuring any templates."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Cart Template"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Creating..."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Block Auto-added"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Auto-add Block"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Customize Manually"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Checkout Template"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Loading store settings, and checking products..."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "It is important to have an accurate store address, as all shipping options need to know the sender location to accurately provide shipping estimates, even if the recipient address is less explicit."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Street Address"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Enter your store address"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Postal Code"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Enter your postal code"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "City"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Enter your city"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Country"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Norway"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Save Address"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Address saved successfully"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Most shipping providers require the dimensions (width, height, and length) of a product, as well as its weight. This is used to more accurately calculate shipping costs, and without it you are more likely t use your fallback prices, or charge lower shipping costs than intended from your customers."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Some products appear to be missing dimensions or weight information. This may cause shipping prices to be inaccurate or unavailable. Note that this check does not account for variable products, we recommend you double-check the product information in WooCommerce."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "All products have complete dimension and weight information."
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Incomplete"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Products missing dimensions"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Store Settings"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Configure your store settings for Fraktvalg shipping options:"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Store Address"
-msgstr ""
-
-#: build/onboarding.js:1
-msgid "Package Dimensions"
-msgstr ""
-
-#: build/onboarding.js:1
+#: src/Onboarding/index.jsx:22
 msgid "License"
 msgstr ""
 
-#: build/onboarding.js:1
+#: src/Onboarding/index.jsx:23
 msgid "Providers"
 msgstr ""
 
-#: build/onboarding.js:1
+#: src/Onboarding/index.jsx:24
 msgid "Templates"
 msgstr ""
 
-#: build/onboarding.js:1
+#: src/Onboarding/index.jsx:25
 msgid "Plugin Settings"
 msgstr ""
 
-#: build/onboarding.js:1
+#: src/Onboarding/index.jsx:26
+#: src/Onboarding/Steps/StoreSettings.jsx:255
+msgid "Store Settings"
+msgstr ""
+
+#: src/Onboarding/index.jsx:27
 msgid "Finished"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/block.json
+#: src/Onboarding/Steps/Finished.jsx:12
+msgid "Fraktvalg is now set up and ready to use."
+msgstr ""
+
+#: src/Onboarding/Steps/Finished.jsx:16
+msgid "Finish setup"
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:28
+msgid "An error was encountered when validating your API key"
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:38
+#: src/Onboarding/Steps/LicenseKey.jsx:69
+msgid "Activate license"
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:41
+msgid "Your license will be activated for the domain: "
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:52
+msgid "License key"
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:57
+msgid "Enter your license key"
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:79
+msgid "Need a license?"
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:84
+msgid "To use Fraktvalg you first need to register an account. It only takes a moment to get started."
+msgstr ""
+
+#: src/Onboarding/Steps/LicenseKey.jsx:89
+msgid "Register at fraktvalg.no"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:48
+#: src/Settings/Tabs/OptionalSettings.jsx:22
+msgid "Shipping & handling"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:104
+#: src/Settings/Tabs/OptionalSettings.jsx:96
+msgid "Error saving optional settings"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:113
+msgid "Almost there! Are there any optional settings you would like to change?"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:116
+#: src/Settings/Tabs/OptionalSettings.jsx:122
+msgid "Backup shipping option"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:119
+#: src/Settings/Tabs/OptionalSettings.jsx:124
+msgid "If Fraktvalg should ever become unavailable, or no shiopping options are returned, returns this shipping alternative by default."
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:123
+#: src/Settings/Tabs/OptionalSettings.jsx:128
+msgid "Shipping option name"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:134
+#: src/Settings/Tabs/OptionalSettings.jsx:139
+msgid "Backup shipping cost"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:137
+#: src/Settings/Tabs/OptionalSettings.jsx:142
+msgid "The backup shipping cost can be set to either a fixed value, or a percentage of the order total."
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:145
+#: src/Settings/Tabs/OptionalSettings.jsx:149
+msgid "Shipping cost adjustments"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:146
+#: src/Settings/Tabs/OptionalSettings.jsx:150
+msgid "Safeguard your shipping costs with these optional alternatives."
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:157
+#: src/Settings/Tabs/OptionalSettings.jsx:161
+msgid "Add an optional surcharge to all shipping options"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:160
+#: src/Settings/Tabs/OptionalSettings.jsx:164
+msgid "Additional shipping surcharges are meant to cover administrative- and handling costs, and is automatically added to all shipping alternatives."
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:166
+#: src/Settings/Tabs/OptionalSettings.jsx:170
+msgid "Shop environment"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:168
+#: src/Settings/Tabs/OptionalSettings.jsx:172
+msgid "Some times, you wish to use the shipping providers test environments, for example on a staging site. Doing so will not create legitimate shipping requests, and prevents yo ufrom incurring charges while testing your store setup."
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:172
+#: src/Settings/Tabs/OptionalSettings.jsx:176
+msgid "Use production environments"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:183
+#: src/Settings/Tabs/OptionalSettings.jsx:187
+msgid "Save optional settings"
+msgstr ""
+
+#: src/Onboarding/Steps/OptionalSettings.jsx:188
+#: src/Onboarding/Steps/Providers.jsx:181
+#: src/Onboarding/Steps/StoreSettings.jsx:281
+#: src/Onboarding/Steps/Templates.jsx:227
+msgid "Next step"
+msgstr ""
+
+#: src/Onboarding/Steps/Providers.jsx:49
+msgid "Connected"
+msgstr ""
+
+#: src/Onboarding/Steps/Providers.jsx:54
+msgid "Disconnected"
+msgstr ""
+
+#: src/Onboarding/Steps/Providers.jsx:119
+msgid "Failed to connect to provider"
+msgstr ""
+
+#: src/Onboarding/Steps/Providers.jsx:145
+msgid "Error:"
+msgstr ""
+
+#: src/Onboarding/Steps/Providers.jsx:164
+#: src/Settings/Tabs/Providers.jsx:249
+msgid "Connecting provider, one moment please..."
+msgstr ""
+
+#: src/Onboarding/Steps/Providers.jsx:173
+#: src/Settings/Tabs/Providers.jsx:258
+msgid "Connect to this provider"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:119
+msgid "Loading store settings, and checking products..."
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:129
+msgid "It is important to have an accurate store address, as all shipping options need to know the sender location to accurately provide shipping estimates, even if the recipient address is less explicit."
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:134
+msgid "Street Address"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:139
+msgid "Enter your store address"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:145
+msgid "Postal Code"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:150
+msgid "Enter your postal code"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:156
+msgid "City"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:161
+msgid "Enter your city"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:167
+msgid "Country"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:173
+msgid "Norway"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:187
+#: src/Settings/Tabs/ShippingMethods.jsx:221
+msgid "Saving..."
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:191
+msgid "Save Address"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:200
+msgid "Address saved successfully"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:210
+msgid "Most shipping providers require the dimensions (width, height, and length) of a product, as well as its weight. This is used to more accurately calculate shipping costs, and without it you are more likely t use your fallback prices, or charge lower shipping costs than intended from your customers."
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:221
+msgid "Some products appear to be missing dimensions or weight information. This may cause shipping prices to be inaccurate or unavailable. Note that this check does not account for variable products, we recommend you double-check the product information in WooCommerce."
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:229
+msgid "All products have complete dimension and weight information."
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:239
+msgid "Incomplete"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:247
+msgid "Products missing dimensions"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:258
+msgid "Configure your store settings for Fraktvalg shipping options:"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:265
+msgid "Store Address"
+msgstr ""
+
+#: src/Onboarding/Steps/StoreSettings.jsx:273
+msgid "Package Dimensions"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:93
+msgid "Your theme uses block templates. Choose how you want to add the Fraktvalg block to your templates:"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:95
+msgid "Your theme uses a mix of block and classic templates. You can configure the block templates below:"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:98
+msgid "Your theme does not use block templates. You can proceed to the next step without configuring any templates."
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:114
+msgid "Checking which templates are in use on this site..."
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:124
+msgid "Template Configuration"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:138
+msgid "Cart Template"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:154
+#: src/Onboarding/Steps/Templates.jsx:199
+msgid "Creating..."
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:159
+#: src/Onboarding/Steps/Templates.jsx:204
+msgid "Block Auto-added"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:164
+#: src/Onboarding/Steps/Templates.jsx:209
+msgid "Auto-add Block"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:173
+#: src/Onboarding/Steps/Templates.jsx:218
+msgid "Customize Manually"
+msgstr ""
+
+#: src/Onboarding/Steps/Templates.jsx:183
+msgid "Checkout Template"
+msgstr ""
+
+#: src/Settings/index.jsx:17
+msgctxt "Tab label"
+msgid "My providers"
+msgstr ""
+
+#: src/Settings/index.jsx:21
+msgctxt "Tab label"
+msgid "Optional settings"
+msgstr ""
+
+#: src/Settings/index.jsx:25
+msgctxt "Tab label"
+msgid "Support"
+msgstr ""
+
+#: src/Settings/Tabs/OptionalSettings.jsx:45
+msgid "Error fetching optional settings"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:64
+#: src/Settings/Tabs/Providers.jsx:180
+msgid "fetching providers"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:99
+msgid "saving provider settings"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:100
+msgid "Failed to save provider settings"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:121
+msgid "Preferred provider settings saved successfully"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:128
+msgid "saving priority provider settings"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:129
+msgid "Failed to save priority provider settings"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:134
+msgid "Are you sure you want to disconnect this provider?"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:153
+msgid "disconnecting provider"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:154
+msgid "Failed to disconnect provider"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:165
+#: src/Settings/Tabs/Providers.jsx:177
+msgid "My providers"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:169
+msgid "Fetching available providers..."
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:198
+msgid "Saving provider settings, one moment please..."
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:215
+msgid "Configure shipping methods"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:221
+msgid "Disconnect provider"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:225
+msgid "Update provider settings"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:272
+msgid "More providers are coming 🥳"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:275
+msgid "We are continually working to integrate more shipping providers to you you more opportunities."
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:279
+msgid "Is there someone you would like to see here?"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:283
+msgid "Send us an e-mail"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:294
+msgid "Preferred provider"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:297
+msgid "Choose which provider should always be the cheapest option in your store. This gives you the opportunity to prioritize one provider by making their prices more competitive."
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:308
+msgid "Price reduction for your preferred provider"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:314
+msgid "%"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:315
+msgid "NOK"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:318
+msgid "something"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:319
+msgid "Determine how much cheaper your preferred provider should be compared to the cheapest competitor."
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:357
+msgid "Currently chosen as your preferred provider"
+msgstr ""
+
+#: src/Settings/Tabs/Providers.jsx:364
+msgid "Save preferred provider preferences"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:81
+msgid "Back to providers"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:92
+msgid "Shipping methods saved successfully!"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:97
+msgid "Failed to save shipping methods. Please try again."
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:105
+msgid "Loading shipping methods..."
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:112
+msgid "This provider does not offer any shipping methods that can be modified."
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:122
+#: src/Settings/Tabs/ShippingMethods.jsx:145
+msgid "Active"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:125
+msgid "Name"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:128
+msgid "Price"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:131
+msgid "Free shipping"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:162
+msgid "Set a fixed price for this shipping method"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:186
+msgid "Free shipping if order total is over"
+msgstr ""
+
+#: src/Settings/Tabs/ShippingMethods.jsx:224
+msgid "Save shipping overrides"
+msgstr ""
+
+#: src/Settings/Tabs/Support.jsx:14
+msgid "Fraktvalg support"
+msgstr ""
+
+#: src/Settings/Tabs/Support.jsx:18
+msgid "For help with the Fraktvalg API, your subscription, or other questions, please contact us directly."
+msgstr ""
+
+#: src/Settings/Tabs/Support.jsx:25
+msgid "Contact Fraktvalg support"
+msgstr ""
+
+#: src/Settings/Tabs/Support.jsx:32
+msgid "Community support"
+msgstr ""
+
+#: src/Settings/Tabs/Support.jsx:36
+msgid "If you are having trouble with WordPress, or using the plugin, please use the community support forums at WordPress.org."
+msgstr ""
+
+#: src/Settings/Tabs/Support.jsx:43
+msgid "Visit the WordPress.org support forums"
+msgstr ""
+
+#: src/Blocks/ShippingSelector/block.json
 msgctxt "block title"
 msgid "Fraktvalg"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/block.json
+#: src/Blocks/ShippingSelector/block.json
 msgctxt "block description"
 msgid "Shipping selector from Fraktvalg"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/block.json
+#: src/Blocks/ShippingSelector/block.json
 msgctxt "block keyword"
 msgid "fraktvalg"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/block.json
+#: src/Blocks/ShippingSelector/block.json
 msgctxt "block keyword"
 msgid "shipping"
 msgstr ""
 
-#: build/Blocks/ShippingSelector/block.json
+#: src/Blocks/ShippingSelector/block.json
 msgctxt "block style label"
 msgid "Default"
 msgstr ""
