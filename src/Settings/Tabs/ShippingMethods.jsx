@@ -124,10 +124,10 @@ export default function ShippingMethods({supplier, setTab}) {
 								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 									{__('Name', 'fraktvalg')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
 									{__('Price', 'fraktvalg')}
 								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								<th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
 									{__('Free shipping', 'fraktvalg')}
 								</th>
 							</tr>
@@ -168,12 +168,14 @@ export default function ShippingMethods({supplier, setTab}) {
 												}}/>
 											</label>
 
-											<input type="number" value={method.price || ''} disabled={!method.canEditPrice}
-												   onChange={(e) => {
-													   const updatedMethods = [...shippingMethods];
-													   updatedMethods[index].price = e.target.value;
-													   setShippingMethods(updatedMethods);
-												   }} className="border border-gray-300 rounded-md p-2"/>
+											<div className="flex justify-end">
+												<input type="number" value={method.price || ''} disabled={!method.canEditPrice}
+													onChange={(e) => {
+														const updatedMethods = [...shippingMethods];
+														updatedMethods[index].price = e.target.value;
+														setShippingMethods(updatedMethods);
+													}} className="border text-right w-20 border-gray-300 rounded-md p-2"/>
+											</div>
 
 										</div>
 									</td>
@@ -190,12 +192,14 @@ export default function ShippingMethods({supplier, setTab}) {
 												}}/>
 											</label>
 
-											<input type="number" value={method.freeShippingThreshold || ''} disabled={!method.hasFreeShipping}
-												   onChange={(e) => {
-													   const updatedMethods = [...shippingMethods];
-													   updatedMethods[index].freeShippingThreshold = e.target.value;
-													   setShippingMethods(updatedMethods);
-												   }} className="border border-gray-300 rounded-md p-2"/>
+											<div className="flex justify-end">
+												<input type="number" value={method.freeShippingThreshold || ''} disabled={!method.hasFreeShipping}
+													onChange={(e) => {
+														const updatedMethods = [...shippingMethods];
+														updatedMethods[index].freeShippingThreshold = e.target.value;
+														setShippingMethods(updatedMethods);
+													}} className="border text-right w-20 border-gray-300 rounded-md p-2"/>
+											</div>
 
 										</div>
 									</td>
