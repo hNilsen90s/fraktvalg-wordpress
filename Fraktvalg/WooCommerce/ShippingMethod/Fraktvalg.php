@@ -222,14 +222,14 @@ class Fraktvalg extends \WC_Shipping_Method {
 				}
 
 				// Apply discount to the cheapest priority provider option if needed
-				if ( ! empty( $priorityProvider['discount'] ) && $cheapest_priority_price >= $cheapest_price ) {
+				if ( ! empty( $priorityProvider['discount'] ) && $cheapest_priority_price >= $cheapest_price['price'] && $priorityProvider['providerId'] !== $cheapest_price['provider'] ) {
 					// Apply the configured discount type and amount
 					if ( 'percent' === $priorityProvider['discountType'] ) {
 						// Apply the configured percentage discount
-						$cheapest_priority_price = $cheapest_price * ( 1 - ( $priorityProvider['discount'] / 100 ) );
+						$cheapest_priority_price = $cheapest_price['price'] * ( 1 - ( $priorityProvider['discount'] / 100 ) );
 					} else {
 						// Apply the configured fixed discount
-						$cheapest_priority_price = $cheapest_price - $priorityProvider['discount'];
+						$cheapest_priority_price = $cheapest_price['price'] - $priorityProvider['discount'];
 					}
 				}
 				
@@ -239,15 +239,6 @@ class Fraktvalg extends \WC_Shipping_Method {
 
 					$price = $option->price->withVAT;
 					
-					// Apply added cost from settings
-					if ( isset( $settings['freight']['addedCost'] ) ) {
-						if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
-							$price += $price * ( $settings['freight']['addedCost'] / 100 );
-						} else {
-							$price += $settings['freight']['addedCost'];
-						}
-					}
-					
 					// If this is the cheapest priority option, use the discounted price
 					if ( $count === $cheapest_priority_count ) {
 						$price = $cheapest_priority_price;
@@ -256,10 +247,26 @@ class Fraktvalg extends \WC_Shipping_Method {
 					elseif ( ! empty( $priorityProvider['discount'] ) && 'percent' === $priorityProvider['discountType'] ) {
 						$price = $price * ( 1 - ( $priorityProvider['discount'] / 100 ) );
 					}
-					// For fixed discount, we don't apply it to other options as it's a fixed amount
-					
+
+					// Never allow a price to dip below 0, so check this in case the discount is configured too high.
+					if ( $price < 0 ) {
+						$price = 0;
+					}
+
+					// Apply added cost from settings
+					if ( isset( $settings['freight']['addedCost'] ) ) {
+						if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
+							$price += $price * ( $settings['freight']['addedCost'] / 100 );
+						} else {
+							$price += $settings['freight']['addedCost'];
+						}
+					}
+									
 					// Always round up the price to the next full number.
 					$price = ceil( $price );
+
+					// If a high discount is applied, never go below 0, and re-apply the added shipping cost.
+
 
 					if ( isset( $option->price->hasFreeShipping ) && $option->price->hasFreeShipping ) {
 						if ( $package['contents_cost'] >= $option->price->freeShippingThreshold ) {
@@ -306,7 +313,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 						} else {
 							$price += $settings['freight']['addedCost'];
 						}
-					}					
+					}
 					// Set the label based on theme type
 					$label = $option->texts->displayName;
 					if ( ! $is_block_theme && isset( $option->texts->shipperName ) ) {
@@ -413,10 +420,13 @@ class Fraktvalg extends \WC_Shipping_Method {
 	 * @param object $shipping_options The shipping options returned from the API
 	 * @param string $priority_provider_id The ID of the priority provider to exclude
 	 * @param array  $settings The plugin settings
-	 * @return float|null The cheapest shipping price found
+	 * @return array The cheapest shipping price found
 	 */
 	private function get_cheapest_shipping_price( $shipping_options, $priority_provider_id, $settings ) {
-		$cheapest_price = null;
+		$cheapest_price = array(
+			'price' => null,
+			'provider' => null,
+		);
 		$has_other_providers = false;
 		
 		// Loop through all providers to find the cheapest price
@@ -440,15 +450,16 @@ class Fraktvalg extends \WC_Shipping_Method {
 					}
 				}
 				
-				if ( null === $cheapest_price || $price < $cheapest_price ) {
-					$cheapest_price = $price;
+				if ( null === $cheapest_price['price'] || $price < $cheapest_price['price'] ) {
+					$cheapest_price['price'] = $price;
+					$cheapest_price['provider'] = $shipper;
 				}
 			}
 		}
 		
 		// If no other providers exist, set cheapest price to 0 to avoid applying discount
 		if ( ! $has_other_providers ) {
-			$cheapest_price = 0;
+			$cheapest_price['price'] = 0;
 		}
 		
 		return $cheapest_price;
