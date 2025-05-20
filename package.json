@@ -50,6 +50,7 @@
 		"fraktvalg.php",
 		"assets/**",
 		"build/**",
+		"languages/**",
 		"Fraktvalg/**",
 		"uninstall.php",
 		"changelog.txt",
