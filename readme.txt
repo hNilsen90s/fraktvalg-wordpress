@@ -47,6 +47,15 @@ Experience the benefits of Fraktvalg with a 14-day free trial, offering unrestri
 
 By choosing Fraktvalg, you streamline your shipping processes, enhance customer satisfaction with flexible delivery options, and potentially increase your store's conversion rates through optimized shipping solutions.
 
+== Screenshots ==
+
+1. The cart choices showing available shippers, and the cheapest option automatically chosen for the user.
+2. The cart choices showing available shipping methods after the customer has chosen a shipping provider, including details like estimated delivery time and pickup location.
+3. The Fraktvalg settings page, showing two connected shipping providers, and one not yet configured.
+4. The screen presented when clicking through to configure shipping methods for a provider. Giving a site admin the possibility to customize shipping method names, set fixed prices for certain shipping methods, or even give free shipping based on order totals.
+5. The preferred shipping provider settings, with a provider chosen, and a discount applied that will undercut the cheapeast competing providers cost by the given amount.
+6. The optional settings, where fixed shipping and handling fees can be applied, as well as fallback shipping methods, and the home for settings not tied directly to the shipping providers.
+
 == Frequently Asked Questions ==
 
 = I have a suggestion for enhancements! =
