@@ -13,97 +13,42 @@ import {ExpandableElement} from "../../Onboarding/Steps/Providers";
 import ProviderLogo from "../../Components/ProviderLogo";
 import {AdjustmentsHorizontalIcon} from "@heroicons/react/16/solid";
 
-export default function Providers({setProvider, setTab}) {
-	const [allSuppliers, setAllSuppliers] = useState({});
-	const [suppliers, setSuppliers] = useState({});
-	const [error, setError] = useState(null);
-	const [errorContext, setErrorContext] = useState('');
-	const [isLoading, setIsLoading] = useState(true);
-	const [ priorityProvider, setPriorityProvider ] = useState(null);
-	const [ priorityProviderDiscount, setPriorityProviderDiscount ] = useState( 10 );
-	const [ priorityProviderDiscountType, setPriorityProviderDiscountType ] = useState('percent' );
-	const [ providerLoadingIndicator, setProviderLoadingIndicator ] = useState('' );
+export default function Providers({
+	allSuppliers,
+	suppliers,
+	priorityProvider,
+	priorityProviderDiscount,
+	priorityProviderDiscountType,
+	providerFieldValues,
+	isLoading,
+	error,
+	setProvider,
+	setTab,
+	setProviderFieldValueCallback,
+	onUpdatePriorityProvider
+}) {
+	const [ providerLoadingIndicator, setProviderLoadingIndicator ] = useState('');
 	const [ successMessage, setSuccessMessage ] = useState('');
 
-	const [ providerFieldValues, setProviderFieldValues ] = useState({});
-
-	const setFieldValueCallback = ( provider, values ) => {
-		setProviderFieldValues( { ...providerFieldValues, [ provider ]: values } );
-	}
-
-	const fetchSuppliers = () => {
-		setError(null);
-		setErrorContext('');
-
-		apiFetch({
-			path: 'fraktvalg/v1/settings/providers/mine',
-			method: 'GET'
-		}).then((response) => {
-			setSuppliers(response?.mine?.data || {});
-			setAllSuppliers(response?.available?.data || {});
-
-			if ( response?.available?.data ) {
-				Object.keys( response?.available?.data ).map( (key) => {
-					setProviderFieldValues( { ...providerFieldValues, [ key ]: response?.available?.data[ key ]?.fields } );
-				} );
-			}
-
-			if ( response?.mine?.data ) {
-				response?.mine?.data?.forEach( (provider) => {
-					if ( allSuppliers[ provider?.id ] ) {
-						// Remove the provider from the allSuppliers object, as we want this data to be handled in the suppliers object.
-						let modifiedALlSuppliers = { ...allSuppliers };
-						delete modifiedALlSuppliers[ provider?.id ];
-						setAllSuppliers( modifiedALlSuppliers );
-					}
-
-					setProviderFieldValues( { ...providerFieldValues, [ provider?.id ]: provider?.fields } );
-				} );
-			}
-		}).catch((error) => {
-			setErrorContext(__('fetching providers', 'fraktvalg'));
-			setError(error?.message);
-		}).then( () => {
-			setIsLoading( false );
-		});
-	}
-
-	const fetchPriorityProvider = () => {
-		apiFetch({
-			path: 'fraktvalg/v1/settings/providers/priority',
-			method: 'GET'
-		}).then((response) => {
-			setPriorityProvider( response?.data?.providerId );
-			setPriorityProviderDiscount( response?.data?.discount );
-			setPriorityProviderDiscountType( response?.data?.discountType );
-		});
-	}
-
-	const storeProviders = ( key ) => {
-		setProviderLoadingIndicator( key );
-		setError(null);
-		setErrorContext('');
+	const storeProviders = (key) => {
+		setProviderLoadingIndicator(key);
 
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/store',
 			method: 'POST',
 			data: {
 				providerId: key,
-				fieldValues: providerFieldValues[ key ]
+				fieldValues: providerFieldValues[key]
 			}
-		}).then( (response) => {
-			setProviderLoadingIndicator( '' );
-			fetchSuppliers();
+		}).then(() => {
+			setProviderLoadingIndicator('');
 		}).catch((error) => {
-			setProviderLoadingIndicator( '' );
-			setErrorContext(__('saving provider settings', 'fraktvalg'));
+			setProviderLoadingIndicator('');
 			setError(error?.message || __('Failed to save provider settings', 'fraktvalg'));
 		});
-	}
+	};
 
 	const storePriorityProvider = () => {
-		setError(null);
-		setErrorContext('');
 		setSuccessMessage('');
 		
 		apiFetch({
@@ -116,8 +61,7 @@ export default function Providers({setProvider, setTab}) {
 					discountType: priorityProviderDiscountType
 				}
 			}
-		}).then((response) => {
-			fetchPriorityProvider();
+		}).then(() => {
 			setSuccessMessage(__('Preferred provider settings saved successfully', 'fraktvalg'));
 			
 			// Clear success message after 5 seconds
@@ -125,19 +69,16 @@ export default function Providers({setProvider, setTab}) {
 				setSuccessMessage('');
 			}, 5000);
 		}).catch((error) => {
-			setErrorContext(__('saving priority provider settings', 'fraktvalg'));
 			setError(error?.message || __('Failed to save priority provider settings', 'fraktvalg'));
 		});
-	}
+	};
 
-	const disconnectProvider = ( provider ) => {
-		if ( ! confirm( __( 'Are you sure you want to disconnect this provider?', 'fraktvalg' ) ) ) {
+	const disconnectProvider = (provider) => {
+		if (!confirm(__( 'Are you sure you want to disconnect this provider?', 'fraktvalg'))) {
 			return;
 		}
 
-		setProviderLoadingIndicator( provider?.id );
-		setError(null);
-		setErrorContext('');
+		setProviderLoadingIndicator(provider?.id);
 
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/disconnect',
@@ -145,28 +86,21 @@ export default function Providers({setProvider, setTab}) {
 			data: {
 				provider: provider?.id
 			}
-		}).then((response) => {
+		}).then(() => {
 			setProviderLoadingIndicator('');
-			fetchSuppliers();
 		}).catch((error) => {
 			setProviderLoadingIndicator('');
-			setErrorContext(__('disconnecting provider', 'fraktvalg'));
 			setError(error?.message || __('Failed to disconnect provider', 'fraktvalg'));
 		});
-	}
+	};
 
-	useEffect(() => {
-		fetchSuppliers();
-		fetchPriorityProvider();
-	}, []);
-
-	if ( isLoading ) {
+	if (isLoading) {
 		return (
 			<Wrapper title={__('My providers', 'fraktvalg')}>
 				<div className="flex flex-col justify-center items-center h-64">
 					<ArrowPathIcon className="h-8 w-8 animate-spin text-primary" />
 					<div className="text-lg">
-						{ __( 'Fetching available providers...', 'fraktvalg' ) }
+						{__( 'Fetching available providers...', 'fraktvalg')}
 					</div>
 				</div>
 			</Wrapper>
@@ -176,53 +110,67 @@ export default function Providers({setProvider, setTab}) {
 	return (
 		<Wrapper title={__('My providers', 'fraktvalg')}>
 			<div className="grid grid-cols-1 gap-3">
-				{ error &&
-					<Notification type="error" title={`Error ${errorContext ? errorContext : __('fetching providers', 'fraktvalg')}`}>
-						{ error }
+				{error &&
+					<Notification type="error" title={__('Error fetching providers', 'fraktvalg')}>
+						{error}
 					</Notification>
 				}
 
 				{Object.keys(suppliers).map((key) => (
 					<ExpandableElement
-						isConnected={ true }
+						isConnected={true}
 						key={key}
 						title={suppliers[key]?.name}
 						supplierId={key}
 						supplier={suppliers[key]}
 						content={
 							<div className="relative grid grid-cols-1 gap-4">
-								{ providerLoadingIndicator === key &&
+								{providerLoadingIndicator === key &&
 									<div className="absolute w-full h-full top-0 left-0 bg-white flex flex-col justify-center items-center gap-2">
 										<ArrowPathIcon className="h-6 w-6 animate-spin text-primary" />
 										<span>
-											{ __( 'Saving provider settings, one moment please...', 'fraktvalg' ) }
+											{__( 'Saving provider settings, one moment please...', 'fraktvalg')}
 										</span>
 									</div>
 								}
 
-								<ProviderFields includeOptional provider={key} fields={suppliers[key]?.fields || []}
-												callback={setFieldValueCallback}/>
+								<ProviderFields 
+									includeOptional 
+									provider={key} 
+									fields={suppliers[key]?.fields || []}
+									callback={setProviderFieldValueCallback}
+								/>
 
 								<div className="flex flex-col md:flex-row justify-between gap-2">
 									<div className="flex flex-col md:flex-row justify-start gap-2">
-										<Button type="button" className="md:inline-block md:w-fit"
-												onClick={ () => {
-													setProvider( suppliers[ key ] );
-													setTab( 'shipping-methods' );
-												} }
+										<Button 
+											type="button" 
+											className="md:inline-block md:w-fit"
+											onClick={() => {
+												setProvider(suppliers[key]);
+												setTab('shipping-methods');
+											}}
 										>
 											<AdjustmentsHorizontalIcon className="w-4 h-4 mr-2 inline-block" />
-											{ __( 'Configure shipping methods', 'fraktvalg' ) }
+											{__( 'Configure shipping methods', 'fraktvalg')}
 										</Button>
 									</div>
 
 									<div className="flex flex-col md:flex-row justify-end gap-2">
-										<Button className="md:inline-block md:w-fit bg-red-600 hover:bg-red-500 active:bg-red-500 focus:bg-red-500" type="button" onClick={ () => disconnectProvider( suppliers[ key ] ) }>
-											{ __( 'Disconnect provider', 'fraktvalg' ) }
+										<Button 
+											className="md:inline-block md:w-fit bg-red-600 hover:bg-red-500 active:bg-red-500 focus:bg-red-500" 
+											type="button" 
+											onClick={() => disconnectProvider(suppliers[key])}
+										>
+											{__( 'Disconnect provider', 'fraktvalg')}
 										</Button>
 
-										<Button className="md:inline-block md:w-fit" type="button" onClick={ () => storeProviders( suppliers[ key ] ) }>
-											{ __( 'Update provider settings', 'fraktvalg' ) }
+										<Button 
+											className="md:inline-block md:w-fit" 
+											type="button" 
+											onClick={() => storeProviders(suppliers[key])}
+										>
+											{__( 'Update provider settings', 'fraktvalg')}
 										</Button>
 									</div>
 								</div>
@@ -239,23 +187,26 @@ export default function Providers({setProvider, setTab}) {
 						title={allSuppliers[key]?.name}
 						supplierId={key}
 						supplier={allSuppliers[key]}
-						visible={ false }
+						visible={false}
 						content={
 							<div className="relative grid grid-cols-1 gap-4">
-								{ providerLoadingIndicator === key &&
+								{providerLoadingIndicator === key &&
 									<div className="absolute w-full h-full top-0 left-0 bg-white flex flex-col justify-center items-center gap-2">
 										<ArrowPathIcon className="h-6 w-6 animate-spin text-primary" />
 										<span>
-											{ __( 'Connecting provider, one moment please...', 'fraktvalg' ) }
+											{__( 'Connecting provider, one moment please...', 'fraktvalg')}
 										</span>
 									</div>
 								}
 
-								<ProviderFields provider={key} fields={allSuppliers[key]?.fields || []}
-												callback={setFieldValueCallback}/>
+								<ProviderFields 
+									provider={key} 
+									fields={allSuppliers[key]?.fields || []}
+									callback={setProviderFieldValueCallback}
+								/>
 
-								<Button type="button" onClick={ () => storeProviders( key ) }>
-									{ __( 'Connect to this provider', 'fraktvalg' ) }
+								<Button type="button" onClick={() => storeProviders(key)}>
+									{__( 'Connect to this provider', 'fraktvalg')}
 								</Button>
 							</div>
 						}
@@ -269,18 +220,18 @@ export default function Providers({setProvider, setTab}) {
 						</div>
 
 						<h2 className="text-xl font-semibold text-gray-900 mb-2">
-							{ __( 'More providers are coming 🥳', 'fraktvalg' ) }
+							{__( 'More providers are coming 🥳', 'fraktvalg')}
 						</h2>
 						<p className="text-gray-600 mb-4">
-							{ __( 'We are continually working to integrate more shipping providers to you you more opportunities.', 'fraktvalg' ) }
+							{__( 'We are continually working to integrate more shipping providers to you you more opportunities.', 'fraktvalg')}
 						</p>
 						<div className="space-y-2">
 							<p className="text-sm text-gray-600">
-								{ __( 'Is there someone you would like to see here?', 'fraktvalg' ) }
+								{__( 'Is there someone you would like to see here?', 'fraktvalg')}
 							</p>
 							<a href="mailto:hei@fraktvalg.no" className="inline-flex items-center text-custom hover:text-custom-dark font-medium">
 								<span>
-									{ __( 'Send us an e-mail', 'fraktvalg' ) }
+									{__( 'Send us an e-mail', 'fraktvalg')}
 								</span>
 								<ArrowRightIcon className="ml-1 w-4 h-4" />
 							</a>
@@ -288,61 +239,78 @@ export default function Providers({setProvider, setTab}) {
 					</div>
 				</div>
 
-				{ Object.keys( suppliers ).length > 1 &&
+				{Object.keys(suppliers).length > 1 &&
 					<div className="bg-white rounded-lg shadow p-6">
 						<h2 className="text-xl font-semibold text-gray-900 mb-2">
-							{ __( 'Preferred provider', 'fraktvalg' ) }
+							{__( 'Preferred provider', 'fraktvalg')}
 						</h2>
 						<p className="text-gray-600 mb-4">
-							{ __( 'Choose which provider should always be the cheapest option in your store. This gives you the opportunity to prioritize one provider by making their prices more competitive.', 'fraktvalg' ) }
+							{__( 'Choose which provider should always be the cheapest option in your store. This gives you the opportunity to prioritize one provider by making their prices more competitive.', 'fraktvalg')}
 						</p>
 
 						<div className="grid grid-cols-1 gap-4">
-							{ successMessage &&
+							{successMessage &&
 								<Notification type="success">
-									{ successMessage }
+									{successMessage}
 								</Notification>
 							}
 							
 							<p>
-								{ __( 'Price reduction for your preferred provider', 'fraktvalg' ) }
+								{__( 'Price reduction for your preferred provider', 'fraktvalg')}
 							</p>
 
 							<div className="flex items-center gap-3">
-								<input value={ priorityProviderDiscount } onChange={ (e) => setPriorityProviderDiscount( e.target.value ) } type="number" min="0" step="1" placeholder="10" className="w-16 border border-gray-300 rounded-md p-2" />
-								<select className="border border-gray-300 rounded-md p-2" value={ priorityProviderDiscountType } onChange={ (e) => setPriorityProviderDiscountType( e.target.value ) }>
+								<input 
+									value={priorityProviderDiscount} 
+									onChange={(e) => onUpdatePriorityProvider(priorityProvider, e.target.value, priorityProviderDiscountType)} 
+									type="number" 
+									min="0" 
+									step="1" 
+									placeholder="10" 
+									className="w-16 border border-gray-300 rounded-md p-2" 
+								/>
+								<select 
+									className="border border-gray-300 rounded-md p-2" 
+									value={priorityProviderDiscountType} 
+									onChange={(e) => onUpdatePriorityProvider(priorityProvider, priorityProviderDiscount, e.target.value)}
+								>
 									<option value="percent">{__('%', 'fraktvalg')}</option>
 									<option value="fixed">{__('NOK', 'fraktvalg')}</option>
 								</select>
 
 								<label htmlFor={__('something', 'fraktvalg')}>
-									{ __( 'Determine how much cheaper your preferred provider should be compared to the cheapest competitor.', 'fraktvalg' ) }
+									{__( 'Determine how much cheaper your preferred provider should be compared to the cheapest competitor.', 'fraktvalg')}
 								</label>
 							</div>
 
 							<div className="flex gap-4">
 								{Object.keys(suppliers).map((key) => (
-									<label key={key} className="relative cursor-pointer grow flex flex-col gap-2 items-center border-2 border-gray-300 rounded-lg p-4 hover:border-primary peer-checked:border-primary transition-all duration-200"
+									<label 
+										key={key} 
+										className="relative cursor-pointer grow flex flex-col gap-2 items-center border-2 border-gray-300 rounded-lg p-4 hover:border-primary peer-checked:border-primary transition-all duration-200"
 										onClick={(e) => {
-											// Prevent the default radio behavior
 											e.preventDefault();
-											// Toggle selection
-											setPriorityProvider(priorityProvider === suppliers[ key ]?.id ? null : suppliers[ key ]?.id);
-										}}>
+											onUpdatePriorityProvider(
+												priorityProvider === suppliers[key]?.id ? null : suppliers[key]?.id,
+												priorityProviderDiscount,
+												priorityProviderDiscountType
+											);
+										}}
+									>
 										<input
 											type="radio"
 											name="preferred_provider"
 											value={key}
 											className="sr-only peer"
-											checked={priorityProvider === suppliers[ key ]?.id}
+											checked={priorityProvider === suppliers[key]?.id}
 										/>
 
-										{ suppliers[ key ]?.logo &&
-											<ProviderLogo logo={ suppliers[ key ]?.logo } className="w-8 h-8" />
+										{suppliers[key]?.logo &&
+											<ProviderLogo logo={suppliers[key]?.logo} className="w-8 h-8" />
 										}
 
 										<span className="text-lg font-medium text-gray-900">
-											{ suppliers[ key ]?.name }
+											{suppliers[key]?.name}
 										</span>
 
 										<div className="absolute top-2 right-2 hidden peer-checked:block">
@@ -350,18 +318,18 @@ export default function Providers({setProvider, setTab}) {
 										</div>
 
 										<p className="text-sm text-gray-5400 text-center">
-											{ suppliers[ key ]?.description }
+											{suppliers[key]?.description}
 										</p>
 
 										<p className="text-xs text-primary font-medium peer-checked:block hidden">
-											{ __( 'Currently chosen as your preferred provider', 'fraktvalg' ) }
+											{__( 'Currently chosen as your preferred provider', 'fraktvalg')}
 										</p>
 									</label>
 								))}
 							</div>
 
 							<Button type="button" onClick={storePriorityProvider}>
-								{ __( 'Save preferred provider preferences', 'fraktvalg' ) }
+								{__( 'Save preferred provider preferences', 'fraktvalg')}
 							</Button>
 						</div>
 					</div>
