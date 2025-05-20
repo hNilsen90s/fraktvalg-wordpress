@@ -31,6 +31,8 @@ To utilize Fraktvalg, you must have active accounts or agreements with the respe
 - [Bring/Posten](https://bring.no): Establish a business agreement to utilize their shipping solutions.
 - [Helthjem](https://helthjem.no): Partner with Helthjem to access their delivery network.
 
+Additionally, you need to [sign up for the Fraktvalg API](https://fraktvalg.no/?utm_source=wordpress.org&utm_medium=plugin-details).
+
 **How It Works:**
 
 Fraktvalg operates as a Software-as-a-Service (SaaS) solution, requiring an API key obtainable by signing up at Fraktvalg. Once integrated, the plugin calculates shipping costs in real-time by sending order details—such as item weight, sizes, your shop address, and the customer's delivery address—to the Fraktvalg API. This process ensures accurate communication with each shipping provider, delivering precise rates and options at checkout.
