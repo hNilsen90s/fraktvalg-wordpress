@@ -43,6 +43,8 @@ class Fraktvalg extends \WC_Shipping_Method {
 			return;
 		}
 
+		$default_dimensions = Options::get( 'default_dimensions' );
+
 		$total_weight = 0;
 		$total_length = 0;
 		$total_width = 0;
@@ -78,7 +80,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 			}
 
 			// Get the weight and convert to grams
-			$product_weight = $product->get_weight();
+			$product_weight = $product->get_weight() ?? $default_dimensions['weight'];
 			if ( $product_weight ) {
 				switch ( $weight_unit ) {
 					case 'kg':
@@ -95,9 +97,9 @@ class Fraktvalg extends \WC_Shipping_Method {
 			}
 
 			// Get dimensions and convert to millimeters
-			$product_length = $product->get_length();
-			$product_width = $product->get_width();
-			$product_height = $product->get_height();
+			$product_length = $product->get_length() ?? $default_dimensions['length'];
+			$product_width = $product->get_width() ?? $default_dimensions['width'];
+			$product_height = $product->get_height() ?? $default_dimensions['height'];
 			$product_volume = 0;
 
 			if ( $product_length || $product_width || $product_height ) {

@@ -3,6 +3,7 @@
 namespace Fraktvalg\Fraktvalg\REST\Settings;
 
 use Fraktvalg\Fraktvalg\REST\Base;
+use Fraktvalg\Fraktvalg\Options;
 use Automattic\WooCommerce\Blocks\Utils\BlockTemplateUtils;
 
 class Onboarding extends Base {
@@ -90,6 +91,76 @@ class Onboarding extends Base {
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
+			]
+		);
+
+		\register_rest_route(
+			$this->namespace,
+			'/onboarding/store-default-dimensions',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => array( $this, 'set_store_default_dimensions' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+				'args'                => [
+					'length' => [
+						'required' => false,
+						'validate_callback' => function($param) {
+							return is_numeric( $param );
+						},
+					],
+					'width' => [
+						'required' => false,
+						'validate_callback' => function($param) {
+							return is_numeric( $param );
+						},
+					],
+					'height' => [
+						'required' => false,
+						'validate_callback' => function($param) {
+							return is_numeric( $param );
+						},
+					],
+					'weight' => [
+						'required' => false,
+						'validate_callback' => function($param) {
+							return is_numeric( $param );
+						},
+					],
+				],
+			]
+		);
+	}
+
+	public function set_store_default_dimensions( $request ) {
+		$length = $request->get_param( 'length' );
+		$width = $request->get_param( 'width' );
+		$height = $request->get_param( 'height' );
+		$weight = $request->get_param( 'weight' );
+	
+		$options = [
+			'default_dimensions' => [
+				'length' => empty( $length ) ? null : $length,
+				'width' => empty( $width ) ? null : $width,
+				'height' => empty( $height ) ? null : $height,
+				'weight' => empty( $weight ) ? null : $weight,
+			]
+		];
+
+		if ( ! Options::bulk_set( $options ) ) {
+			return new \WP_REST_Response( [
+				'status' => 'error',
+				'type' => 'notice',
+				'title' => __( 'Could not save settings', 'fraktvalg' ),
+				'message' => __( "An unknown error occurred, and your preferences could not be saved at this time. Please double check the options, and try again. You can always move forward, and change these later if you wish.", 'fraktvalg' )
+			] );
+		}
+
+		return new \WP_REST_Response(
+			[
+				'status' => 'success',
+				'type' => 'success',
+				'title' => __( 'Settings saved', 'fraktvalg' ),
+				'message' => __( 'Your default dimensions have been successfully stored.', 'fraktvalg' )
 			]
 		);
 	}

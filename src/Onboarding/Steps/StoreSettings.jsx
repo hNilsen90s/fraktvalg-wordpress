@@ -111,6 +111,62 @@ export default function StoreSettings({ nextStep }) {
 		}
 	};
 
+	const handleDimensionChange = ( field, value ) => {
+		// Update the local state for any dimension field
+		setStoreStatus( prev => ({
+			...prev,
+			default_dimensions: {
+				...prev.default_dimensions,
+				[field]: value
+			}
+		}));
+	};
+
+	const saveDefaultDimensions = async () => {
+		setIsSaving( true );
+		try {
+			// Make API call to update default dimensions
+			await apiFetch( {
+				path: '/fraktvalg/v1/onboarding/store-default-dimensions',
+				method: 'POST',
+				data: { 
+					length: storeStatus.default_dimensions?.length || '',
+					width: storeStatus.default_dimensions?.width || '',
+					height: storeStatus.default_dimensions?.height || '',
+					weight: storeStatus.default_dimensions?.weight || ''
+				}
+			} );
+			
+			// Update local state to mark dimensions as complete
+			setStoreStatus( prev => ({
+				...prev,
+				default_dimensions: {
+					...prev.default_dimensions,
+					complete: true
+				}
+			}));
+			
+			// Show success message for this section
+			setSectionSaveStatus(prev => ({
+				...prev,
+				dimensions: true
+			}));
+			
+			// Reset the success message after 3 seconds
+			setTimeout(() => {
+				setSectionSaveStatus(prev => ({
+					...prev,
+					dimensions: false
+				}));
+			}, 3000);
+			
+		} catch ( error ) {
+			console.error( 'Error updating store default dimensions:', error );
+		} finally {
+			setIsSaving( false );
+		}
+	};
+
 	if ( isLoading ) {
 		return (
 			<div className="flex flex-col justify-center items-center h-64">
@@ -221,13 +277,93 @@ export default function StoreSettings({ nextStep }) {
 							<div className="flex-shrink-0">
 								<ExclamationTriangleIcon className="h-5 w-5 text-yellow-400" />
 							</div>
-							<div className="ml-3">
+							<div className="grid grid-cols gap-2 ml-3">
 								<p className="text-sm text-yellow-700">
 									{ __( 'Some products appear to be missing dimensions or weight information. This may cause shipping prices to be inaccurate or unavailable. Note that this check does not account for variable products, we recommend you double-check the product information in WooCommerce.', 'fraktvalg' ) }
+								</p>
+								<p className="text-sm text-yellow-700">
+									{ __( 'You may define default dimensions and weights that will substitute any missing ones. Note that some shipping prices may be inaccurate if you do not provide the correct dimensions and weights for each product.', 'fraktvalg' ) }
 								</p>
 							</div>
 						</div>
 					</div>
+
+					<div className="mt-4 grid grid-cols-4 gap-4">
+						<div>
+							<label className="block text-sm font-medium text-gray-700 mb-1">
+								{ __( 'Length', 'fraktvalg' ) }
+							</label>
+							<InputText
+								type="number"
+								value={ storeStatus.default_dimensions?.length || '' }
+								onChange={ (e) => handleDimensionChange('length', e.target.value) }
+								placeholder={ __( 'Length', 'fraktvalg' ) }
+							/>
+						</div>
+						
+						<div>
+							<label className="block text-sm font-medium text-gray-700 mb-1">
+								{ __( 'Width', 'fraktvalg' ) }
+							</label>
+							<InputText
+								type="number"
+								value={ storeStatus.default_dimensions?.width || '' }
+								onChange={ (e) => handleDimensionChange('width', e.target.value) }
+								placeholder={ __( 'Width', 'fraktvalg' ) }
+							/>
+						</div>
+						
+						<div>
+							<label className="block text-sm font-medium text-gray-700 mb-1">
+								{ __( 'Height', 'fraktvalg' ) }
+							</label>
+							<InputText
+								type="number"
+								value={ storeStatus.default_dimensions?.height || '' }
+								onChange={ (e) => handleDimensionChange('height', e.target.value) }
+								placeholder={ __( 'Height', 'fraktvalg' ) }
+							/>
+						</div>
+						
+						<div>
+							<label className="block text-sm font-medium text-gray-700 mb-1">
+								{ __( 'Weight', 'fraktvalg' ) }
+							</label>
+							<InputText
+								type="number"
+								value={ storeStatus.default_dimensions?.weight || '' }
+								onChange={ (e) => handleDimensionChange('weight', e.target.value) }
+								placeholder={ __( 'Weight', 'fraktvalg' ) }
+							/>
+						</div>
+					</div>
+
+					<div className="mt-4 flex justify-end">
+						<Button 
+							type="button" 
+							onClick={saveDefaultDimensions}
+							disabled={isSaving}
+						>
+							{ isSaving ? (
+								<>
+									<ArrowPathIcon className="h-4 w-4 mr-2 inline-block animate-spin" />
+									{ __( 'Saving...', 'fraktvalg' ) }
+								</>
+							) : (
+								<>
+									{ __( 'Save Default Dimensions', 'fraktvalg' ) }
+								</>
+							) }
+						</Button>
+					</div>
+					
+					{sectionSaveStatus.dimensions && (
+						<div className="mt-2 text-green-600 text-sm flex items-center">
+							<CheckCircleIcon className="h-4 w-4 mr-1" />
+							{ __( 'Default dimensions saved successfully', 'fraktvalg' ) }
+						</div>
+					)}
+					
 				</div>
 			) : (
 				<p className="text-green-600">

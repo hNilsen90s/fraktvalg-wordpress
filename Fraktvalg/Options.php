@@ -25,6 +25,12 @@ class Options {
 			],
 			'useProduction' => wp_get_environment_type() === 'production',
 			'names'   => [],
+			'default_dimensions' => [
+				'length' => null,
+				'width' => null,
+				'height' => null,
+				'weight' => null,
+			],
 		];
 
 		$options = \get_option( 'fraktvalg_options', [] );

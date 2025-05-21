@@ -37,6 +37,18 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 			case 'useProduction':
 				newSettings.useProduction = event.target.checked;
 				break;
+			case 'default_dimensions[length]':
+				newSettings.default_dimensions.length = event.target.value;
+				break;
+			case 'default_dimensions[width]':
+				newSettings.default_dimensions.width = event.target.value;
+				break;
+			case 'default_dimensions[height]':
+				newSettings.default_dimensions.height = event.target.value;
+				break;
+			case 'default_dimensions[weight]':
+				newSettings.default_dimensions.weight = event.target.value;
+				break;
 			default:
 				newSettings[event.target.name] = event.target.value;
 				break;
@@ -168,6 +180,68 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 							<p className="text-xs italic">
 								{__('Additional shipping surcharges are meant to cover administrative- and handling costs, and is automatically added to all shipping alternatives.', 'fraktvalg')}
 							</p>
+						</div>
+					</div>
+				</AccordionSection>
+
+				<AccordionSection title={__('Default dimensions', 'fraktvalg')} open={true}>
+					<p className="text-sm text-yellow-700 mb-4">
+						{ __( 'Most shipping providers require all dimensions and weights for each product to reliably return shipping costs. If you have not set these for your products, you may define default dimensions and weights that will substitute any missing ones.', 'fraktvalg' ) }
+					</p>
+
+					<div className="mt-2 grid grid-cols-1 gap-4">
+						<div className="grid grid-cols-4 gap-4">
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									{__('Length', 'fraktvalg')}
+								</label>
+								<InputText
+									type="number"
+									name="default_dimensions[length]"
+									value={settings.default_dimensions?.length || ''}
+									onChange={setOption}
+									placeholder={__('Length', 'fraktvalg')}
+								/>
+							</div>
+							
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									{__('Width', 'fraktvalg')}
+								</label>
+								<InputText
+									type="number"
+									name="default_dimensions[width]"
+									value={settings.default_dimensions?.width || ''}
+									onChange={setOption}
+									placeholder={__('Width', 'fraktvalg')}
+								/>
+							</div>
+							
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									{__('Height', 'fraktvalg')}
+								</label>
+								<InputText
+									type="number"
+									name="default_dimensions[height]"
+									value={settings.default_dimensions?.height || ''}
+									onChange={setOption}
+									placeholder={__('Height', 'fraktvalg')}
+								/>
+							</div>
+							
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-1">
+									{__('Weight', 'fraktvalg')}
+								</label>
+								<InputText
+									type="number"
+									name="default_dimensions[weight]"
+									value={settings.default_dimensions?.weight || ''}
+									onChange={setOption}
+									placeholder={__('Weight', 'fraktvalg')}
+								/>
+							</div>
 						</div>
 					</div>
 				</AccordionSection>
