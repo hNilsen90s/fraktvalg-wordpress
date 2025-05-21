@@ -115,8 +115,13 @@ export default function StoreSettings({ nextStep }) {
 		return (
 			<div className="flex flex-col justify-center items-center h-64">
 				<ArrowPathIcon className="h-8 w-8 animate-spin text-primary" />
-				<div className="text-lg">
-					{ __( 'Loading store settings, and checking products...', 'fraktvalg' ) }
+				<div className="text-lg text-center">
+					<p>
+						{ __( 'Loading store settings, and checking products.', 'fraktvalg' ) }
+					</p>
+					<p className="text-sm text-gray-600">
+						{ __( 'This may take a few minutes if you have a lot of products...', 'fraktvalg' ) }
+					</p>
 				</div>
 			</div>
 		);
