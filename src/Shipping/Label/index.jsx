@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { apiFetch } from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 
-import './label.pcss';
 import Modal from "./Modal";
 
-export default function Label({}) {
+export default function Label({ orderId }) {
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 
 	return (
@@ -18,8 +16,8 @@ export default function Label({}) {
 			</button>
 
 			{ isModalOpen &&
-				<Modal setIsModalOpen={ setIsModalOpen } />
+				<Modal setIsModalOpen={ setIsModalOpen } orderId={orderId} />
 			}
 		</>
 	)
-}
+} 

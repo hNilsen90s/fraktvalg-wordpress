@@ -5,11 +5,9 @@ import { __ } from '@wordpress/i18n';
 
 import apiFetch from '@wordpress/api-fetch';
 
-export default function Modal({ setIsModalOpen }) {
+export default function Modal({ setIsModalOpen, orderId }) {
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ labelImageUrl, setLabelImageUrl ] = useState( null );
-
-	const orderId = new URLSearchParams( window.location.search ).get( 'id' );
 
 	const printLabel = () => {
 		if (labelImageUrl) {
@@ -40,7 +38,7 @@ export default function Modal({ setIsModalOpen }) {
 		}).finally( () => {
 			setIsLoading( false );
 		});
-	}, [])
+	}, [orderId])
 
 	return (
 		<div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[999999]">

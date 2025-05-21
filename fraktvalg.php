@@ -20,7 +20,8 @@ namespace Fraktvalg\Fraktvalg;
 
 define( 'FRAKTVALG_BASE_PATH', __DIR__ );
 define( 'FRAKTVALG_BASE_FILE', __FILE__ );
-define( 'FRAKTVALG_API_SERVER', 'https://api.fraktvalg.no/api' );
+//define( 'FRAKTVALG_API_SERVER', 'https://api.fraktvalg.no/api' );
+define( 'FRAKTVALG_API_SERVER', 'https://fraktvalg.share.clorith.space/api' );
 
 /*
  * Autoloader to ensure our namespace can autoload files seamlessly.

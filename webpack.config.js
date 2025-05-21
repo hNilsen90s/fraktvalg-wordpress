@@ -7,7 +7,7 @@ module.exports = {
 		...defaultConfig.entry(),
 		fraktvalg: './src/fraktvalg.jsx',
 		onboarding: './src/onboarding.jsx',
-		label: './src/label.jsx'
+		shipping: './src/shipping.jsx'
 	},
 	plugins: [
 		...defaultConfig.plugins.filter(

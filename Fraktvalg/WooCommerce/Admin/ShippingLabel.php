@@ -2,6 +2,8 @@
 
 namespace Fraktvalg\Fraktvalg\WooCommerce\Admin;
 
+use Fraktvalg\Fraktvalg\Options;
+
 class ShippingLabel {
 
 	public function __construct() {
@@ -13,42 +15,25 @@ class ShippingLabel {
 			return;
 		}
 
-		$screen = \get_current_screen();
-		if ( ! $screen || $screen->id !== 'woocommerce_page_wc-orders' || ! isset( $_GET['action'] ) || $_GET['action'] !== 'edit' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- False positive report presuming the enqueue hook is handling form data.
+		if ( ! isset( $_GET['page'] ) || 'wc-orders' !== $_GET['page'] || ! isset( $_GET['action'] ) || $_GET['action'] !== 'edit' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- False positive report presuming the enqueue hook is handling form data.
 			return;
 		}
-
-		$order = \wc_get_order( \absint( $_GET['id'] ) );
-
-		$required_meta_fields = [
-			'_fraktvalg_shipper',
-			'_fraktvalg_shipment_id',
-			'_fraktvalg_shipment_meta',
-		];
-
-		foreach ( $required_meta_fields as $meta_field ) {
-			if ( ! $order->get_meta( $meta_field, true ) ) {
-				return;
-			}
-		}
-
+		
 		\add_action( 'add_meta_boxes', [ $this, 'add_shipping_label_meta_box' ] );
 
 		\add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-
-		new \Fraktvalg\Fraktvalg\REST\WooCommerce\ShippingLabel();
 	}
 
 	public function enqueue_scripts() {
 		\remove_all_actions( 'admin_notices' );
 
-		$asset = require \plugin_dir_path( FRAKTVALG_BASE_FILE ) . 'build/label.asset.php';
+		$asset = require \plugin_dir_path( FRAKTVALG_BASE_FILE ) . 'build/shipping.asset.php';
 
-		\wp_enqueue_script( 'fraktvalg-label', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/label.js', $asset['dependencies'], $asset['version'], true );
-		\wp_enqueue_style( 'fraktvalg-label', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/label.css', [], $asset['version'] );
+		\wp_enqueue_script( 'fraktvalg-shipping', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/shipping.js', $asset['dependencies'], $asset['version'], true );
+		\wp_enqueue_style( 'fraktvalg-shipping', \plugin_dir_url( FRAKTVALG_BASE_FILE ) . 'build/shipping.css', [], $asset['version'] );
 
 		\wp_set_script_translations(
-			'fraktvalg-label',
+			'fraktvalg-shipping',
 			'fraktvalg',
 			dirname( plugin_basename( FRAKTVALG_BASE_FILE ) ) . '/languages/'
 		);
@@ -66,7 +51,34 @@ class ShippingLabel {
 	}
 
 	public function shipping_label_meta_box() {
-		echo '<div id="fraktvalg-label-meta-box"></div>';
+		$order = \wc_get_order( \absint( $_GET['id'] ) );
+
+		$required_meta_fields = [
+			'_fraktvalg_shipper',
+			'_fraktvalg_shipment_id',
+			'_fraktvalg_shipment_meta',
+		];
+
+		$data_attrs = [];
+
+		foreach ( $required_meta_fields as $meta_field ) {
+			$data_attrs[] = sprintf(
+				'data-%s="%s"',
+				trim( $meta_field, '_' ),
+				\esc_attr( $order->get_meta( $meta_field, true ) )
+			);
+		}
+
+		$data_attrs[] = sprintf(
+			'data-environment="%s"',
+			\esc_attr( Options::get( 'useProduction' ) )
+		);
+
+		printf(
+			'<div id="fraktvalg-label-meta-box" data-order_id="%s" %s></div>',
+			$order->get_id(),
+			implode( ' ', $data_attrs )
+		);
 	}
 
 }

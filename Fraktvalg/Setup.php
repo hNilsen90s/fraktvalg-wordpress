@@ -3,7 +3,6 @@
 namespace Fraktvalg\Fraktvalg;
 
 use Fraktvalg\Fraktvalg\WooCommerce\Admin\ShippingLabel;
-use Fraktvalg\Fraktvalg\WooCommerce\CreateShipment;
 use Fraktvalg\Fraktvalg\WooCommerce\ShippingMethod;
 
 class Setup {
@@ -24,9 +23,11 @@ class Setup {
 		new PluginControls();
 
 		new ShippingMethod();
-		new CreateShipment();
-
+		
 		new WooCommerce\Admin\ShippingLabel();
+
+		new \Fraktvalg\Fraktvalg\REST\WooCommerce\CreateConsignment();
+		new \Fraktvalg\Fraktvalg\REST\WooCommerce\ShippingLabel();
 	}
 
 	public function load_plugin_textdomain() {
