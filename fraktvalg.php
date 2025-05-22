@@ -9,7 +9,7 @@
  * Plugin URI: https://fraktvalg.no
  * Description: Easily provide shipping estimates for your customers from multiple providers.
  * Author: fraktvalg
- * Version: 1.2.0
+ * Version: 1.3.0-beta1
  * Text Domain: fraktvalg
  * Domain Path: /languages
  * Requires Plugins: woocommerce
@@ -20,8 +20,7 @@ namespace Fraktvalg\Fraktvalg;
 
 define( 'FRAKTVALG_BASE_PATH', __DIR__ );
 define( 'FRAKTVALG_BASE_FILE', __FILE__ );
-//define( 'FRAKTVALG_API_SERVER', 'https://api.fraktvalg.no/api' );
-define( 'FRAKTVALG_API_SERVER', 'https://fraktvalg.share.clorith.space/api' );
+define( 'FRAKTVALG_API_SERVER', 'https://api.fraktvalg.no/api' );
 
 /*
  * Autoloader to ensure our namespace can autoload files seamlessly.
