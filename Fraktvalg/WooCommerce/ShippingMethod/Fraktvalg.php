@@ -54,7 +54,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 		// Get units once before the loop
 		$weight_unit = get_option( 'woocommerce_weight_unit' );
 		$dimension_unit = get_option( 'woocommerce_dimension_unit' );
-		
+
 		// Set up dimension conversion factor
 		$dimension_conversion_factor = 1;
 		switch ( $dimension_unit ) {
@@ -112,7 +112,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 				if ( $product_height ) {
 					$product_height *= $dimension_conversion_factor;
 				}
-				
+
 				// Recalculate volume if it wasn't explicitly set
 				if ( $product_length && $product_width && $product_height ) {
 					$product_volume = $product_length * $product_width * $product_height;
@@ -170,10 +170,17 @@ class Fraktvalg extends \WC_Shipping_Method {
 			$shipping_options_array['packages'][0]['packageVolume'] = ceil( $total_volume );
 		}
 
-		$shippers = Api::post(
-			'/shipment/offers',
-			$shipping_options_array
-		);
+		$cache_key = 'fraktvalg_shipping_options_' . md5( \json_encode( $shipping_options_array ) . date( 'Y-m-d' ) );
+
+		$shippers = \get_transient( $cache_key );
+		if ( false === $shippers ) {
+			$shippers = Api::post(
+				'/shipment/offers',
+				$shipping_options_array
+			);
+
+			\set_transient( $cache_key, $shippers, DAY_IN_SECONDS );
+		}
 
 		$settings        = Options::get();
 		$shippingOptions = [];
@@ -203,10 +210,10 @@ class Fraktvalg extends \WC_Shipping_Method {
 				$cheapest_priority_price = null;
 				$cheapest_priority_option = null;
 				$cheapest_priority_count = null;
-				
+
 				foreach ( $shippingOptions->{$priorityProvider['providerId']} as $count => $option ) {
 					$price = $option->price->withVAT;
-					
+
 					// Apply added cost from settings
 					if ( isset( $settings['freight']['addedCost'] ) ) {
 						if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
@@ -215,7 +222,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 							$price += $settings['freight']['addedCost'];
 						}
 					}
-					
+
 					if ( null === $cheapest_priority_price || $price < $cheapest_priority_price ) {
 						$cheapest_priority_price = $price;
 						$cheapest_priority_option = $option;
@@ -234,13 +241,13 @@ class Fraktvalg extends \WC_Shipping_Method {
 						$cheapest_priority_price = $cheapest_price['price'] - $priorityProvider['discount'];
 					}
 				}
-				
+
 				// Now add all priority provider options with appropriate pricing
 				foreach ( $shippingOptions->{$priorityProvider['providerId']} as $count => $option ) {
 					$shipping_id = $priorityProvider['providerId'] . ':' . $count;
 
 					$price = $option->price->withVAT;
-					
+
 					// If this is the cheapest priority option, use the discounted price
 					if ( $count === $cheapest_priority_count ) {
 						$price = $cheapest_priority_price;
@@ -263,7 +270,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 							$price += $settings['freight']['addedCost'];
 						}
 					}
-									
+
 					// Always round up the price to the next full number.
 					$price = ceil( $price );
 
@@ -275,7 +282,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 							$price = 0;
 						}
 					}
-					
+
 					// Set the label based on theme type
 					$label = $option->texts->shipperName . ' - ' . $option->texts->displayName;
 
@@ -382,7 +389,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 		if ( ! empty( $this->cheapest_shipping_id ) ) {
 			// Check if a shipping method is already chosen
 			$chosen_shipping_methods = \WC()->session->get( 'chosen_shipping_methods' );
-			
+
 			// Only set the default if no shipping method is chosen
 			if ( empty( $chosen_shipping_methods ) || ! is_array( $chosen_shipping_methods ) || empty( $chosen_shipping_methods[0] ) ) {
 				// Set the default shipping option in WooCommerce
@@ -405,7 +412,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 		// Use wp_kses_post to allow safe HTML in the label while preventing XSS attacks
 		// This will prevent React from escaping the HTML entities
 		$safe_label = wp_kses_post( $label );
-		
+
 		$this->add_rate( [
 			'id'        => $shipping_id,
 			'label'     => $safe_label,
@@ -430,19 +437,19 @@ class Fraktvalg extends \WC_Shipping_Method {
 			'provider' => null,
 		);
 		$has_other_providers = false;
-		
+
 		// Loop through all providers to find the cheapest price
 		foreach ( $shipping_options as $shipper => $options ) {
 			// Skip the priority provider
 			if ( $shipper === $priority_provider_id ) {
 				continue;
 			}
-			
+
 			$has_other_providers = true;
-			
+
 			foreach ( $options as $option ) {
 				$price = $option->price->withVAT;
-				
+
 				// Apply added cost from settings
 				if ( isset( $settings['freight']['addedCost'] ) ) {
 					if ( ! empty( $settings['freight']['addedCostType'] ) && 'percent' === $settings['freight']['addedCostType'] ) {
@@ -451,19 +458,19 @@ class Fraktvalg extends \WC_Shipping_Method {
 						$price += $settings['freight']['addedCost'];
 					}
 				}
-				
+
 				if ( null === $cheapest_price['price'] || $price < $cheapest_price['price'] ) {
 					$cheapest_price['price'] = $price;
 					$cheapest_price['provider'] = $shipper;
 				}
 			}
 		}
-		
+
 		// If no other providers exist, set cheapest price to 0 to avoid applying discount
 		if ( ! $has_other_providers ) {
 			$cheapest_price['price'] = 0;
 		}
-		
+
 		return $cheapest_price;
 	}
 
