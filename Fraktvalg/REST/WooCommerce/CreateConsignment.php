@@ -45,7 +45,7 @@ class CreateConsignment extends Base {
 			// Get units once before the loop
 			$weight_unit = get_option( 'woocommerce_weight_unit' );
 			$dimension_unit = get_option( 'woocommerce_dimension_unit' );
-			
+
 			// Set up dimension conversion factor
 			$dimension_conversion_factor = 1;
 			switch ( $dimension_unit ) {
@@ -103,7 +103,7 @@ class CreateConsignment extends Base {
 					if ( $product_height ) {
 						$product_height *= $dimension_conversion_factor;
 					}
-					
+
 					// Recalculate volume if it wasn't explicitly set
 					if ( $product_length && $product_width && $product_height ) {
 						$product_volume = $product_length * $product_width * $product_height;
@@ -133,14 +133,16 @@ class CreateConsignment extends Base {
 			$shipping_options_array = [
 				'shipper'   => \wp_json_encode( $shipping_meta ),
 				'sender'    => [
+					'name'       => \get_bloginfo( 'name' ),
 					'country'    => \get_option( 'woocommerce_default_country' ),
 					'postalCode' => \get_option( 'woocommerce_store_postcode' ),
 					'city'       => \get_option( 'woocommerce_store_city' ),
-					'address'	=> \get_option( 'woocommerce_store_address' ),
-					'email'		=> \get_option( 'woocommerce_email_from_address', null ),
-					'phone'		=> \get_option( 'woocommerce_store_phone', null ),
+					'address'    => \get_option( 'woocommerce_store_address' ),
+					'email'      => \get_option( 'woocommerce_email_from_address', null ),
+					'phone'      => \get_option( 'woocommerce_store_phone', null ),
 				],
 				'recipient' => [
+					'name'       => trim( $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name() ),
 					'country'    => $order->get_shipping_country(),
 					'postalCode' => $order->get_shipping_postcode(),
 					'city'       => $order->get_shipping_city(),
@@ -176,7 +178,7 @@ class CreateConsignment extends Base {
 
 			if ( \is_wp_error( $shipment ) || 200 !== $shipment['response']['code'] ) {
 				$error_message = \is_wp_error( $shipment ) ? $shipment->get_error_message() : $shipment['response']['message'];
-				
+
 				$order->add_order_note(
 					\sprintf(
 						// translators: 1: Shipping method name, 2: Shipper name, 3: Error message.
@@ -213,6 +215,8 @@ class CreateConsignment extends Base {
 				),
 				false // Not a customer note.
 			);
+
+			$order->save();
 
 			// Return success response with shipment data
 			return new \WP_REST_Response([
