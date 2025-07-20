@@ -284,7 +284,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 					}
 
 					// Set the label based on theme type
-					$label = $option->texts->shipperName . ' - ' . $option->texts->displayName;
+					$label = $option->texts->shipperName . ' - ' . ( $option->texts->displayName ?? $option->texts->originalName );
 
 					if ( isset( $option->texts->description ) ) {
 						$label .= ' (' . $option->texts->description . ')';
@@ -324,7 +324,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 						}
 					}
 					// Set the label based on theme type
-					$label = $option->texts->displayName;
+					$label = ( $option->texts->displayName ?? $option->texts->originalName );
 					if ( ! $is_block_theme && isset( $option->texts->shipperName ) ) {
 						$label = $option->texts->shipperName . ' - ' . $label;
 
