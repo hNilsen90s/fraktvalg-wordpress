@@ -62,11 +62,18 @@ export default function Modal({ setIsModalOpen, orderId }) {
 							onClick={printLabel}>
 							{ __( 'Print', 'fraktvalg' ) }
 						</button>
-						<img
-							src={labelImageUrl}
-							alt="Shipping Label"
-							className="max-w-full w-full h-auto my-4 shadow-lg"
-						/>
+						{ labelImageUrl.includes( 'application/pdf' )
+							? <iframe
+								src={labelImageUrl}
+								title="Shipping Label"
+								className="max-w-full w-full min-h-48 h-auto my-4 shadow-lg"
+							/>
+							: <img
+								src={labelImageUrl}
+								alt="Shipping Label"
+								className="max-w-full w-full h-auto my-4 shadow-lg"
+							/>
+						}
 					</>
 				) : (
 					<p className="text-red-500 text-center">
