@@ -23,7 +23,8 @@ class Setup {
 		new PluginControls();
 
 		new ShippingMethod();
-		
+
+		new WooCommerce\Admin\FilterOrderList();
 		new WooCommerce\Admin\ShippingLabel();
 
 		new \Fraktvalg\Fraktvalg\REST\WooCommerce\CreateConsignment();
