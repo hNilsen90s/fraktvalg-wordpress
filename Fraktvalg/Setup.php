@@ -2,7 +2,6 @@
 
 namespace Fraktvalg\Fraktvalg;
 
-use Fraktvalg\Fraktvalg\WooCommerce\Admin\ShippingLabel;
 use Fraktvalg\Fraktvalg\WooCommerce\ShippingMethod;
 
 class Setup {
@@ -24,6 +23,7 @@ class Setup {
 
 		new ShippingMethod();
 
+		new WooCommerce\Admin\Settings\PhoneNumber();
 		new WooCommerce\Admin\FilterOrderList();
 		new WooCommerce\Admin\ShipmentStatusColumn();
 		new WooCommerce\Admin\ShippingLabel();

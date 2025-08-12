@@ -4,6 +4,7 @@ namespace Fraktvalg\Fraktvalg\REST\WooCommerce;
 
 use Fraktvalg\Fraktvalg\Api;
 use Fraktvalg\Fraktvalg\REST\Base;
+use Fraktvalg\Fraktvalg\WooCommerce\Admin\Settings\PhoneNumber;
 
 class CreateConsignment extends Base {
 
@@ -139,7 +140,7 @@ class CreateConsignment extends Base {
 					'city'       => \get_option( 'woocommerce_store_city' ),
 					'address'    => \get_option( 'woocommerce_store_address' ),
 					'email'      => \get_option( 'woocommerce_email_from_address', null ),
-					'phone'      => \get_option( 'woocommerce_store_phone', null ),
+					'phone'      => PhoneNumber::get_value(),
 				],
 				'recipient' => [
 					'name'       => trim( $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name() ),
