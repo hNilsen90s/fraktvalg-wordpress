@@ -26,7 +26,7 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 					type: event.target.type
 				}
 			};
-			
+
 			// Process the synthetic event
 			const newFieldValues = { ...fieldValues };
 			if (syntheticEvent.target.type === 'checkbox') {
@@ -34,27 +34,27 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 			} else {
 				newFieldValues[syntheticEvent.target.name] = syntheticEvent.target.value;
 			}
-			
+
 			// Update state and call callback with the new values
 			setFieldValues(newFieldValues);
 			callback(provider, newFieldValues);
-			
+
 			// Mark this field as just pasted to prevent handling the subsequent change event
 			setLastPastedField(syntheticEvent.target.name);
-			
+
 			// Reset the lastPastedField after a short delay
 			setTimeout(() => {
 				setLastPastedField(null);
 			}, 100);
-			
+
 			return;
 		}
-		
+
 		// Skip handling change events for fields that were just pasted
 		if (lastPastedField === event.target.name) {
 			return;
 		}
-		
+
 		// Handle regular change events
 		const newFieldValues = { ...fieldValues };
 		if (event.target.type === 'checkbox') {
@@ -68,11 +68,15 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 	}
 
 	useEffect(() => {
-		fields.forEach( field => {
-			if ( field?.value ) {
-				setFieldValues( { ...fieldValues, [ field.name ]: field.value } );
+		const temporaryValueStore = {};
+
+		fields.forEach(field => {
+			if (field?.value) {
+				temporaryValueStore[field.name] = field.value;
 			}
-		} );
+		});
+
+		setFieldValues(temporaryValueStore);
 	}, []);
 
 	const getFieldType = ( field ) => {
