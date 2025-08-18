@@ -20,8 +20,8 @@ export default function Shippers({ shippers, onSelectShipper, editorMode }) {
 					}}
 					disabled={editorMode === 'multiple'}
 				>
-					<div className="flex items-center">
-						<ProviderLogo logo={ shipper?.texts?.logo?.url } alt="" className="w-12 h-12 mr-2" />
+					<div className="flex items-center gap-4">
+						<ProviderLogo logo={ shipper?.texts?.logo?.url } alt="" className="w-12 h-12" />
 
 						<div className="flex flex-col gap-1">
 							<span className="text-md font-semibold">{ sprintf( __( 'Shipped by %s', 'fraktvalg' ), shipper?.details?.label ) }</span>
