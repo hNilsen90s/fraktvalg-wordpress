@@ -1,6 +1,7 @@
 import ProviderLogo from "../../../Components/ProviderLogo";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import {formatShippingPrice} from "../utils/formatShippingPrice";
+import { __, sprintf } from '@wordpress/i18n';
 
 export default function Shippers({ shippers, onSelectShipper, editorMode }) {
 	return (
@@ -20,17 +21,17 @@ export default function Shippers({ shippers, onSelectShipper, editorMode }) {
 					disabled={editorMode === 'multiple'}
 				>
 					<div className="flex items-center">
-						<ProviderLogo logo={ shipper?.texts?.logo?.url } alt={ shipper?.details?.label } className="w-12 h-12 mr-2" />
+						<ProviderLogo logo={ shipper?.texts?.logo?.url } alt="" className="w-12 h-12 mr-2" />
 
 						<div className="flex flex-col gap-1">
-							<span className="text-md font-semibold">Fraktes av {shipper?.details?.label}</span>
+							<span className="text-md font-semibold">{ __( sprintf( 'Shipped by %s', shipper?.details?.label ), 'fraktvalg' ) }</span>
 							<p className="text-sm text-gray-600 flex items-center">
 								<ClockIcon className="w-4 h-4 inline-block mr-2" />
 								{shipper?.details?.quickestShippingTime}
 							</p>
 						</div>
 					</div>
-					<p className="text-md font-medium mt-2 sm:mt-0">Fra { formatShippingPrice( shipper?.details?.LowestPrice ) }</p>
+					<p className="text-md font-medium mt-2 sm:mt-0">{ __( sprintf( 'From %s', formatShippingPrice( shipper?.details?.LowestPrice ) ), 'fraktvalg' ) }</p>
 				</button>
 			))}
 		</div>

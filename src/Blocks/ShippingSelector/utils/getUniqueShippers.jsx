@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 export function GetUniqueShippers( cart ) {
 	let shippers = [];
 	let rateOptions = {},
@@ -22,7 +24,7 @@ export function GetUniqueShippers( cart ) {
 					id: rateGroup,
 					details: {
 						label: rateOptions?.texts?.shipperName,
-						quickestShippingTime: '2 virkedager',
+						quickestShippingTime: __( '2 business days', 'fraktvalg' ),
 						LowestPrice: rate.price,
 					},
 					shippingOptions: [],

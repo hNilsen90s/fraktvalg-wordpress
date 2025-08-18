@@ -1,6 +1,5 @@
 import {useEffect, useState, useCallback} from '@wordpress/element';
 import {__} from '@wordpress/i18n';
-import {TruckIcon} from "@heroicons/react/24/outline";
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select, subscribe } from '@wordpress/data';
 import '@woocommerce/block-data';
@@ -81,7 +80,7 @@ export default function Block({attributes = {}}) {
 						name: rate.name,
 						description: rate.description,
 						price: rate.price,
-						shippingTime: '1-3 virkedager',
+						shippingTime: __( '1-3 business days', 'fraktvalg' ),
 						icon: getShippingIcon(rate.delivery.serviceCode),
 						selected: rate.selected,
 						delivery: {
@@ -115,7 +114,7 @@ export default function Block({attributes = {}}) {
 		if (window.shippingOptionsTimeout) {
 			clearTimeout(window.shippingOptionsTimeout);
 		}
-		
+
 		// Set a new timeout
 		window.shippingOptionsTimeout = setTimeout(() => {
 			fetchShippingOptions();
@@ -124,27 +123,27 @@ export default function Block({attributes = {}}) {
 
 	useEffect(() => {
 		fetchShippingOptions();
-		
+
 		// Log cart data when component mounts
 		const cartData = select('wc/store/cart').getCartData();
-		
+
 		// Monitor shipping address changes and re-fetch shipping options
 		let previousShippingAddress = JSON.stringify(cartData.shippingAddress);
-		
+
 		const unsubscribe = subscribe(() => {
 			const cartStore = select('wc/store/cart');
 			const currentCartData = cartStore.getCartData();
 			const currentShippingAddress = JSON.stringify(currentCartData.shippingAddress);
-			
+
 			// Check if shipping address has changed
 			if (previousShippingAddress !== currentShippingAddress) {
 				previousShippingAddress = currentShippingAddress;
-				
+
 				// Use debounced function instead of calling fetchShippingOptions directly
 				debouncedFetchShippingOptions();
 			}
 		});
-		
+
 		// Clean up subscription and timeout when component unmounts
 		return () => {
 			unsubscribe();
