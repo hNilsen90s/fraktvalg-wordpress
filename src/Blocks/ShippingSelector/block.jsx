@@ -81,7 +81,7 @@ export default function Block({attributes = {}}) {
 						description: rate.description,
 						price: rate.price,
 						shippingTime: __( '1-3 business days', 'fraktvalg' ),
-						icon: getShippingIcon(rate.delivery.serviceCode),
+						icon: getShippingIcon(rate?.icon),
 						selected: rate.selected,
 						delivery: {
 							days: rate.delivery.days,
