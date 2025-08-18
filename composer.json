@@ -37,7 +37,7 @@
 		"automation:phpstan": "phpstan analyse . --error-format=checkstyle --no-progress",
 		"make-pot": "wp i18n make-pot . --slug=fraktvalg --domain=fraktvalg --exclude='src,node_modules,vendor'",
 		"make-i18n": [
-			"wp i18n make-json ./languages --no-purge '--use-map={\"src/fraktvalg.jsx\":\"build/fraktvalg.js\",\"src/label.jsx\":\"build/label.js\",\"src/onboarding.jsx\":\"build/onboarding.js\"}'",
+			"wp i18n make-json ./languages --no-purge",
 			"wp i18n make-php ./languages"
 		]
 	},

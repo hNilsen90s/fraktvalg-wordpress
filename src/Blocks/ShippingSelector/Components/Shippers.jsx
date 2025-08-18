@@ -24,14 +24,14 @@ export default function Shippers({ shippers, onSelectShipper, editorMode }) {
 						<ProviderLogo logo={ shipper?.texts?.logo?.url } alt="" className="w-12 h-12 mr-2" />
 
 						<div className="flex flex-col gap-1">
-							<span className="text-md font-semibold">{ __( sprintf( 'Shipped by %s', shipper?.details?.label ), 'fraktvalg' ) }</span>
+							<span className="text-md font-semibold">{ sprintf( __( 'Shipped by %s', 'fraktvalg' ), shipper?.details?.label ) }</span>
 							<p className="text-sm text-gray-600 flex items-center">
 								<ClockIcon className="w-4 h-4 inline-block mr-2" />
 								{shipper?.details?.quickestShippingTime}
 							</p>
 						</div>
 					</div>
-					<p className="text-md font-medium mt-2 sm:mt-0">{ __( sprintf( 'From %s', formatShippingPrice( shipper?.details?.LowestPrice ) ), 'fraktvalg' ) }</p>
+					<p className="text-md font-medium mt-2 sm:mt-0">{ sprintf( __( 'From %s', 'fraktvalg' ), formatShippingPrice( shipper?.details?.LowestPrice ) ) }</p>
 				</button>
 			))}
 		</div>

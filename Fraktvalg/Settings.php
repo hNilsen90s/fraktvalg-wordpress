@@ -42,8 +42,8 @@ class Settings {
 	public function add_menu_item() {
 		\add_submenu_page(
 			'woocommerce',
-			\esc_html__( 'Fraktvalg settings', 'fraktvalg' ),
-			\esc_html__( 'Fraktvalg settings', 'fraktvalg' ),
+			\esc_html_x( 'Fraktvalg settings', 'Settings page title', 'fraktvalg' ),
+			\esc_html_x( 'Fraktvalg settings', 'Settings page menu title', 'fraktvalg' ),
 			'manage_options',
 			'fraktvalg',
 			[ $this, 'custom_admin_page_content' ],

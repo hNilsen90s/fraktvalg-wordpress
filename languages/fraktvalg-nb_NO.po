@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fraktvalg 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fraktvalg\n"
-"POT-Creation-Date: 2025-05-11T20:58:30+00:00\n"
-"PO-Revision-Date: 2025-05-11 23:00+0200\n"
+"POT-Creation-Date: 2025-08-18T21:44:39+00:00\n"
+"PO-Revision-Date: 2025-08-18 23:45+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Domain: fraktvalg\n"
 
 #. Plugin Name of the plugin
-#: fraktvalg.php Fraktvalg/WooCommerce/Admin/ShippingLabel.php:60
+#: fraktvalg.php Fraktvalg/WooCommerce/Admin/ShippingLabel.php:45
 #: Fraktvalg/WooCommerce/ShippingMethod/Fraktvalg.php:27
 #: Fraktvalg/WooCommerce/ShippingMethod/Fraktvalg.php:28
 #, fuzzy
@@ -138,10 +138,12 @@ msgstr ""
 "kan bli lagret i fraktsystemene deres for å gi pakkesporing eller annen "
 "relevant informasjon til deg som kunde."
 
+#: Fraktvalg/REST/Settings/Onboarding.php:153
 #: Fraktvalg/REST/Settings/OptionalSettings.php:53
 msgid "Could not save settings"
 msgstr "Kunne ikke lagre innstillingene"
 
+#: Fraktvalg/REST/Settings/Onboarding.php:154
 #: Fraktvalg/REST/Settings/OptionalSettings.php:54
 msgid ""
 "An unknown error occurred, and your preferences could not be saved at this "
@@ -152,25 +154,26 @@ msgstr ""
 "øyeblikket. Dobbeltsjekk alternativene, og prøv på nytt. Du kan alltid gå "
 "videre og endre disse senere hvis du ønsker det."
 
+#: Fraktvalg/REST/Settings/Onboarding.php:162
 #: Fraktvalg/REST/Settings/OptionalSettings.php:61
 msgid "Settings saved"
 msgstr "Innstillinger lagret"
+
+#: Fraktvalg/REST/Settings/Onboarding.php:163
+msgid "Your default dimensions have been successfully stored."
+msgstr "Standarddimensjonene dine har blitt lagret."
 
 #: Fraktvalg/REST/Settings/OptionalSettings.php:62
 msgid "Your optional preferences have been successfully stored."
 msgstr "De valgfrie innstillingene dine er lagret."
 
-#: Fraktvalg/Settings.php:45 Fraktvalg/Settings.php:46
-msgid "Fraktvalg settings"
-msgstr "Fraktvalg-innstillinger"
-
 #. translators: 1: Shipping method name, 2: Shipper name, 3: Error message.
-#: Fraktvalg/WooCommerce/CreateShipment.php:68
+#: Fraktvalg/REST/WooCommerce/CreateConsignment.php:186
 msgid "Fraktvalg: Failed to create shipment with %1$s for %2$s (%3$s)"
 msgstr "Fraktvalg: Kunne ikke opprette forsendelse med %1$s for %2$s (%3$s)"
 
 #. translators: 1: Shipping method name, 2: Shipper name, 3: Shipment ID.
-#: Fraktvalg/WooCommerce/CreateShipment.php:88
+#: Fraktvalg/REST/WooCommerce/CreateConsignment.php:212
 msgid ""
 "Fraktvalg: Shipment created with %1$s for %2$s and has been assigned "
 "shipment ID %3$s"
@@ -178,15 +181,70 @@ msgstr ""
 "Fraktvalg: Forsendelse opprettet med %1$s for %2$s og har fått tildelt "
 "forsendelses-ID %3$s"
 
+#: Fraktvalg/REST/WooCommerce/CreateConsignment.php:237
+msgid "No valid Fraktvalg shipping methods found for this order."
+msgstr "Ingen gyldige Fraktvalg fraktmetoder funnet for denne bestillingen."
+
+#: Fraktvalg/Settings.php:45
+msgctxt "Settings page title"
+msgid "Fraktvalg settings"
+msgstr "Fraktvalg innstillinger"
+
+#: Fraktvalg/Settings.php:46
+msgctxt "Settings page menu title"
+msgid "Fraktvalg settings"
+msgstr "Fraktvalg innstillinger"
+
+#: Fraktvalg/WooCommerce/Admin/FilterOrderList.php:30
+msgid "All shipment statuses"
+msgstr "Alle fraktstatuser"
+
+#: Fraktvalg/WooCommerce/Admin/FilterOrderList.php:31
+msgid "Shipment not registered"
+msgstr "Ingen forsendelse innmeldt"
+
+#: Fraktvalg/WooCommerce/Admin/FilterOrderList.php:32
+msgid "Shipment registered"
+msgstr "Forsendelse registrert"
+
+#: Fraktvalg/WooCommerce/Admin/Settings/PhoneNumber.php:24
+msgid "Phone Number"
+msgstr "Telefonnummer"
+
+#: Fraktvalg/WooCommerce/Admin/Settings/PhoneNumber.php:25
+msgid ""
+"The phone number for your store, used for shipping and customer service "
+"purposes."
+msgstr ""
+"Telefonnummeret til butikken din, som brukes til frakt og kundeservice."
+
+#: Fraktvalg/WooCommerce/Admin/Settings/PhoneNumber.php:52
+msgid ""
+"Fraktvalg phone number must be a valid Norwegian number (8 digits, "
+"optionally with +47 or 0047)."
+msgstr ""
+"Fraktvalg-telefonnummeret må være et gyldig norsk nummer (8 siffer, "
+"eventuelt med +47 eller 0047)."
+
+#: Fraktvalg/WooCommerce/Admin/ShipmentStatusColumn.php:28
+msgid "Shipment Status"
+msgstr "Forsendelsesstatus"
+
+#: Fraktvalg/WooCommerce/Admin/ShipmentStatusColumn.php:45
+msgid "Registered"
+msgstr "Registrert"
+
+#: Fraktvalg/WooCommerce/Admin/ShipmentStatusColumn.php:47
+msgid "Not Registered"
+msgstr "Ikke registrert"
+
 #: build/Blocks/ShippingSelector/frontend.js:1
 #: build/Blocks/ShippingSelector/index.js:1
-#, fuzzy
 msgid "Fetching the best shipping options..."
 msgstr "Henter de beste fraktalternativene..."
 
 #: build/Blocks/ShippingSelector/frontend.js:1
 #: build/Blocks/ShippingSelector/index.js:1
-#, fuzzy
 msgid "Return to shipping providers"
 msgstr "Gå tilbake til fraktleverandører"
 
@@ -197,28 +255,43 @@ msgstr "Fraktalternativer"
 
 #: build/Blocks/ShippingSelector/frontend.js:1
 #: build/Blocks/ShippingSelector/index.js:1
-#, fuzzy
+msgid "Shipped by %s"
+msgstr "Leveres av %s"
+
+#: build/Blocks/ShippingSelector/frontend.js:1
+#: build/Blocks/ShippingSelector/index.js:1
+msgid "From %s"
+msgstr "Fra %s"
+
+#: build/Blocks/ShippingSelector/frontend.js:1
+#: build/Blocks/ShippingSelector/index.js:1
+msgid "2 business days"
+msgstr "2 virkedager"
+
+#: build/Blocks/ShippingSelector/frontend.js:1
+#: build/Blocks/ShippingSelector/index.js:1
+msgid "1-3 business days"
+msgstr "1-3 virkedager"
+
+#: build/Blocks/ShippingSelector/frontend.js:1
+#: build/Blocks/ShippingSelector/index.js:1
 msgid " business days"
 msgstr " virkedager"
 
 #: build/Blocks/ShippingSelector/frontend.js:1
 #: build/Blocks/ShippingSelector/index.js:1
-#, fuzzy
 msgid "Updating cart totals with your new shipping preference"
-msgstr ""
-"Oppdatering av totalbeløpet i handlekurven med dine nye fraktpreferanser"
+msgstr "Oppdaterer totalbeløpet i handlekurven med dine nye fraktpreferanser"
 
 #: build/Blocks/ShippingSelector/index.js:1
 msgid "Preview Settings"
 msgstr "Forhåndsvisningsinnstillinger"
 
 #: build/Blocks/ShippingSelector/index.js:1
-#, fuzzy
 msgid "Preview Mode:"
 msgstr "Forhåndsvisningsmodus:"
 
 #: build/Blocks/ShippingSelector/index.js:1
-#, fuzzy
 msgid "Shipping providers"
 msgstr "Leverandører av frakttjenester"
 
@@ -235,7 +308,6 @@ msgid "Secondary Color"
 msgstr "Sekundærfarge"
 
 #: build/Blocks/ShippingSelector/index.js:1
-#, fuzzy
 msgid "Tertiary Color"
 msgstr "Tertiærfarge"
 
@@ -248,88 +320,62 @@ msgid "Connected"
 msgstr "Tilkoblet"
 
 #: build/fraktvalg.js:1 build/onboarding.js:1
-#, fuzzy
 msgid "Disconnected"
 msgstr "Frakoblet"
 
 #: build/fraktvalg.js:1
-#, fuzzy
-msgid "fetching providers"
-msgstr "henting av leverandører"
-
-#: build/fraktvalg.js:1
-#, fuzzy
-msgid "saving provider settings"
-msgstr "lagre leverandørinnstillinger"
-
-#: build/fraktvalg.js:1
-#, fuzzy
-#| msgid "Could not save settings"
 msgid "Failed to save provider settings"
 msgstr "Kunne ikke lagre innstillingene"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "My providers"
 msgstr "Mine leverandører"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Fetching available providers..."
 msgstr "Henter tilgjengelige leverandører..."
 
 #: build/fraktvalg.js:1
-#, fuzzy
-msgid "Saving provider settings, one moment please..."
-msgstr "Lagre leverandørinnstillinger, et øyeblikk..."
+msgid "Error fetching providers"
+msgstr "Feil ved henting av leverandører"
 
 #: build/fraktvalg.js:1
-#, fuzzy
+msgid "Saving provider settings, one moment please..."
+msgstr "Lagrer leverandørinnstillinger, et øyeblikk..."
+
+#: build/fraktvalg.js:1
 msgid "Configure shipping methods"
 msgstr "Konfigurer fraktmetoder"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Are you sure you want to disconnect this provider?"
 msgstr "Er du sikker på at du vil koble fra denne leverandøren?"
 
 #: build/fraktvalg.js:1
-#, fuzzy
-msgid "disconnecting provider"
-msgstr "frakobling av leverandør"
-
-#: build/fraktvalg.js:1
-#, fuzzy
 msgid "Failed to disconnect provider"
 msgstr "Kunne ikke koble fra leverandøren"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Disconnect provider"
 msgstr "Koble fra leverandøren"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Update provider settings"
 msgstr "Oppdater leverandørinnstillingene"
 
 #: build/fraktvalg.js:1 build/onboarding.js:1
-#, fuzzy
 msgid "Connecting provider, one moment please..."
-msgstr "Tilkoblingsleverandør, et øyeblikk..."
+msgstr "Kobler til leverandøren, et øyeblikk..."
 
 #: build/fraktvalg.js:1 build/onboarding.js:1
-#, fuzzy
 msgid "Connect to this provider"
 msgstr "Koble til denne leverandøren"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "More providers are coming 🥳"
 msgstr "Flere leverandører er på vei 🥳"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid ""
 "We are continually working to integrate more shipping providers to you you "
 "more opportunities."
@@ -338,22 +384,18 @@ msgstr ""
 "flere muligheter."
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Is there someone you would like to see here?"
 msgstr "Er det noen du ønsker å se her?"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Send us an e-mail"
 msgstr "Send oss en e-post"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Preferred provider"
 msgstr "Foretrukket leverandør"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid ""
 "Choose which provider should always be the cheapest option in your store. "
 "This gives you the opportunity to prioritize one provider by making their "
@@ -364,7 +406,6 @@ msgstr ""
 "gjøre prisene deres mer konkurransedyktige."
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Price reduction for your preferred provider"
 msgstr "Prisreduksjon for din foretrukne leverandør"
 
@@ -381,7 +422,6 @@ msgid "something"
 msgstr "noe"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid ""
 "Determine how much cheaper your preferred provider should be compared to the "
 "cheapest competitor."
@@ -390,18 +430,12 @@ msgstr ""
 "med den billigste konkurrenten."
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Currently chosen as your preferred provider"
 msgstr "For øyeblikket valgt som din foretrukne leverandør"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Preferred provider settings saved successfully"
 msgstr "Innstillinger for foretrukket leverandør ble lagret"
-
-#: build/fraktvalg.js:1
-msgid "saving priority provider settings"
-msgstr "lagrer innstillinger for prioritert leverandør"
 
 #: build/fraktvalg.js:1
 msgid "Failed to save priority provider settings"
@@ -411,11 +445,6 @@ msgstr "Kunne ikke lagre innstillinger for prioritetsleverandør"
 #, fuzzy
 msgid "Save preferred provider preferences"
 msgstr "Lagre preferanser for foretrukket leverandør"
-
-#: build/fraktvalg.js:1 build/onboarding.js:1
-#, fuzzy
-msgid "Shipping & handling"
-msgstr "Frakt og håndtering"
 
 #: build/fraktvalg.js:1
 #, fuzzy
@@ -480,6 +509,39 @@ msgstr ""
 "Frakttillegg er ment å dekke administrasjons- og håndteringskostnader, og "
 "legges automatisk til alle fraktalternativer."
 
+#: build/fraktvalg.js:1
+#, fuzzy
+msgid "Default dimensions"
+msgstr "Dimensjoner på pakken"
+
+#: build/fraktvalg.js:1
+msgid ""
+"Most shipping providers require all dimensions and weights for each product "
+"to reliably return shipping costs. If you have not set these for your "
+"products, you may define default dimensions and weights that will substitute "
+"any missing ones."
+msgstr ""
+"De fleste fraktleverandører krever alle dimensjoner og vekter for hvert "
+"produkt for å kunne returnere fraktkostnader på en pålitelig måte. Hvis du "
+"ikke har angitt disse for produktene dine, kan du definere standardmål og "
+"-vekter som vil erstatte eventuelle manglende mål og vekter."
+
+#: build/fraktvalg.js:1 build/onboarding.js:1
+msgid "Length"
+msgstr "Lengde"
+
+#: build/fraktvalg.js:1 build/onboarding.js:1
+msgid "Width"
+msgstr "Bredde"
+
+#: build/fraktvalg.js:1 build/onboarding.js:1
+msgid "Height"
+msgstr "Høyde"
+
+#: build/fraktvalg.js:1 build/onboarding.js:1
+msgid "Weight"
+msgstr "Vekt"
+
 #: build/fraktvalg.js:1 build/onboarding.js:1
 #, fuzzy
 msgid "Shop environment"
@@ -509,15 +571,12 @@ msgid "Error saving optional settings"
 msgstr "Feil ved lagring av valgfrie innstillinger"
 
 #: build/fraktvalg.js:1 build/onboarding.js:1
-#, fuzzy
-#| msgid "Fraktvalg settings"
 msgid "Save optional settings"
-msgstr "Fraktvalg-innstillinger"
+msgstr "Lagre valgfrie innstillinger"
 
 #: build/fraktvalg.js:1
-#, fuzzy
 msgid "Fraktvalg support"
-msgstr "Fraktvalg"
+msgstr "Fraktvalg kundestøtte"
 
 #: build/fraktvalg.js:1
 #, fuzzy
@@ -610,6 +669,11 @@ msgstr "Lagrer…"
 msgid "Save shipping overrides"
 msgstr "Lagre fraktmetoder"
 
+#: build/fraktvalg.js:1 build/onboarding.js:1
+#, fuzzy
+msgid "Shipping & handling"
+msgstr "Frakt og håndtering"
+
 #: build/fraktvalg.js:1
 #, fuzzy
 msgctxt "Tab label"
@@ -629,20 +693,6 @@ msgstr "Valgfrie innstillinger"
 msgctxt "Tab label"
 msgid "Support"
 msgstr "Brukerstøtte"
-
-#: build/label.js:1
-msgid "Print"
-msgstr "Skriv ut"
-
-#: build/label.js:1
-#, fuzzy
-msgid "Failed to load shipping label."
-msgstr "Kunne ikke laste inn fraktetikett."
-
-#: build/label.js:1
-#, fuzzy
-msgid "Fetch & print shipping label"
-msgstr "Hent og skriv ut fraktetikett"
 
 #: build/onboarding.js:1
 msgid "Activate license"
@@ -780,8 +830,14 @@ msgid "Checkout Template"
 msgstr "Mal for utsjekk"
 
 #: build/onboarding.js:1
-msgid "Loading store settings, and checking products..."
+#, fuzzy
+#| msgid "Loading store settings, and checking products..."
+msgid "Loading store settings, and checking products."
 msgstr "Laster inn butikkinnstillinger og sjekker produkter..."
+
+#: build/onboarding.js:1
+msgid "This may take a few minutes if you have a lot of products..."
+msgstr "Dette kan ta noen minutter hvis du har mange produkter..."
 
 #: build/onboarding.js:1
 msgid ""
@@ -862,6 +918,27 @@ msgstr ""
 "dobbeltsjekker produktinformasjonen i WooCommerce."
 
 #: build/onboarding.js:1
+msgid ""
+"You may define default dimensions and weights that will substitute any "
+"missing ones. Note that some shipping prices may be inaccurate if you do not "
+"provide the correct dimensions and weights for each product."
+msgstr ""
+"Du kan definere standardmål og -vekter som erstatter eventuelle manglende "
+"mål og vekter. Merk at enkelte fraktpriser kan være unøyaktige hvis du ikke "
+"oppgir riktige dimensjoner og vekter for hvert produkt."
+
+#: build/onboarding.js:1
+#, fuzzy
+msgid "Save Default Dimensions"
+msgstr "Dimensjoner på pakken"
+
+#: build/onboarding.js:1
+#, fuzzy
+#| msgid "Address saved successfully"
+msgid "Default dimensions saved successfully"
+msgstr "Adressen er lagret"
+
+#: build/onboarding.js:1
 #, fuzzy
 msgid "All products have complete dimension and weight information."
 msgstr "Alle produkter har fullstendig informasjon om mål og vekt."
@@ -913,6 +990,41 @@ msgstr "Utvidelse Innstillinger"
 msgid "Finished"
 msgstr "Ferdig"
 
+#: build/shipping.js:1
+msgid "Print"
+msgstr "Skriv ut"
+
+#: build/shipping.js:1
+#, fuzzy
+msgid "Failed to load shipping label."
+msgstr "Kunne ikke laste inn fraktetikett."
+
+#: build/shipping.js:1
+#, fuzzy
+msgid "Fetch & print shipping label"
+msgstr "Hent og skriv ut fraktetikett"
+
+#: build/shipping.js:1
+msgid ""
+"If this error persists, you may need to generate this consignment manually."
+msgstr ""
+"Hvis denne feilen vedvarer, kan det hende du må generere denne forsendelsen "
+"manuelt."
+
+#: build/shipping.js:1
+msgid "Please try again."
+msgstr "Vennligst, prøv på nytt."
+
+#: build/shipping.js:1
+#, fuzzy
+#| msgid "Security check failed. Please try again."
+msgid "Failed to create consignment. Please try again."
+msgstr "Sikkerhetskontrollen mislyktes. Vennligst prøv igjen."
+
+#: build/shipping.js:1
+msgid "Create consignment booking"
+msgstr "Opprett bestilling av forsendelser"
+
 #: build/Blocks/ShippingSelector/block.json
 #, fuzzy
 msgctxt "block title"
@@ -940,6 +1052,17 @@ msgstr "levering"
 msgctxt "block style label"
 msgid "Default"
 msgstr "Standard"
+
+#, fuzzy
+#~ msgid "saving provider settings"
+#~ msgstr "lagre leverandørinnstillinger"
+
+#, fuzzy
+#~ msgid "disconnecting provider"
+#~ msgstr "frakobling av leverandør"
+
+#~ msgid "saving priority provider settings"
+#~ msgstr "lagrer innstillinger for prioritert leverandør"
 
 #, fuzzy
 #~ msgid "hei@fraktvalg.no"
