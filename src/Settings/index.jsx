@@ -13,7 +13,7 @@ import ShippingMethods from "./Tabs/ShippingMethods";
 export default function Settings({}) {
 	const [ tab, setTab ] = useState( 'providers' );
 	const [ provider, setProvider ] = useState( null );
-	
+
 	// Shared state for providers
 	const [ allSuppliers, setAllSuppliers ] = useState({});
 	const [ suppliers, setSuppliers ] = useState({});
@@ -21,7 +21,7 @@ export default function Settings({}) {
 	const [ priorityProviderDiscount, setPriorityProviderDiscount ] = useState(10);
 	const [ priorityProviderDiscountType, setPriorityProviderDiscountType ] = useState('percent');
 	const [ providerFieldValues, setProviderFieldValues ] = useState({});
-	
+
 	// Shared state for optional settings
 	const [ optionalSettings, setOptionalSettings ] = useState({
 		freight: {
@@ -36,11 +36,11 @@ export default function Settings({}) {
 		useProduction: true,
 		names: [],
 	});
-	
+
 	// Loading states
 	const [ isLoadingProviders, setIsLoadingProviders ] = useState(true);
 	const [ isLoadingOptionalSettings, setIsLoadingOptionalSettings ] = useState(true);
-	
+
 	// Error states
 	const [ providerError, setProviderError ] = useState(null);
 	const [ optionalSettingsError, setOptionalSettingsError ] = useState(null);
@@ -68,12 +68,18 @@ export default function Settings({}) {
 			path: 'fraktvalg/v1/settings/providers/mine',
 			method: 'GET'
 		}).then((response) => {
+			const tempFieldValues = {};
+
 			setSuppliers(response?.mine?.data || {});
 			setAllSuppliers(response?.available?.data || {});
 
 			if (response?.available?.data) {
 				Object.keys(response?.available?.data).map((key) => {
-					setProviderFieldValues({ ...providerFieldValues, [key]: response?.available?.data[key]?.fields });
+					let fieldEntries = {};
+					Object.keys(response?.available?.data[key]?.fields).map((fieldKey) => {
+						fieldEntries[response?.available?.data[key]?.fields[fieldKey]?.name] = response?.available?.data[key]?.fields[fieldKey]?.value;
+					});
+					tempFieldValues[response?.available?.data[key]?.id] = fieldEntries;
 				});
 			}
 
@@ -85,8 +91,15 @@ export default function Settings({}) {
 						setAllSuppliers(modifiedAllSuppliers);
 					}
 
-					setProviderFieldValues({ ...providerFieldValues, [provider?.id]: provider?.fields });
+					let fieldEntries = {};
+					Object.keys(provider?.fields).map((fieldKey) => {
+						fieldEntries[provider?.fields[fieldKey]?.name] = provider?.fields[fieldKey]?.value;
+					});
+
+					tempFieldValues[provider?.id] = fieldEntries;
 				});
+
+				setProviderFieldValues(tempFieldValues);
 			}
 		}).catch((error) => {
 			setProviderError(error?.message);
@@ -150,6 +163,7 @@ export default function Settings({}) {
 					providerFieldValues={providerFieldValues}
 					isLoading={isLoadingProviders}
 					error={providerError}
+					setError={setProviderError}
 					setProvider={setProvider}
 					setTab={setTab}
 					setProviderFieldValueCallback={setProviderFieldValueCallback}

@@ -22,6 +22,7 @@ export default function Providers({
 	providerFieldValues,
 	isLoading,
 	error,
+	setError,
 	setProvider,
 	setTab,
 	setProviderFieldValueCallback,
@@ -31,14 +32,14 @@ export default function Providers({
 	const [ successMessage, setSuccessMessage ] = useState('');
 
 	const storeProviders = (key) => {
-		setProviderLoadingIndicator(key);
+		setProviderLoadingIndicator(key?.id);
 
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/store',
 			method: 'POST',
 			data: {
-				providerId: key,
-				fieldValues: providerFieldValues[key]
+				providerId: key?.id,
+				fieldValues: providerFieldValues[key?.id]
 			}
 		}).then(() => {
 			setProviderLoadingIndicator('');
@@ -50,7 +51,7 @@ export default function Providers({
 
 	const storePriorityProvider = () => {
 		setSuccessMessage('');
-		
+
 		apiFetch({
 			path: 'fraktvalg/v1/settings/providers/priority/store',
 			method: 'POST',
@@ -63,7 +64,7 @@ export default function Providers({
 			}
 		}).then(() => {
 			setSuccessMessage(__('Preferred provider settings saved successfully', 'fraktvalg'));
-			
+
 			// Clear success message after 5 seconds
 			setTimeout(() => {
 				setSuccessMessage('');
@@ -121,7 +122,7 @@ export default function Providers({
 						isConnected={true}
 						key={key}
 						title={suppliers[key]?.name}
-						supplierId={key}
+						supplierId={key?.id}
 						supplier={suppliers[key]}
 						content={
 							<div className="relative grid grid-cols-1 gap-4">
@@ -134,17 +135,17 @@ export default function Providers({
 									</div>
 								}
 
-								<ProviderFields 
-									includeOptional 
-									provider={key} 
+								<ProviderFields
+									includeOptional
+									provider={suppliers[key]?.id}
 									fields={suppliers[key]?.fields || []}
 									callback={setProviderFieldValueCallback}
 								/>
 
 								<div className="flex flex-col md:flex-row justify-between gap-2">
 									<div className="flex flex-col md:flex-row justify-start gap-2">
-										<Button 
-											type="button" 
+										<Button
+											type="button"
 											className="md:inline-block md:w-fit"
 											onClick={() => {
 												setProvider(suppliers[key]);
@@ -157,17 +158,17 @@ export default function Providers({
 									</div>
 
 									<div className="flex flex-col md:flex-row justify-end gap-2">
-										<Button 
-											className="md:inline-block md:w-fit bg-red-600 hover:bg-red-500 active:bg-red-500 focus:bg-red-500" 
-											type="button" 
+										<Button
+											className="md:inline-block md:w-fit bg-red-600 hover:bg-red-500 active:bg-red-500 focus:bg-red-500"
+											type="button"
 											onClick={() => disconnectProvider(suppliers[key])}
 										>
 											{__( 'Disconnect provider', 'fraktvalg')}
 										</Button>
 
-										<Button 
-											className="md:inline-block md:w-fit" 
-											type="button" 
+										<Button
+											className="md:inline-block md:w-fit"
+											type="button"
 											onClick={() => storeProviders(suppliers[key])}
 										>
 											{__( 'Update provider settings', 'fraktvalg')}
@@ -185,7 +186,7 @@ export default function Providers({
 					<ExpandableElement
 						key={key}
 						title={allSuppliers[key]?.name}
-						supplierId={key}
+						supplierId={allSuppliers[key]?.id}
 						supplier={allSuppliers[key]}
 						visible={false}
 						content={
@@ -199,13 +200,13 @@ export default function Providers({
 									</div>
 								}
 
-								<ProviderFields 
-									provider={key} 
+								<ProviderFields
+									provider={allSuppliers[key]?.id}
 									fields={allSuppliers[key]?.fields || []}
 									callback={setProviderFieldValueCallback}
 								/>
 
-								<Button type="button" onClick={() => storeProviders(key)}>
+								<Button type="button" onClick={() => storeProviders(allSuppliers[key])}>
 									{__( 'Connect to this provider', 'fraktvalg')}
 								</Button>
 							</div>
@@ -254,24 +255,24 @@ export default function Providers({
 									{successMessage}
 								</Notification>
 							}
-							
+
 							<p>
 								{__( 'Price reduction for your preferred provider', 'fraktvalg')}
 							</p>
 
 							<div className="flex items-center gap-3">
-								<input 
-									value={priorityProviderDiscount} 
-									onChange={(e) => onUpdatePriorityProvider(priorityProvider, e.target.value, priorityProviderDiscountType)} 
-									type="number" 
-									min="0" 
-									step="1" 
-									placeholder="10" 
-									className="w-16 border border-gray-300 rounded-md p-2" 
+								<input
+									value={priorityProviderDiscount}
+									onChange={(e) => onUpdatePriorityProvider(priorityProvider, e.target.value, priorityProviderDiscountType)}
+									type="number"
+									min="0"
+									step="1"
+									placeholder="10"
+									className="w-16 border border-gray-300 rounded-md p-2"
 								/>
-								<select 
-									className="border border-gray-300 rounded-md p-2" 
-									value={priorityProviderDiscountType} 
+								<select
+									className="border border-gray-300 rounded-md p-2"
+									value={priorityProviderDiscountType}
 									onChange={(e) => onUpdatePriorityProvider(priorityProvider, priorityProviderDiscount, e.target.value)}
 								>
 									<option value="percent">{__('%', 'fraktvalg')}</option>
@@ -285,8 +286,8 @@ export default function Providers({
 
 							<div className="flex gap-4">
 								{Object.keys(suppliers).map((key) => (
-									<label 
-										key={key} 
+									<label
+										key={key}
 										className="relative cursor-pointer grow flex flex-col gap-2 items-center border-2 border-gray-300 rounded-lg p-4 hover:border-primary peer-checked:border-primary transition-all duration-200"
 										onClick={(e) => {
 											e.preventDefault();
@@ -303,6 +304,7 @@ export default function Providers({
 											value={key}
 											className="sr-only peer"
 											checked={priorityProvider === suppliers[key]?.id}
+											readOnly={true}
 										/>
 
 										{suppliers[key]?.logo &&
