@@ -4,6 +4,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { __ } from '@wordpress/i18n';
 
 import apiFetch from '@wordpress/api-fetch';
+import {PrinterIcon} from "@heroicons/react/24/outline";
 
 export default function Modal({ setIsModalOpen, orderId }) {
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -58,8 +59,9 @@ export default function Modal({ setIsModalOpen, orderId }) {
 					<>
 						<button
 							type="button"
-							className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
+							className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-2"
 							onClick={printLabel}>
+							<PrinterIcon className="inline-block h-4 w-4" />
 							{ __( 'Print', 'fraktvalg' ) }
 						</button>
 						{ labelImageUrl.includes( 'application/pdf' )
