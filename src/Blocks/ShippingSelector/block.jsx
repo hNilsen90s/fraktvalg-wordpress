@@ -1,5 +1,5 @@
 import {useEffect, useState, useCallback} from '@wordpress/element';
-import {__} from '@wordpress/i18n';
+import {__,_x} from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select, subscribe } from '@wordpress/data';
 import '@woocommerce/block-data';
@@ -97,7 +97,7 @@ export default function Block({attributes = {}}) {
 
 					shipper.details.LowestPrice = Math.min(...shipper.shippingOptions.map(option => option.price));
 					const minDays = Math.min(...shipper.shippingOptions.map(option => option.delivery.days));
-					shipper.details.quickestShippingTime = !isNaN(minDays) ? minDays + __(' business days', 'fraktvalg') : '1-3';
+					shipper.details.quickestShippingTime = !isNaN(minDays) ? minDays + __(' business days', 'fraktvalg') : _x( '3-5 business days', 'Default fallback shipping time', 'fraktvalg' );
 				});
 
 				setShippers(newShippers);
