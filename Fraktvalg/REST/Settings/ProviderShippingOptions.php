@@ -3,6 +3,7 @@
 namespace Fraktvalg\Fraktvalg\REST\Settings;
 
 use Fraktvalg\Fraktvalg\Api;
+use Fraktvalg\Fraktvalg\Options;
 use Fraktvalg\Fraktvalg\REST\Base;
 
 class ProviderShippingOptions extends Base {
@@ -52,8 +53,10 @@ class ProviderShippingOptions extends Base {
 		);
 
 		if ( \is_wp_error( $options ) || 200 !== $options['response']['code'] ) {
-			return new \WP_Error( 'api_error', 'Could not update available shipping methods wit hthe provider at this time', [ 'status' => 400 ] );
+			return new \WP_Error( 'api_error', 'Could not update available shipping methods with the provider at this time', [ 'status' => 400 ] );
 		}
+
+		Options::clear_cache_timestamp();
 
 		return new \WP_Rest_Response( \json_decode( $options['body'] ) );
 	}

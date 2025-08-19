@@ -170,7 +170,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 			$shipping_options_array['packages'][0]['packageVolume'] = ceil( $total_volume );
 		}
 
-		$cache_key = 'fraktvalg_shipping_options_' . md5( \json_encode( $shipping_options_array ) . date( 'Y-m-d' ) );
+		$cache_key = 'fraktvalg_shipping_options_' . md5( \json_encode( $shipping_options_array ) . date( 'Y-m-d' ) . Options::get_cache_timestamp() );
 
 		$shippers = \get_transient( $cache_key );
 		if ( false === $shippers ) {

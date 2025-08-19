@@ -3,6 +3,7 @@
 namespace Fraktvalg\Fraktvalg\REST\Settings;
 
 use Fraktvalg\Fraktvalg\Api;
+use Fraktvalg\Fraktvalg\Options;
 use Fraktvalg\Fraktvalg\REST\Base;
 
 class Providers extends Base {
@@ -117,6 +118,8 @@ class Providers extends Base {
 
 		Api::post( '/shipper/disconnect', [ 'shipper_id' => $provider ] );
 
+		Options::clear_cache_timestamp();
+
 		return new \WP_Rest_Response( [ 'status' => 'OK' ] );
 	}
 
@@ -152,16 +155,18 @@ class Providers extends Base {
 
 		if ( \is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
 			$error_message = 'Could not store providers';
-			
+
 			if ( ! \is_wp_error( $response ) && isset( $response['body'] ) ) {
 				$response_body = json_decode( $response['body'], true );
 				if ( isset( $response_body['message'] ) ) {
 					$error_message = $response_body['message'];
 				}
 			}
-			
+
 			return new \WP_Error( 'api_error', $error_message, [ 'status' => 400 ] );
 		}
+
+		Options::clear_cache_timestamp();
 
 		return new \WP_Rest_Response( [ 'status' => 'OK' ] );
 	}

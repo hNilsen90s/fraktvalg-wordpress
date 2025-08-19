@@ -85,4 +85,19 @@ class Options {
 		return \update_option( 'fraktvalg_options', $options );
 	}
 
+	public static function get_cache_timestamp() {
+		$timestamp = \get_option( 'fraktvalg_cache_timestamp', false );
+
+		if ( ! $timestamp ) {
+			$timestamp = time();
+			update_option( 'fraktvalg_cache_timestamp', $timestamp );
+		}
+
+		return $timestamp;
+	}
+
+	public static function clear_cache_timestamp() {
+		return \delete_option( 'fraktvalg_cache_timestamp' );
+	}
+
 }
