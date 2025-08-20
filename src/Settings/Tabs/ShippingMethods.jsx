@@ -85,6 +85,8 @@ export default function ShippingMethods({supplier, setTab}) {
 		)
 	}
 
+	const toBoolean = (value) => value === true || value === 'true' || value === 1 || value === '1';
+
 	return (
 		<Wrapper title={title()}>
 			{saveStatus === 'success' && (
@@ -137,7 +139,7 @@ export default function ShippingMethods({supplier, setTab}) {
 								<tr key={method.id}>
 									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
 										<label>
-											<input type="checkbox" checked={method.active} onChange={() => {
+											<input type="checkbox" checked={toBoolean(method.active)} onChange={() => {
 												const updatedMethods = [...shippingMethods];
 												updatedMethods[index].active = !updatedMethods[index].active;
 												setShippingMethods(updatedMethods);
@@ -161,7 +163,7 @@ export default function ShippingMethods({supplier, setTab}) {
 												<span className="mr-2">
 													{__('Set a fixed price for this shipping method', 'fraktvalg')}
 												</span>
-												<input type="checkbox" checked={method.canEditPrice} onChange={() => {
+												<input type="checkbox" checked={toBoolean(method.canEditPrice)} onChange={() => {
 													const updatedMethods = [...shippingMethods];
 													updatedMethods[index].canEditPrice = !updatedMethods[index].canEditPrice;
 													setShippingMethods(updatedMethods);
@@ -185,7 +187,7 @@ export default function ShippingMethods({supplier, setTab}) {
 												<span className="mr-2">
 													{__('Free shipping if order total is over', 'fraktvalg')}
 												</span>
-												<input type="checkbox" checked={method.hasFreeShipping} onChange={() => {
+												<input type="checkbox" checked={toBoolean(method.hasFreeShipping)} onChange={() => {
 													const updatedMethods = [...shippingMethods];
 													updatedMethods[index].hasFreeShipping = !updatedMethods[index].hasFreeShipping;
 													setShippingMethods(updatedMethods);
@@ -209,9 +211,9 @@ export default function ShippingMethods({supplier, setTab}) {
 					</table>
 
 					<div className="flex flex-col md:flex-row justify-end gap-2 mt-4">
-						<Button 
-							type="button" 
-							onClick={() => saveShippingMethods()} 
+						<Button
+							type="button"
+							onClick={() => saveShippingMethods()}
 							className="md:inline-block md:w-fit"
 							disabled={isSaving}
 						>
