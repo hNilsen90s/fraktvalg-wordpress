@@ -171,7 +171,7 @@ export default function ShippingMethods({supplier, setTab}) {
 											</label>
 
 											<div className="flex justify-end">
-												<input type="number" value={method.price || ''} disabled={!method.canEditPrice}
+												<input type="number" value={method.price || ''} disabled={!toBoolean(method.canEditPrice)}
 													onChange={(e) => {
 														const updatedMethods = [...shippingMethods];
 														updatedMethods[index].price = e.target.value;
@@ -195,7 +195,7 @@ export default function ShippingMethods({supplier, setTab}) {
 											</label>
 
 											<div className="flex justify-end">
-												<input type="number" value={method.freeShippingThreshold || ''} disabled={!method.hasFreeShipping}
+												<input type="number" value={method.freeShippingThreshold || ''} disabled={!toBoolean(method.hasFreeShipping)}
 													onChange={(e) => {
 														const updatedMethods = [...shippingMethods];
 														updatedMethods[index].freeShippingThreshold = e.target.value;
