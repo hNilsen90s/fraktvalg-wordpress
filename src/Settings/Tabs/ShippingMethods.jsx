@@ -141,7 +141,7 @@ export default function ShippingMethods({supplier, setTab}) {
 										<label>
 											<input type="checkbox" checked={toBoolean(method.active)} onChange={() => {
 												const updatedMethods = [...shippingMethods];
-												updatedMethods[index].active = !updatedMethods[index].active;
+												updatedMethods[index].active = !toBoolean(updatedMethods[index].active);
 												setShippingMethods(updatedMethods);
 											}}/>
 											<span className="ml">{__('Active', 'fraktvalg')}</span>
@@ -165,7 +165,7 @@ export default function ShippingMethods({supplier, setTab}) {
 												</span>
 												<input type="checkbox" checked={toBoolean(method.canEditPrice)} onChange={() => {
 													const updatedMethods = [...shippingMethods];
-													updatedMethods[index].canEditPrice = !updatedMethods[index].canEditPrice;
+													updatedMethods[index].canEditPrice = !toBoolean(updatedMethods[index].canEditPrice);
 													setShippingMethods(updatedMethods);
 												}}/>
 											</label>
@@ -189,7 +189,7 @@ export default function ShippingMethods({supplier, setTab}) {
 												</span>
 												<input type="checkbox" checked={toBoolean(method.hasFreeShipping)} onChange={() => {
 													const updatedMethods = [...shippingMethods];
-													updatedMethods[index].hasFreeShipping = !updatedMethods[index].hasFreeShipping;
+													updatedMethods[index].hasFreeShipping = !toBoolean(updatedMethods[index].hasFreeShipping);
 													setShippingMethods(updatedMethods);
 												}}/>
 											</label>
