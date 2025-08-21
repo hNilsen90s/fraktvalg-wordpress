@@ -200,6 +200,8 @@ class Fraktvalg extends \WC_Shipping_Method {
 		$this->cheapest_shipping_id = null;
 		$this->cheapest_shipping_price = null;
 
+		$all_new_shipping_rates = [];
+
 		if ( ! empty( $shippingOptions) ) {
 			// Find the cheapest shipping method from non-priority providers
 			$cheapest_price = $this->get_cheapest_shipping_price( $shippingOptions, $priorityProvider['providerId'], $settings );
@@ -290,12 +292,18 @@ class Fraktvalg extends \WC_Shipping_Method {
 						$label .= ' (' . $option->texts->description . ')';
 					}
 
-					$this->add_shipping_rate( $shipping_id, $label, $price, $package, [
-						'fraktvalg' => true,
-						'shipper'   => $priorityProvider['providerId'],
-						'option'    => $option,
-						'priority'  => true,
-					] );
+					$all_new_shipping_rates[] = [
+						'id' => $shipping_id,
+						'label' => $label,
+						'price' => $price,
+						'package' => $package,
+						'meta_data' => [
+							'fraktvalg' => true,
+							'shipper'   => $priorityProvider['providerId'],
+							'option'    => $option,
+							'priority'  => true,
+						],
+					];
 
 					// Track the cheapest priority shipping option
 					if ( null === $this->cheapest_shipping_price || $price < $this->cheapest_shipping_price ) {
@@ -339,11 +347,17 @@ class Fraktvalg extends \WC_Shipping_Method {
 						}
 					}
 
-					$this->add_shipping_rate( $shipping_id, $label, $price, $package, [
-						'fraktvalg' => true,
-						'shipper'   => $shipper,
-						'option'    => $option,
-					] );
+					$all_new_shipping_rates[] = [
+						'id' => $shipping_id,
+						'label' => $label,
+						'price' => $price,
+						'package' => $package,
+						'meta_data' => [
+							'fraktvalg' => true,
+							'shipper'   => $shipper,
+							'option'    => $option,
+						],
+					];
 
 					// Track the cheapest non-priority shipping option
 					// Only update if no priority provider exists or if this is cheaper than the cheapest priority option
@@ -366,18 +380,24 @@ class Fraktvalg extends \WC_Shipping_Method {
 					$price += $settings['freight']['addedCost'];
 				}
 
-				$this->add_shipping_rate( 'fallback', $settings['freight']['custom']['name'], $price, $package, [
-					'fraktvalg' => true,
-					'shipper'   => 'fallback',
-					'option'    => array_merge(
-						[
-							'delivery' => [
-								'estimatedDays' => '3-5',
+				$all_new_shipping_rates[] = [
+					'id' => 'fallback',
+					'label' => $settings['freight']['custom']['name'],
+					'price' => $price,
+					'package' => $package,
+					'meta_data' => [
+						'fraktvalg' => true,
+						'shipper'   => 'fallback',
+						'option'    => array_merge(
+							[
+								'delivery' => [
+									'estimatedDays' => '3-5',
+								],
 							],
-						],
-						$settings['freight']['custom']
-					),
-				] );
+							$settings['freight']['custom']
+						),
+					],
+				];
 
 				// Set fallback as cheapest option if no other options exist
 				$this->cheapest_shipping_price = $price;
@@ -385,16 +405,18 @@ class Fraktvalg extends \WC_Shipping_Method {
 			}
 		}
 
-		// Set the default shipping option in WooCommerce
-		if ( ! empty( $this->cheapest_shipping_id ) ) {
-			// Check if a shipping method is already chosen
-			$chosen_shipping_methods = \WC()->session->get( 'chosen_shipping_methods' );
+		usort( $all_new_shipping_rates, function( $a, $b ) {
+			return $a['price'] <=> $b['price'];
+		} );
 
-			// Only set the default if no shipping method is chosen
-			if ( empty( $chosen_shipping_methods ) || ! is_array( $chosen_shipping_methods ) || empty( $chosen_shipping_methods[0] ) ) {
-				// Set the default shipping option in WooCommerce
-				\WC()->session->set( 'chosen_shipping_methods', [ $this->cheapest_shipping_id ] );
-			}
+		foreach ( $all_new_shipping_rates as $new_shipping_rate ) {
+			$this->add_shipping_rate(
+				$new_shipping_rate['id'],
+				$new_shipping_rate['label'],
+				$new_shipping_rate['price'],
+				$new_shipping_rate['package'],
+				$new_shipping_rate['meta_data']
+			);
 		}
 	}
 
