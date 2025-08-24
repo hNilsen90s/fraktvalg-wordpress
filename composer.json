@@ -23,7 +23,8 @@
 		"spatie/phpunit-watcher": "^1.10",
 		"phpstan/phpstan": "^1.4",
 		"szepeviktor/phpstan-wordpress": "^1.0",
-		"phpstan/extension-installer": "^1.1"
+		"phpstan/extension-installer": "^1.1",
+		"wp-cli/wp-cli-bundle": "^2.12"
 	},
 	"scripts": {
 		"lint": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --report=summary,source",
