@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Fraktvalg 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fraktvalg\n"
-"POT-Creation-Date: 2025-08-19T22:19:38+00:00\n"
-"PO-Revision-Date: 2025-08-20 00:19+0200\n"
+"POT-Creation-Date: 2025-08-24T11:32:28+00:00\n"
+"PO-Revision-Date: 2025-08-24 13:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -237,6 +237,12 @@ msgstr "Registrert"
 #: Fraktvalg/WooCommerce/Admin/ShipmentStatusColumn.php:47
 msgid "Not Registered"
 msgstr "Ikke registrert"
+
+#. translators: 1: Shipper name, 2: Shipping option name.
+#: Fraktvalg/WooCommerce/ShippingMethod/Fraktvalg.php:291
+#: Fraktvalg/WooCommerce/ShippingMethod/Fraktvalg.php:344
+msgid "%1$s with %2$s"
+msgstr "%1$s med %2$s"
 
 #: build/Blocks/ShippingSelector/frontend.js:1
 #: build/Blocks/ShippingSelector/index.js:1
