@@ -32,6 +32,7 @@ export default function Providers({
 	const [ successMessage, setSuccessMessage ] = useState('');
 
 	const storeProviders = (key) => {
+		console.log( 'Loading indicator applied to :', key?.id );
 		setProviderLoadingIndicator(key?.id);
 
 		apiFetch({
@@ -122,11 +123,11 @@ export default function Providers({
 						isConnected={true}
 						key={key}
 						title={suppliers[key]?.name}
-						supplierId={key?.id}
+						supplierId={suppliers[key]?.id}
 						supplier={suppliers[key]}
 						content={
 							<div className="relative grid grid-cols-1 gap-4">
-								{providerLoadingIndicator === key &&
+								{providerLoadingIndicator === suppliers[key]?.id &&
 									<div className="absolute w-full h-full top-0 left-0 bg-white flex flex-col justify-center items-center gap-2">
 										<ArrowPathIcon className="h-6 w-6 animate-spin text-primary" />
 										<span>
@@ -191,7 +192,7 @@ export default function Providers({
 						visible={false}
 						content={
 							<div className="relative grid grid-cols-1 gap-4">
-								{providerLoadingIndicator === key &&
+								{providerLoadingIndicator === allSuppliers[key]?.id &&
 									<div className="absolute w-full h-full top-0 left-0 bg-white flex flex-col justify-center items-center gap-2">
 										<ArrowPathIcon className="h-6 w-6 animate-spin text-primary" />
 										<span>
