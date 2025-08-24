@@ -8,6 +8,9 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -28,11 +31,13 @@ jobs:
           php-version: '8.2'
 
       - name: Create tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git tag ${{ github.event.inputs.version }}
-          git push origin ${{ github.event.inputs.version }}
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} ${{ github.event.inputs.version }}
 
       - name: Install npm dependencies
         run: npm ci
