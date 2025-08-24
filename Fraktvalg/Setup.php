@@ -38,7 +38,7 @@ class Setup {
 		\load_plugin_textdomain(
 			'fraktvalg',
 			false,
-			\trailingslashit( FRAKTVALG_BASE_PATH ) . 'languages'
+			\trailingslashit( \dirname( \plugin_basename( FRAKTVALG_BASE_FILE ) ) ) . 'languages'
 		);
 	}
 
