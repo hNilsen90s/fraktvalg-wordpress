@@ -9,7 +9,7 @@
  * Plugin URI: https://fraktvalg.no
  * Description: Easily provide shipping estimates for your customers from multiple providers.
  * Author: fraktvalg
- * Version: 1.3.0-beta1
+ * Version: 1.3.0
  * Text Domain: fraktvalg
  * Domain Path: /languages
  * Requires Plugins: woocommerce

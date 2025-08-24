@@ -4,7 +4,7 @@ Contributors: fraktvalg
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,22 +64,10 @@ Fantastic! The Fraktvalg plugin is open source, and you can browse the code or g
 
 == Changelog ==
 
-= 1.2.0 (2025-04-12) =
-* Improved shipping method front-end presentation.
-* Improved accessibility of shipping provider and method interfaces.
-* Improved onboarding to guide users through required store settings.
-* Add a means to reset the plugin to the onboarding stage.
-* Added more contextual feedbacks in the settings panels.
-* Resolve an issue where preferred providers did not alwways properly apply discounts, and only matched prices.
-* Fixed so you can de-select a preferred shipping provider.
-
-= 1.1.0 (2025-04-06) =
-* Align the shipping block better on the x-axis in themes.
-* Better shipping labels in classic themes wit hthe default shipping display from WooCommerce.
-* Add support for more provier logo types from the Fraktvalg API.
-* Better presentation of error messages when setting up shipping providers.
-* Improve the onboarding wizard by automating the setup process for block themes when possible.
-* Improve shipping rate update times by leveraging the WooCommerce data stores.
-
-= 1.0.0 (2025-03-22) =
-* Initial release
+= 1.3.0 (2025-08-24) =
+* Performance: Reduce shipping method calculation time by up to 60%.
+* Features: Introduced individual shipping method overrides. Set fixed prices, free shipping thresholds, or rename individual shipping options to fit your site and needs!
+* Features: List orders based on which ones have created shipment consignments, and create consignments when you are ready to send the product.
+* Features: Introduce a store phone number setting to the general WooCommerce store settings, which is used for shipping providers who require it to create consignments.
+* Translations: Bundle base translations for Norwegian Bokmål.
+* Bugfix: Restrict discounts when preferred providers are already the cheaper option.
