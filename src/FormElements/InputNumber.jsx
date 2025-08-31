@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 export default function InputNumber({ name, label, value = '', placeholder = '', required = false, callback, onChange, children, ...props }) {
-	const [ number, setNumber ] = useState( value ?? 0 );
-	
+	const [ number, setNumber ] = useState( Number.isInteger( value ) ? value : parseInt( value, 10 ) || 0 );
+
 	// Use onChange if provided, otherwise fall back to callback for backward compatibility
 	const handleChange = onChange || callback;
 
@@ -31,7 +31,7 @@ export default function InputNumber({ name, label, value = '', placeholder = '',
 		const pastedValue = event.clipboardData.getData('text');
 		// Convert to number
 		const numericValue = parseInt(pastedValue, 10);
-		
+
 		// Only update if it's a valid number
 		if (!isNaN(numericValue) && numericValue >= 0) {
 			setNumber(numericValue);
