@@ -80,7 +80,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 			}
 
 			// Get the weight and convert to grams
-			$product_weight = $product->get_weight() ?? $default_dimensions['weight'];
+			$product_weight = $product->get_weight() ?: $default_dimensions['weight'];
 			if ( $product_weight ) {
 				switch ( $weight_unit ) {
 					case 'kg':
@@ -97,9 +97,9 @@ class Fraktvalg extends \WC_Shipping_Method {
 			}
 
 			// Get dimensions and convert to millimeters
-			$product_length = $product->get_length() ?? $default_dimensions['length'];
-			$product_width = $product->get_width() ?? $default_dimensions['width'];
-			$product_height = $product->get_height() ?? $default_dimensions['height'];
+			$product_length = $product->get_length() ?: $default_dimensions['length'];
+			$product_width = $product->get_width() ?: $default_dimensions['width'];
+			$product_height = $product->get_height() ?: $default_dimensions['height'];
 			$product_volume = 0;
 
 			if ( $product_length || $product_width || $product_height ) {
@@ -290,7 +290,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 						// translators: 1: Shipper name, 2: Shipping option name.
 						\__( '%1$s with %2$s', 'fraktvalg' ),
 						$option->texts->shipperName,
-						( $option->texts->displayName ?? $option->texts->originalName )
+						( $option->texts->displayName ?: $option->texts->originalName )
 					);
 
 					if ( isset( $option->texts->description ) && ! empty( $option->texts->description ) ) {
@@ -337,7 +337,7 @@ class Fraktvalg extends \WC_Shipping_Method {
 						}
 					}
 					// Set the label based on theme type
-					$label = ( $option->texts->displayName ?? $option->texts->originalName );
+					$label = ( $option->texts->displayName ?: $option->texts->originalName );
 					if ( ! $is_block_theme && isset( $option->texts->shipperName ) ) {
 						$label = sprintf(
 						// translators: 1: Shipper name, 2: Shipping option name.
