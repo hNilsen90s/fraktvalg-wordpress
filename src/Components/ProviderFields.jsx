@@ -69,11 +69,21 @@ export default function ProviderFields({ includeOptional = false, provider, fiel
 
 	useEffect(() => {
 		const temporaryValueStore = {};
+		let setValue;
 
 		fields.forEach(field => {
-			if (field?.value) {
-				temporaryValueStore[field.name] = field.value;
+			setValue = field?.value || field?.defaultValue || null;
+
+			// Ensure the proper type based on field type.
+			if (field.type === 'boolean') {
+				setValue = Boolean(setValue);
+			} else if (field.type === 'number') {
+				setValue = Number.isInteger( setValue ) ? setValue : parseInt( setValue, 10 ) || 0;
+			} else if (field.type === 'string' || field.type === 'text' || field.type === 'password') {
+				setValue = setValue !== null ? String(setValue) : null;
 			}
+
+			temporaryValueStore[field.name] = setValue;
 		});
 
 		setFieldValues(temporaryValueStore);
