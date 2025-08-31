@@ -134,6 +134,8 @@ class Providers extends Base {
 
 		\update_option( "fraktvalg['priorityProvider']", $priorityProviders );
 
+		Options::clear_cache_timestamp();
+
 		return new \WP_Rest_Response( [ 'status' => 'OK' ] );
 	}
 

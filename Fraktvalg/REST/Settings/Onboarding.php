@@ -136,7 +136,7 @@ class Onboarding extends Base {
 		$width = $request->get_param( 'width' );
 		$height = $request->get_param( 'height' );
 		$weight = $request->get_param( 'weight' );
-	
+
 		$options = [
 			'default_dimensions' => [
 				'length' => empty( $length ) ? null : $length,
@@ -154,6 +154,8 @@ class Onboarding extends Base {
 				'message' => __( "An unknown error occurred, and your preferences could not be saved at this time. Please double check the options, and try again. You can always move forward, and change these later if you wish.", 'fraktvalg' )
 			] );
 		}
+
+		Options::clear_cache_timestamp();
 
 		return new \WP_REST_Response(
 			[
@@ -198,7 +200,7 @@ class Onboarding extends Base {
 	public function create_template( $request ) {
 		$template_type = $request->get_param('template');
 		$template_name = $template_type;
-		
+
 		// Retrieve template.
 		$page_id = \wc_get_page_id( $template_type );
 		$template = get_post( $page_id );
@@ -252,9 +254,9 @@ class Onboarding extends Base {
 		];
 
 		// Check if all address fields are filled.
-		$address_complete = ! empty( $store_address['address'] ) && 
-			! empty( $store_address['postcode'] ) && 
-			! empty( $store_address['city'] ) && 
+		$address_complete = ! empty( $store_address['address'] ) &&
+			! empty( $store_address['postcode'] ) &&
+			! empty( $store_address['city'] ) &&
 			! empty( $store_address['country'] );
 
 		// Check for products without dimensions or weight.
@@ -282,12 +284,14 @@ class Onboarding extends Base {
 		$postcode  = $request->get_param( 'postcode' );
 		$city      = $request->get_param( 'city' );
 		$country   = $request->get_param( 'country' );
-		
+
 		\update_option( 'woocommerce_store_address', $address );
 		\update_option( 'woocommerce_store_postcode', $postcode );
 		\update_option( 'woocommerce_store_city', $city );
 		\update_option( 'woocommerce_default_country', $country );
-		
+
+		Options::clear_cache_timestamp();
+
 		return new \WP_REST_Response(
 			[
 				'status'  => 'success',
@@ -396,7 +400,7 @@ class Onboarding extends Base {
 		];
 
 		$products = \get_posts( $args );
-		
+
 		// Return a simple boolean indicating if any products are missing dimensions
 		return [
 			'has_products_without_dimensions' => ! empty( $products ),
@@ -405,6 +409,9 @@ class Onboarding extends Base {
 
 	public function finalize_onboarding() {
 		\update_option( 'fraktvalg_configured', true );
+
+		Options::clear_cache_timestamp();
+
 		return new \WP_REST_Response( [ 'status' => 'ok' ] );
 	}
 

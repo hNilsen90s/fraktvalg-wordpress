@@ -55,6 +55,8 @@ class OptionalSettings extends Base {
 			] );
 		}
 
+		Options::clear_cache_timestamp();
+
 		return new \WP_Rest_Response( [
 			'status' => 'ok',
 			'type' => 'success',

@@ -3,6 +3,7 @@
 namespace Fraktvalg\Fraktvalg\REST\Settings;
 
 use Fraktvalg\Fraktvalg\Api;
+use Fraktvalg\Fraktvalg\Options;
 use Fraktvalg\Fraktvalg\REST\Base;
 
 class ApiKey extends Base {
@@ -30,6 +31,8 @@ class ApiKey extends Base {
 
 	public function set_api_key( \WP_REST_Request $request ) {
 		\update_option( 'fraktvalg_api_key', $request->get_param( 'api_key' ) );
+
+		Options::clear_cache_timestamp();
 
 		$api_status = Api::post(
 			'/account/validate',
