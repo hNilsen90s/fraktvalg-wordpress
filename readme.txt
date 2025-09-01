@@ -64,6 +64,11 @@ Fantastic! The Fraktvalg plugin is open source, and you can browse the code or g
 
 == Changelog ==
 
+= 1.3.1 (2025-09-01) =
+* Bugfix: Fix an error where the number of shipping methods could not be limited by setting the "max number of shipping methods to show".
+* Bugfix: Ensure that default dimensions are passed to the API when products do not have dimensions set.
+* Feature: Clear the shipping method caches in more scenarios that could impact shipping alternatives or prices.
+
 = 1.3.0 (2025-08-24) =
 * Performance: Reduce shipping method calculation time by up to 60%.
 * Features: Introduced individual shipping method overrides. Set fixed prices, free shipping thresholds, or rename individual shipping options to fit your site and needs!
