@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { __ } from "@wordpress/i18n";
+import {__, _x} from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 
 import Wrapper from "../Components/Wrapper";
@@ -17,7 +17,7 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 
 	const setOption = (event) => {
 		const newSettings = {...settings};
-		
+
 		switch (event.target.name) {
 			case 'freight[addedCost]':
 				newSettings.freight.addedCost = event.target.value;
@@ -53,7 +53,7 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 				newSettings[event.target.name] = event.target.value;
 				break;
 		}
-		
+
 		onUpdateSettings(newSettings);
 	}
 
@@ -95,7 +95,7 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 	}
 
 	return (
-		<Wrapper title="Optional settings">
+		<Wrapper title={_x('Optional settings', 'Tab label', 'fraktvalg')}>
 			<div className="grid grid-cols-1 gap-3">
 				{error &&
 					<Notification type="error" title={__('Error fetching optional settings', 'fraktvalg')}>
@@ -109,28 +109,28 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 					</p>
 
 					<div className="mt-2 grid grid-cols-1 gap-4">
-						<InputText 
-							label={__('Shipping option name', 'fraktvalg')} 
-							name="freight[custom][name]" 
-							value={settings.freight.custom.name} 
-							callback={setOption} 
+						<InputText
+							label={__('Shipping option name', 'fraktvalg')}
+							name="freight[custom][name]"
+							value={settings.freight.custom.name}
+							callback={setOption}
 						/>
 
 						<div className="flex items-center gap-3">
-							<input 
-								name="freight[custom][price]" 
-								value={settings.freight.custom.price} 
-								onChange={setOption} 
-								type="number" 
-								min="0" 
-								step="1" 
-								placeholder="25" 
-								className="w-16 border border-gray-300 rounded-md p-2" 
+							<input
+								name="freight[custom][price]"
+								value={settings.freight.custom.price}
+								onChange={setOption}
+								type="number"
+								min="0"
+								step="1"
+								placeholder="25"
+								className="w-16 border border-gray-300 rounded-md p-2"
 							/>
-							<select 
-								name="freight[custom][type]" 
-								className="border border-gray-300 rounded-md p-2" 
-								value={settings.freight.custom.type} 
+							<select
+								name="freight[custom][type]"
+								className="border border-gray-300 rounded-md p-2"
+								value={settings.freight.custom.type}
 								onChange={setOption}
 							>
 								<option value="percent">%</option>
@@ -153,20 +153,20 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 					{__('Safeguard your shipping costs with these optional alternatives.', 'fraktvalg')}
 
 					<div className="flex items-center gap-3">
-						<input 
-							name="freight[addedCost]" 
-							value={settings.freight.addedCost} 
-							onChange={setOption} 
-							type="number" 
-							min="0" 
-							step="1" 
-							placeholder="10" 
-							className="w-16 border border-gray-300 rounded-md p-2" 
+						<input
+							name="freight[addedCost]"
+							value={settings.freight.addedCost}
+							onChange={setOption}
+							type="number"
+							min="0"
+							step="1"
+							placeholder="10"
+							className="w-16 border border-gray-300 rounded-md p-2"
 						/>
-						<select 
-							name="freight[addedCostType]" 
-							className="border border-gray-300 rounded-md p-2" 
-							value={settings.freight.addedCostType} 
+						<select
+							name="freight[addedCostType]"
+							className="border border-gray-300 rounded-md p-2"
+							value={settings.freight.addedCostType}
 							onChange={setOption}
 						>
 							<option value="percent">%</option>
@@ -203,7 +203,7 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 									placeholder={__('Length', 'fraktvalg')}
 								/>
 							</div>
-							
+
 							<div>
 								<label className="block text-sm font-medium text-gray-700 mb-1">
 									{__('Width', 'fraktvalg')}
@@ -216,7 +216,7 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 									placeholder={__('Width', 'fraktvalg')}
 								/>
 							</div>
-							
+
 							<div>
 								<label className="block text-sm font-medium text-gray-700 mb-1">
 									{__('Height', 'fraktvalg')}
@@ -229,7 +229,7 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 									placeholder={__('Height', 'fraktvalg')}
 								/>
 							</div>
-							
+
 							<div>
 								<label className="block text-sm font-medium text-gray-700 mb-1">
 									{__('Weight', 'fraktvalg')}
@@ -252,11 +252,11 @@ export default function OptionalSettings({settings, isLoading, error, onUpdateSe
 					</p>
 
 					<div className="mt-2 grid grid-cols-1 gap-4">
-						<InputBoolean 
-							label={__('Use production environments', 'fraktvalg')} 
-							name="useProduction" 
-							value={settings.useProduction} 
-							callback={setOption} 
+						<InputBoolean
+							label={__('Use production environments', 'fraktvalg')}
+							name="useProduction"
+							value={settings.useProduction}
+							callback={setOption}
 						/>
 					</div>
 				</AccordionSection>
