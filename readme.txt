@@ -4,7 +4,7 @@ Contributors: fraktvalg
 Requires at least: 5.8
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 1.3.0
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,9 @@ By choosing Fraktvalg, you streamline your shipping processes, enhance customer 
 Fantastic! The Fraktvalg plugin is open source, and you can browse the code or give feedback and suggestions via the [GitHub repository](https://github.com/Fraktvalg/fraktvalg-wordpress)
 
 == Changelog ==
+
+= 1.3.2 (2025-09-03) =
+* Enhancement: Improve the print experience by adding a local proxy for PDFs to prevent incorrect CORS warnings, and close image label print screens fully when completed.
 
 = 1.3.1 (2025-09-01) =
 * Bugfix: Fix an error where the number of shipping methods could not be limited by setting the "max number of shipping methods to show".
