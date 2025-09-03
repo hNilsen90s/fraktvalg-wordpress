@@ -13,14 +13,19 @@ export default function Modal({ setIsModalOpen, orderId }) {
 	const printLabel = () => {
 		if (labelImageUrl) {
 			const printWindow = window.open('', '_blank');
+			const printContent = labelImageUrl.includes('application/pdf')
+				? `<embed src="${labelImageUrl}" type="application/pdf" width="100%" height="100%">`
+				: `<img src="${labelImageUrl}" style="max-width: 100%; height: auto;">`;
+
 			printWindow.document.write(`
-                <html>
-                    <head><title>${ __( 'Print', 'fraktvalg' ) }</title></head>
-                    <body class="flex justify-center items-center min-h-screen">
-                        <img src="${labelImageUrl}" class="max-w-full h-auto">
-                    </body>
-                </html>
-            `);
+				<html>
+					<head><title>${ __( 'Print', 'fraktvalg' ) }</title></head>
+					<body class="flex justify-center items-center min-h-screen">
+						${printContent}
+					</body>
+				</html>
+			`);
+
 			printWindow.document.close();
 			printWindow.print();
 		}
@@ -66,6 +71,7 @@ export default function Modal({ setIsModalOpen, orderId }) {
 						</button>
 						{ labelImageUrl.includes( 'application/pdf' )
 							? <iframe
+								id="fraktvalg-label-iframe"
 								src={labelImageUrl}
 								title="Shipping Label"
 								className="max-w-full w-full min-h-48 h-auto my-4 shadow-lg"
