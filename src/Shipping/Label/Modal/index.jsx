@@ -12,22 +12,25 @@ export default function Modal({ setIsModalOpen, orderId }) {
 
 	const printLabel = () => {
 		if (labelImageUrl) {
-			const printWindow = window.open('', '_blank');
-			const printContent = labelImageUrl.includes('application/pdf')
-				? `<embed src="${labelImageUrl}" type="application/pdf" width="100%" height="100%">`
-				: `<img src="${labelImageUrl}" style="max-width: 100%; height: auto;">`;
 
-			printWindow.document.write(`
-				<html>
-					<head><title>${ __( 'Print', 'fraktvalg' ) }</title></head>
-					<body class="flex justify-center items-center min-h-screen">
-						${printContent}
-					</body>
-				</html>
-			`);
+			if (labelImageUrl.includes('.pdf')) {
+				document.getElementById( 'fraktvalg-label-iframe' ).contentWindow.print();
+			} else {
+				const printWindow = window.open('', '_blank');
 
-			printWindow.document.close();
-			printWindow.print();
+				printWindow.document.write(`
+					<html>
+						<head><title>${ __( 'Print', 'fraktvalg' ) }</title></head>
+						<script type="text/javascript">window.onafterprint = window.close;</script>
+						<body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+							<img src="${labelImageUrl}" style="max-width: 100%; height: auto;" onload="window.print();">
+						</body>
+					</html>
+				`);
+
+				printWindow.document.close();
+				printWindow.print();
+			}
 		}
 	};
 
@@ -48,7 +51,7 @@ export default function Modal({ setIsModalOpen, orderId }) {
 
 	return (
 		<div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[999999]">
-			<div className="relative bg-white p-6 rounded-md shadow-lg w-96">
+			<div className="relative min-h-48 max-w-[80vw] max-h-[80vh] m-8 bg-white p-6 rounded-md shadow-lg w-96 overflow-hidden">
 				<button
 					type="button"
 					className="absolute top-0 right-1 text-gray-600 hover:text-gray-900 text-xl font-bold"
@@ -69,7 +72,7 @@ export default function Modal({ setIsModalOpen, orderId }) {
 							<PrinterIcon className="inline-block h-4 w-4" />
 							{ __( 'Print', 'fraktvalg' ) }
 						</button>
-						{ labelImageUrl.includes( 'application/pdf' )
+						{ labelImageUrl.includes( '.pdf' )
 							? <iframe
 								id="fraktvalg-label-iframe"
 								src={labelImageUrl}
@@ -79,7 +82,7 @@ export default function Modal({ setIsModalOpen, orderId }) {
 							: <img
 								src={labelImageUrl}
 								alt="Shipping Label"
-								className="max-w-full w-full h-auto my-4 shadow-lg"
+								className="max-w-full w-full min-h-48 h-auto my-4 shadow-lg"
 							/>
 						}
 					</>

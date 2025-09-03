@@ -32,6 +32,7 @@ class Setup {
 
 		new \Fraktvalg\Fraktvalg\REST\WooCommerce\CreateConsignment();
 		new \Fraktvalg\Fraktvalg\REST\WooCommerce\ShippingLabel();
+		new \Fraktvalg\Fraktvalg\REST\WooCommerce\PdfProxy();
 	}
 
 	public function load_plugin_textdomain() {

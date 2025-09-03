@@ -55,6 +55,10 @@ class ShippingLabel extends Base {
 
 		$labelData = \json_decode( $shippingLabel['body'] ) ?: [];
 
+		if ( isset( $labelData->url ) && strpos( $labelData->url, 'data:application/pdf' ) === 0 ) {
+			$labelData->url = PdfProxy::generate_pdf_url( $request->get_param( 'order_id' ) );
+		}
+
 		return new \WP_REST_Response( $labelData );
 	}
 
