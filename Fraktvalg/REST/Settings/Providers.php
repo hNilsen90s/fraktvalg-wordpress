@@ -155,14 +155,22 @@ class Providers extends Base {
 			)
 		);
 
-		if ( \is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-			$error_message = 'Could not store providers';
+		// Parse response body first
+		$response_body = ! \is_wp_error( $response ) && isset( $response['body'] ) 
+			? json_decode( $response['body'], true ) 
+			: null;
 
-			if ( ! \is_wp_error( $response ) && isset( $response['body'] ) ) {
-				$response_body = json_decode( $response['body'], true );
-				if ( isset( $response_body['message'] ) ) {
-					$error_message = $response_body['message'];
-				}
+		// Check for errors in response body even with HTTP 200
+		if ( \is_wp_error( $response ) || 200 !== $response['response']['code'] ||
+			 ( isset( $response_body['error'] ) || 
+			   isset( $response_body['success'] ) && false === $response_body['success'] ) ) {
+			
+			$error_message = 'Could not store providers';
+			
+			if ( isset( $response_body['message'] ) ) {
+				$error_message = $response_body['message'];
+			} elseif ( isset( $response_body['error'] ) ) {
+				$error_message = $response_body['error'];
 			}
 
 			return new \WP_Error( 'api_error', $error_message, [ 'status' => 400 ] );

@@ -112,8 +112,20 @@ export default function Providers({nextStep}) {
 				fieldValues: providerFieldValues[ key ]
 			}
 		}).then((response) => {
+			// Verify provider was registered by fetching updated list
+			return apiFetch({
+				path: 'fraktvalg/v1/settings/providers/mine',
+				method: 'GET'
+			});
+		}).then((verifyResponse) => {
 			setProviderLoadingIndicator( '' );
-			setIsConnectedProviders( [ ...isConnectedProviders, key ] );
+			// Check if provider is in the connected list
+			const connectedIds = Object.keys(verifyResponse?.mine?.data || {});
+			if ( connectedIds.includes( key ) ) {
+				setIsConnectedProviders( [ ...isConnectedProviders, key ] );
+			} else {
+				setError( __('Provider credentials could not be validated', 'fraktvalg') );
+			}
 		}).catch((error) => {
 			console.error( error );
 			setError(error?.message || __('Failed to connect to provider', 'fraktvalg'));

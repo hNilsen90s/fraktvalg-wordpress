@@ -44,6 +44,8 @@ export default function Providers({
 			}
 		}).then(() => {
 			setProviderLoadingIndicator('');
+			// Refresh provider list to show actual status
+			fetchProviders();
 		}).catch((error) => {
 			setProviderLoadingIndicator('');
 			setError(error?.message || __('Failed to save provider settings', 'fraktvalg'));
