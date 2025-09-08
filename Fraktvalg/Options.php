@@ -115,7 +115,9 @@ class Options {
 			 WHERE option_name LIKE '_transient_fraktvalg_shipping_options_%' 
 			 OR option_name LIKE '_transient_timeout_fraktvalg_shipping_options_%'
 			 OR option_name LIKE '_transient_error_fraktvalg_shipping_options_%'
-			 OR option_name LIKE '_transient_timeout_error_fraktvalg_shipping_options_%'"
+			 OR option_name LIKE '_transient_timeout_error_fraktvalg_shipping_options_%'
+			 OR option_name LIKE '_transient_fraktvalg_api_health_%'
+			 OR option_name LIKE '_transient_timeout_fraktvalg_api_health_%'"
 		);
 		
 		// Also clear the cache timestamp to force refresh
