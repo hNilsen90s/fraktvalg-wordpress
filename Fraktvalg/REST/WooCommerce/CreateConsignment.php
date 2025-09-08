@@ -3,6 +3,7 @@
 namespace Fraktvalg\Fraktvalg\REST\WooCommerce;
 
 use Fraktvalg\Fraktvalg\Api;
+use Fraktvalg\Fraktvalg\DimensionConverter;
 use Fraktvalg\Fraktvalg\REST\Base;
 use Fraktvalg\Fraktvalg\WooCommerce\Admin\Settings\PhoneNumber;
 
@@ -37,96 +38,22 @@ class CreateConsignment extends Base {
 		$shipping_methods = $order->get_shipping_methods();
 
 		foreach ( $shipping_methods as $shipping_method ) {
-			$total_weight = 0;
-			$total_length = 0;
-			$total_width = 0;
-			$total_height = 0;
-			$total_volume = 0;
-
-			// Get units once before the loop
+			// Get WooCommerce units
 			$weight_unit = get_option( 'woocommerce_weight_unit' );
 			$dimension_unit = get_option( 'woocommerce_dimension_unit' );
 
-			// Set up dimension conversion factor
-			$dimension_conversion_factor = 1;
-			switch ( $dimension_unit ) {
-				case 'm':
-					$dimension_conversion_factor = 1000;
-					break;
-				case 'cm':
-					$dimension_conversion_factor = 10;
-					break;
-				case 'in':
-					$dimension_conversion_factor = 25.4;
-					break;
-				case 'yd':
-					$dimension_conversion_factor = 914.4;
-					break;
-				// 'mm' needs no conversion
-			}
+			// Calculate package totals using the centralized converter
+			// Note: CreateConsignment doesn't use default dimensions (only actual product dimensions)
+			$package_totals = DimensionConverter::calculatePackageTotals(
+				$order->get_items(),
+				[], // No default dimensions for consignment creation
+				$weight_unit,
+				$dimension_unit,
+				'order'
+			);
 
-			foreach ( $order->get_items() as $single_order_item ) {
-				$product = $single_order_item->get_product();
-				if ( $single_order_item->get_quantity() < 1 || ! $product->needs_shipping() ) {
-					continue;
-				}
-
-				// Get the weight and convert to grams
-				$product_weight = $product->get_weight();
-				if ( $product_weight ) {
-					switch ( $weight_unit ) {
-						case 'kg':
-							$product_weight *= 1000;
-							break;
-						case 'lbs':
-							$product_weight *= 453.59237;
-							break;
-						case 'oz':
-							$product_weight *= 28.3495231;
-							break;
-						// 'g' needs no conversion
-					}
-				}
-
-				// Get dimensions and convert to millimeters
-				$product_length = $product->get_length();
-				$product_width = $product->get_width();
-				$product_height = $product->get_height();
-				$product_volume = 0;
-
-				if ( $product_length || $product_width || $product_height ) {
-					if ( $product_length ) {
-						$product_length *= $dimension_conversion_factor;
-					}
-					if ( $product_width ) {
-						$product_width *= $dimension_conversion_factor;
-					}
-					if ( $product_height ) {
-						$product_height *= $dimension_conversion_factor;
-					}
-
-					// Recalculate volume if it wasn't explicitly set
-					if ( $product_length && $product_width && $product_height ) {
-						$product_volume = $product_length * $product_width * $product_height;
-					}
-				}
-
-				if ( $product_weight ) {
-					$total_weight += ( (float) $product_weight * $single_order_item->get_quantity() );
-				}
-				if ( $product_length && $product_width && $product_height ) {
-					$total_length = max( $total_length, (float) $product_length );
-					$total_width = max( $total_width, (float) $product_width );
-					$total_height = max( $total_height, (float) $product_height );
-
-					$total_volume += ( ( (float) $product_length * (float) $product_width * (float) $product_height ) * $single_order_item->get_quantity() );
-				}
-			}
-
-			// Ensure minimum weight of 1g instead of 1kg
-			if ( $total_weight < 1 ) {
-				$total_weight = 1;
-			}
+			// Prepare package data for API submission
+			$package_data = DimensionConverter::preparePackageForApi( $package_totals );
 
 			$shipping_meta = $shipping_method->get_meta( 'option', true );
 			$shipping_meta->id = $shipping_method->get_meta( 'shipper' );
@@ -151,26 +78,8 @@ class CreateConsignment extends Base {
 					'email'		=> $order->get_billing_email(),
 					'phone'		=> $order->get_billing_phone(),
 				],
-				'packages'  => [
-					[
-						'packageWeight' => $total_weight
-					]
-				],
+				'packages'  => [ $package_data ],
 			];
-
-			// Add dimensions if they are available
-			if ($total_length > 0) {
-				$shipping_options_array['packages'][0]['packageLength'] = ceil( $total_length );
-			}
-			if ($total_width > 0) {
-				$shipping_options_array['packages'][0]['packageWidth'] = ceil( $total_width );
-			}
-			if ($total_height > 0) {
-				$shipping_options_array['packages'][0]['packageHeight'] = ceil( $total_height );
-			}
-			if ($total_volume > 0) {
-				$shipping_options_array['packages'][0]['packageVolume'] = ceil( $total_volume );
-			}
 
 			$shipment = Api::post(
 				'/shipment/register',

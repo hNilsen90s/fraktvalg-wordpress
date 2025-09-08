@@ -3,6 +3,7 @@
 namespace Fraktvalg\Fraktvalg\WooCommerce\ShippingMethod;
 
 use Fraktvalg\Fraktvalg\Api;
+use Fraktvalg\Fraktvalg\DimensionConverter;
 use Fraktvalg\Fraktvalg\Options;
 
 class Fraktvalg extends \WC_Shipping_Method {
@@ -43,98 +44,22 @@ class Fraktvalg extends \WC_Shipping_Method {
 			return;
 		}
 
+		// Get default dimensions and WooCommerce units
 		$default_dimensions = Options::get( 'default_dimensions' );
-
-		$total_weight = 0;
-		$total_length = 0;
-		$total_width = 0;
-		$total_height = 0;
-		$total_volume = 0;
-
-		// Get units once before the loop
 		$weight_unit = get_option( 'woocommerce_weight_unit' );
 		$dimension_unit = get_option( 'woocommerce_dimension_unit' );
 
-		// Set up dimension conversion factor
-		$dimension_conversion_factor = 1;
-		switch ( $dimension_unit ) {
-			case 'm':
-				$dimension_conversion_factor = 1000;
-				break;
-			case 'cm':
-				$dimension_conversion_factor = 10;
-				break;
-			case 'in':
-				$dimension_conversion_factor = 25.4;
-				break;
-			case 'yd':
-				$dimension_conversion_factor = 914.4;
-				break;
-			// 'mm' needs no conversion
-		}
+		// Calculate package totals using the centralized converter
+		$package_totals = DimensionConverter::calculatePackageTotals(
+			$package['contents'],
+			$default_dimensions,
+			$weight_unit,
+			$dimension_unit,
+			'cart'
+		);
 
-		foreach ( $package['contents'] as $data ) {
-			$product = $data['data'];
-			if ( $data['quantity'] < 1 || ! $data['data']->needs_shipping() ) {
-				continue;
-			}
-
-			// Get the weight and convert to grams
-			$product_weight = $product->get_weight() ?: $default_dimensions['weight'];
-			if ( $product_weight ) {
-				switch ( $weight_unit ) {
-					case 'kg':
-						$product_weight *= 1000;
-						break;
-					case 'lbs':
-						$product_weight *= 453.59237;
-						break;
-					case 'oz':
-						$product_weight *= 28.3495231;
-						break;
-					// 'g' needs no conversion
-				}
-			}
-
-			// Get dimensions and convert to millimeters
-			$product_length = $product->get_length() ?: $default_dimensions['length'];
-			$product_width = $product->get_width() ?: $default_dimensions['width'];
-			$product_height = $product->get_height() ?: $default_dimensions['height'];
-			$product_volume = 0;
-
-			if ( $product_length || $product_width || $product_height ) {
-				if ( $product_length ) {
-					$product_length *= $dimension_conversion_factor;
-				}
-				if ( $product_width ) {
-					$product_width *= $dimension_conversion_factor;
-				}
-				if ( $product_height ) {
-					$product_height *= $dimension_conversion_factor;
-				}
-
-				// Recalculate volume if it wasn't explicitly set
-				if ( $product_length && $product_width && $product_height ) {
-					$product_volume = $product_length * $product_width * $product_height;
-				}
-			}
-
-			if ( $product_weight ) {
-				$total_weight += ( (float) $product_weight * $data['quantity'] );
-			}
-			if ( $product_length && $product_width && $product_height ) {
-				$total_length = max( $total_length, (float) $product_length );
-				$total_width = max( $total_width, (float) $product_width );
-				$total_height = max( $total_height, (float) $product_height );
-
-				$total_volume += ( ( (float) $product_length * (float) $product_width * (float) $product_height ) * $data['quantity'] );
-			}
-		}
-
-		// Ensure minimum weight of 1g instead of 1kg
-		if ( $total_weight < 1 ) {
-			$total_weight = 1;
-		}
+		// Prepare package data for API submission
+		$package_data = DimensionConverter::preparePackageForApi( $package_totals );
 
 		$shipping_options_array = [
 			'sender' => [
@@ -149,26 +74,8 @@ class Fraktvalg extends \WC_Shipping_Method {
 				'city'       => $package['destination']['city'] ?? '',
 				'address'    => $package['destination']['address'] ?? '',
 			],
-			'packages' => [
-				[
-					'packageWeight' => ceil( $total_weight )
-				]
-			],
+			'packages' => [ $package_data ],
 		];
-
-		// Add dimensions if they are available
-		if ($total_length > 0) {
-			$shipping_options_array['packages'][0]['packageLength'] = ceil( $total_length );
-		}
-		if ($total_width > 0) {
-			$shipping_options_array['packages'][0]['packageWidth'] = ceil( $total_width );
-		}
-		if ($total_height > 0) {
-			$shipping_options_array['packages'][0]['packageHeight'] = ceil( $total_height );
-		}
-		if ($total_volume > 0) {
-			$shipping_options_array['packages'][0]['packageVolume'] = ceil( $total_volume );
-		}
 
 		$cache_key = 'fraktvalg_shipping_options_' . md5( \json_encode( $shipping_options_array ) . date( 'Y-m-d' ) . Options::get_cache_timestamp() );
 
