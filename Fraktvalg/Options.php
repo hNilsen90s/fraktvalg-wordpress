@@ -100,4 +100,28 @@ class Options {
 		return \delete_option( 'fraktvalg_cache_timestamp' );
 	}
 
+	/**
+	 * Clear all shipping-related transient cache
+	 * This ensures fresh data is fetched from the API
+	 *
+	 * @return int Number of deleted transients
+	 */
+	public static function clear_shipping_cache() {
+		global $wpdb;
+		
+		// Clear all fraktvalg shipping transients (both success and error caches)
+		$deleted = $wpdb->query(
+			"DELETE FROM {$wpdb->options} 
+			 WHERE option_name LIKE '_transient_fraktvalg_shipping_options_%' 
+			 OR option_name LIKE '_transient_timeout_fraktvalg_shipping_options_%'
+			 OR option_name LIKE '_transient_error_fraktvalg_shipping_options_%'
+			 OR option_name LIKE '_transient_timeout_error_fraktvalg_shipping_options_%'"
+		);
+		
+		// Also clear the cache timestamp to force refresh
+		self::clear_cache_timestamp();
+		
+		return $deleted;
+	}
+
 }

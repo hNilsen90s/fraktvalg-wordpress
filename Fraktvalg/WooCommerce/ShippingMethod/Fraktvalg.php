@@ -81,12 +81,26 @@ class Fraktvalg extends \WC_Shipping_Method {
 
 		$shippers = \get_transient( $cache_key );
 		if ( false === $shippers ) {
-			$shippers = Api::post(
-				'/shipment/offers',
-				$shipping_options_array
-			);
+			// Check for recent error cache
+			$error_cache = \get_transient( 'error_' . $cache_key );
+			if ( false !== $error_cache ) {
+				$shippers = $error_cache;
+			} else {
+				// Use retry mechanism for better reliability
+				$shippers = Api::post_with_retry(
+					'/shipment/offers',
+					$shipping_options_array
+				);
 
-			\set_transient( $cache_key, $shippers, DAY_IN_SECONDS );
+				// Only cache successful responses for 24 hours
+				if ( ! \is_wp_error( $shippers ) && 200 === $shippers['response']['code'] ) {
+					\set_transient( $cache_key, $shippers, DAY_IN_SECONDS );
+				} elseif ( ! \is_wp_error( $shippers ) ) {
+					// Cache API errors (4xx/5xx) for short time to avoid hammering the API
+					\set_transient( 'error_' . $cache_key, $shippers, 5 * MINUTE_IN_SECONDS );
+				}
+				// Don't cache wp_errors (network/timeout issues) - retry on next request
+			}
 		}
 
 		$settings        = Options::get();

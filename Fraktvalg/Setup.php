@@ -11,6 +11,14 @@ class Setup {
 		\add_action( 'wp_enqueue_scripts', [ $this, 'load_block_translations' ] );
 		\add_action( 'enqueue_block_editor_assets', [ $this, 'load_block_translations' ] );
 
+		// Hook into WooCommerce shipping events to clear cache when needed
+		\add_action( 'woocommerce_shipping_zone_method_added', [ $this, 'clear_shipping_cache' ] );
+		\add_action( 'woocommerce_shipping_zone_method_deleted', [ $this, 'clear_shipping_cache' ] );
+		\add_action( 'woocommerce_shipping_zone_method_status_toggled', [ $this, 'clear_shipping_cache' ] );
+		\add_action( 'woocommerce_shipping_zone_updated', [ $this, 'clear_shipping_cache' ] );
+		\add_action( 'update_option_fraktvalg_options', [ $this, 'clear_shipping_cache' ] );
+		\add_action( 'update_option_fraktvalg_api_key', [ $this, 'clear_shipping_cache' ] );
+
 		new Privacy();
 		new WooCommerce\Blocks\Shipping();
 
@@ -51,6 +59,14 @@ class Setup {
 			'fraktvalg',
 			\trailingslashit( FRAKTVALG_BASE_PATH ) . 'languages'
 		);
+	}
+
+	/**
+	 * Clear shipping cache when relevant settings change
+	 * This ensures fresh shipping rates are fetched from the API
+	 */
+	public function clear_shipping_cache() {
+		Options::clear_shipping_cache();
 	}
 
 }

@@ -33,4 +33,44 @@ class Api {
 			]
 		);
 	}
+
+	/**
+	 * Make POST request with retry mechanism for better reliability
+	 *
+	 * @param string $endpoint The API endpoint to call
+	 * @param mixed $body The request body
+	 * @param int $max_attempts Maximum number of attempts (default: 2)
+	 * @return array|\WP_Error The response or WP_Error on failure
+	 */
+	public static function post_with_retry( $endpoint, $body = null, $max_attempts = 2 ) {
+		$attempt = 0;
+		$last_response = null;
+		
+		while ( $attempt < $max_attempts ) {
+			$response = \wp_remote_post(
+				FRAKTVALG_API_SERVER . $endpoint,
+				[
+					'headers' => self::headers(),
+					'body' => $body,
+					'timeout' => 15, // Increase from WordPress default of 5 seconds
+					'sslverify' => true
+				]
+			);
+			
+			// Return immediately on success
+			if ( ! \is_wp_error( $response ) ) {
+				return $response;
+			}
+			
+			$last_response = $response;
+			$attempt++;
+			
+			// Wait 1 second before retry (except on last attempt)
+			if ( $attempt < $max_attempts ) {
+				sleep(1);
+			}
+		}
+		
+		return $last_response;
+	}
 }
