@@ -26,6 +26,7 @@ export default function Providers({
 	setProvider,
 	setTab,
 	setProviderFieldValueCallback,
+	fetchProviders,
 	onUpdatePriorityProvider
 }) {
 	const [ providerLoadingIndicator, setProviderLoadingIndicator ] = useState('');

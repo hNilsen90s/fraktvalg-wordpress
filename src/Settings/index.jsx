@@ -167,6 +167,7 @@ export default function Settings({}) {
 					setProvider={setProvider}
 					setTab={setTab}
 					setProviderFieldValueCallback={setProviderFieldValueCallback}
+					fetchProviders={fetchProviders}
 					onUpdatePriorityProvider={(provider, discount, type) => {
 						setPriorityProvider(provider);
 						setPriorityProviderDiscount(discount);

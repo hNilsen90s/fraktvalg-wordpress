@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
-import Shipping from './Shipping';
+import "./Settings/fraktvalg.pcss"; // Import styles for Tailwind CSS
+import Shipping from './Shipping/index';
 
 const domNode = document.getElementById('fraktvalg-label-meta-box');
 

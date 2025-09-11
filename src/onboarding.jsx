@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
-import Onboarding from "./Onboarding";
+import "./Settings/fraktvalg.pcss"; // Import styles for Tailwind CSS
+import Onboarding from "./Onboarding/index";
 
 const domNode = document.getElementById('fraktvalg-onboarding');
 
